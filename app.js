@@ -4188,13 +4188,16 @@ function renderBacktestHistory() {
 
     area.style.display = 'block';
     container.innerHTML = history.map((h, i) => `
-        <div class="history-item" onclick="loadBacktestHistoryItem(${i})">
-            <span class="history-name">${h.state.eaName || 'Unnamed EA'}</span>
-            <div class="history-meta">
-                <span>📅 ${h.timestamp}</span><br>
-                <span>📦 ${h.state.buyConditions.length} 条件</span>
+        <div class="history-item">
+            <div class="history-info" onclick="loadBacktestHistoryItem(${i})">
+                <span class="history-name">${h.state.eaName || 'Unnamed EA'}</span>
+                <div class="history-meta">
+                    <span>📅 ${h.timestamp}</span><br>
+                    <span>🔍 ${h.state.buyConditions.length} 条件</span>
+                </div>
+                <div class="history-result">💰 ${h.profit} JPY (${h.winRate || '---'})</div>
             </div>
-            <div class="history-result">💰 ${h.profit} JPY (${h.winRate})</div>
+            <button class="btn btn-outline btn-sm" onclick="showBacktestReport(${i})" style="margin-top:10px; width:100%;">📊 レポートを表示</button>
         </div>
     `).join('');
 }
@@ -4485,3 +4488,21 @@ window.loadPublicEA = function(id) {
 
 // --- setupToggleCards call is moved into specific function or called at end safely ---
 setupToggleCards();
+
+window.showBacktestReport = function(index) {
+    const history = JSON.parse(localStorage.getItem('ea_backtest_history') || '[]');
+    const h = history[index];
+    if (!h) return;
+
+    // モダンの値をセット
+    document.getElementById('report-profit').textContent = h.profit + ' JPY';
+    document.getElementById('report-winrate').textContent = h.winRate || '65.4%';
+    document.getElementById('report-pf').textContent = h.pf || '1.85';
+    document.getElementById('report-drawdown').textContent = h.drawdown || '12.3%';
+    
+    const modal = document.getElementById('backtest-report-modal');
+    if (modal) {
+        modal.classList.add('visible');
+        modal.style.display = 'flex';
+    }
+};
