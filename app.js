@@ -1635,7 +1635,7 @@ function setupBacktest() {
 function showEAStep(stepNum) {
     if (typeof closeWizard === 'function') closeWizard();
     // 全ステップを隠す (1-8)
-    for (let i = 1; i <= 8; i++) { 
+    for (let i = 0; i <= 8; i++) { 
         const s = document.getElementById(`ea-step-${i}`); 
         if (s) {
             s.classList.add('hidden');
