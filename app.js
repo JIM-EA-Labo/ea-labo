@@ -1,11 +1,11 @@
-﻿// ============================================================
-// [A-001] eaState — グローバル状態オブジェクト（完成版）
+// ============================================================
+// [A-001] eaState ? 繧ｰ繝ｭ繝ｼ繝舌Ν迥ｶ諷九が繝悶ず繧ｧ繧ｯ繝茨ｼ亥ｮ梧・迚茨ｼ・
 // [FIX] CACHE BUSTER v4.0.0
 // ============================================================
-window.alert('EA Labo 修正版(v4)が正常に読み込まれました！\nキャッシュは更新されました。これより全ての機能が正常に動作します。');
+window.alert('EA Labo 菫ｮ豁｣迚・v4)縺梧ｭ｣蟶ｸ縺ｫ隱ｭ縺ｿ霎ｼ縺ｾ繧後∪縺励◆・―n繧ｭ繝｣繝・す繝･縺ｯ譖ｴ譁ｰ縺輔ｌ縺ｾ縺励◆縲ゅ％繧後ｈ繧雁・縺ｦ縺ｮ讖溯・縺梧ｭ｣蟶ｸ縺ｫ蜍穂ｽ懊＠縺ｾ縺吶・);
 console.log('EA Labo App.js v4.0.0 - SUCCESSFUL LOAD');
 const eaState = {
-  // --- 基本設定 ---
+  // --- 蝓ｺ譛ｬ險ｭ螳・---
   eaName: 'MyEA',
   platform: 'mt4',
   magicNumber: 12345,
@@ -17,7 +17,7 @@ const eaState = {
   entryCooldown: 0,
   timeframe: 'PERIOD_H1',
 
-  // --- strategies 配列 + positionParams (setupStep1が使用) ---
+  // --- strategies 驟榊・ + positionParams (setupStep1縺御ｽｿ逕ｨ) ---
   strategies: [],
   positionParams: {
     nanpinInterval: 20,
@@ -54,13 +54,13 @@ const eaState = {
     reverseGridResetOnOneSideComplete: false
   },
 
-  // --- エントリー条件 ---
+  // --- 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ ---
   buyConditions: [],
   sellConditions: [],
   buyCombine: 'AND',
   sellCombine: 'AND',
 
-  // --- 決済基本 ---
+  // --- 豎ｺ貂亥渕譛ｬ ---
   takeProfit: 0,
   stopLoss: 0,
   useTrailing: false,
@@ -77,36 +77,36 @@ const eaState = {
   magicStopAmount: 10000,
   magicStopType: 'both',
 
-  // --- エグジット条件 (P2-C) ---
+  // --- 繧ｨ繧ｰ繧ｸ繝・ヨ譚｡莉ｶ (P2-C) ---
   exitConditions: [],
   exitCombine: 'AND',
 
-  // --- 決済優先度 (P2-D) ---
+  // --- 豎ｺ貂亥━蜈亥ｺｦ (P2-D) ---
   exitPriority: ['stoploss', 'takeprofit', 'trailing', 'autoclose', 'indicator_exit', 'manual_close'],
 
-  // --- スプレッドフィルター ---
+  // --- 繧ｹ繝励Ξ繝・ラ繝輔ぅ繝ｫ繧ｿ繝ｼ ---
   useSpreadFilter: false,
   maxSpread: 3.0,
 
-  // --- 時間フィルター ---
+  // --- 譎る俣繝輔ぅ繝ｫ繧ｿ繝ｼ ---
   useTimeFilter: false,
   timeStartHour: 0,
   timeStartMin: 0,
   timeEndHour: 23,
   timeEndMin: 59,
 
-  // --- パーフェクトオーダー ---
+  // --- 繝代・繝輔ぉ繧ｯ繝医が繝ｼ繝繝ｼ ---
   usePerfectOrder: false,
   poShortPeriod: 20,
   poMidPeriod: 50,
   poLongPeriod: 100,
 
-  // --- ADXフィルター ---
+  // --- ADX繝輔ぅ繝ｫ繧ｿ繝ｼ ---
   useAdxFilter: false,
   adxFilterPeriod: 14,
   adxFilterLevel: 25,
 
-  // --- ゴト日フィルター (P2-B) ---
+  // --- 繧ｴ繝域律繝輔ぅ繝ｫ繧ｿ繝ｼ (P2-B) ---
   useGotoFilter: false,
   gotoStopStartHour: 0,
   gotoStopStartMin: 0,
@@ -114,30 +114,30 @@ const eaState = {
   gotoStopEndMin: 59,
   gotoIncludeMonthEnd: true,
 
-  // --- 経済指標フィルター (P2-B) ---
+  // --- 邨梧ｸ域欠讓吶ヵ繧｣繝ｫ繧ｿ繝ｼ (P2-B) ---
   useNewsFilter: false,
   newsStopMinutesBefore: 30,
   newsStopMinutesAfter: 30,
   newsEvents: [],
 
-  // --- 曜日フィルター (P2-7) ---
+  // --- 譖懈律繝輔ぅ繝ｫ繧ｿ繝ｼ (P2-7) ---
   useDayFilter: false,
   dayFilterMode: 'allow',
   dayFilterDays: [false, true, true, true, true, true, false],
 
-  // --- ストラテジー ---
+  // --- 繧ｹ繝医Λ繝・ず繝ｼ ---
   useNanpin: false,
   useMartingale: false,
   usePyramid: false,
   useGrid: false,
   useReverseGrid: false,
   
-  // --- 月末月初フィルター ---
+  // --- 譛域忰譛亥・繝輔ぅ繝ｫ繧ｿ繝ｼ ---
   useMonthFilter: false,
   monthStartDays: 0,
   monthEndDays: 0,
 
-  // --- アラート ---
+  // --- 繧｢繝ｩ繝ｼ繝・---
   useAlertPopup: false,
   useAlertSound: false,
   alertSoundFile: 'alert.wav',
@@ -152,21 +152,29 @@ const eaState = {
   discordNotifyError: false,
   discordNotifyDaily: false,
 
-  // --- 認証・セキュリティ設定 (P4-D) ---
+  // --- 隱崎ｨｼ繝ｻ繧ｻ繧ｭ繝･繝ｪ繝・ぅ險ｭ螳・(P4-D) ---
   useAccountLock: false,
   lockAccountId: '',
   useExpiryLock: false,
   lockExpiryDate: '',
   
-  // --- ダウンロード設定 ---
+  // --- 繝繧ｦ繝ｳ繝ｭ繝ｼ繝芽ｨｭ螳・---
   downloadFormat: 'mq4',
 
-  // --- ナンピン追加設定 ---
-  nanpinTargetProfit: 1000
+  // --- 繝翫Φ繝斐Φ霑ｽ蜉�險ｭ螳・---
+  nanpinTargetProfit: 1000,
+  mtPlatform: 'mt5',
+  mtSymbol: 'USDJPY',
+  mtPeriod: 'H1',
+  mtModel: '2',
+  mtFromDate: '',
+  mtToDate: '',
+  mtOptimization: false,
+  optParams: {}
 };
 
 // ============================================================
-// グローバル状態: wizardState
+// 繧ｰ繝ｭ繝ｼ繝舌Ν迥ｶ諷・ wizardState
 // ============================================================
 const wizardState = {
   targetType: '',
@@ -184,7 +192,7 @@ const wizardState = {
 };
 
 // ============================================================
-// グローバル状態: indiState
+// 繧ｰ繝ｭ繝ｼ繝舌Ν迥ｶ諷・ indiState
 // ============================================================
 const indiState = {
   type: 'arrow',
@@ -210,9 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setupHomeScreen();
         setupEAFlow();
         setupIndicatorFlow();
-        setupGallery(); // ギャラリーの初期化を追加
+        setupGallery(); // 繧ｮ繝｣繝ｩ繝ｪ繝ｼ縺ｮ蛻晄悄蛹悶ｒ霑ｽ蜉�
         setupModals();
         setupBacktest();
+        setupMTSettings();
+        setupOptSettings();
         console.log('EA Labo initialized successfully');
     } catch (error) {
         console.error('Initialization error:', error);
@@ -362,15 +372,15 @@ function getEATemplate(id) {
         base.positionMode = 'multiple'; base.maxPositions = 10;
         base.strategies = ['grid'];
         base.positionParams = { gridStep: 20, gridLots: 0.1, gridMax: 10 };
-        base.buyConditions = [ { id: '4_1', category: 'price', indicator: 'price', detail: '常に許可', type: 'always_true', params: {}, shift: 1 } ];
-        base.sellConditions = [ { id: '4_2', category: 'price', indicator: 'price', detail: '常に許可', type: 'always_true', params: {}, shift: 1 } ];
+        base.buyConditions = [ { id: '4_1', category: 'price', indicator: 'price', detail: '蟶ｸ縺ｫ險ｱ蜿ｯ', type: 'always_true', params: {}, shift: 1 } ];
+        base.sellConditions = [ { id: '4_2', category: 'price', indicator: 'price', detail: '蟶ｸ縺ｫ險ｱ蜿ｯ', type: 'always_true', params: {}, shift: 1 } ];
         base.useMagicStopOrder = true; base.magicStopAmount = 50000;
         base.useSpreadFilter = true; base.maxSpread = 15;
     }
     // T-5: News Scalp
     if(id == 5) {
-        base.buyConditions = [ { id: '5_1', category: 'momentum', indicator: 'momentum', detail: 'Momentum有力', type: 'mom_up', params: { period: 14 }, shift: 1 } ];
-        base.sellConditions = [ { id: '5_2', category: 'momentum', indicator: 'momentum', detail: 'Momentum有力', type: 'mom_down', params: { period: 14 }, shift: 1 } ];
+        base.buyConditions = [ { id: '5_1', category: 'momentum', indicator: 'momentum', detail: 'Momentum譛牙鴨', type: 'mom_up', params: { period: 14 }, shift: 1 } ];
+        base.sellConditions = [ { id: '5_2', category: 'momentum', indicator: 'momentum', detail: 'Momentum譛牙鴨', type: 'mom_down', params: { period: 14 }, shift: 1 } ];
         base.useNewsFilter = false; 
         base.useAutoClose = true; base.autoCloseProfitPips = 5; base.autoCloseLossPips = 5;
     }
@@ -390,8 +400,8 @@ function getEATemplate(id) {
     }
     // T-7: MACD Zero Cross
     if(id == 7) {
-        base.buyConditions = [ { id: '7_1', category: 'indicator', indicator: 'macd', detail: 'メイン線が0を抜けた', type: 'macd_cross_zero_up', params: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 }, shift: 1 } ];
-        base.sellConditions = [ { id: '7_2', category: 'indicator', indicator: 'macd', detail: 'メイン線が0を抜けた', type: 'macd_cross_zero_down', params: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 }, shift: 1 } ];
+        base.buyConditions = [ { id: '7_1', category: 'indicator', indicator: 'macd', detail: '繝｡繧､繝ｳ邱壹′0繧呈栢縺代◆', type: 'macd_cross_zero_up', params: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 }, shift: 1 } ];
+        base.sellConditions = [ { id: '7_2', category: 'indicator', indicator: 'macd', detail: '繝｡繧､繝ｳ邱壹′0繧呈栢縺代◆', type: 'macd_cross_zero_down', params: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 }, shift: 1 } ];
         base.useDayFilter = true; base.dayFilterDays = [false, true, true, true, true, false, false];
         base.useAutoClose = true; base.autoCloseProfitPips = 10; base.autoCloseLossPips = 10;
     }
@@ -407,15 +417,15 @@ function getEATemplate(id) {
     }
     // T-9: Deep Value
     if(id == 9) {
-        base.buyConditions = [ { id: '9_1', category: 'price', indicator: 'price', detail: '安値更新', type: 'price_below', params: { price: 130.00 }, shift: 1 } ];
-        base.sellConditions = [ { id: '9_2', category: 'price', indicator: 'price', detail: '高値更新', type: 'price_above', params: { price: 160.00 }, shift: 1 } ];
+        base.buyConditions = [ { id: '9_1', category: 'price', indicator: 'price', detail: '螳牙､譖ｴ譁ｰ', type: 'price_below', params: { price: 130.00 }, shift: 1 } ];
+        base.sellConditions = [ { id: '9_2', category: 'price', indicator: 'price', detail: '鬮伜､譖ｴ譁ｰ', type: 'price_above', params: { price: 160.00 }, shift: 1 } ];
         base.useSpreadFilter = true; base.maxSpread = 10;
         base.takeProfit = 100;
     }
     // T-10: Parabolic SAR
     if(id == 10) {
-        base.buyConditions = [ { id: '10_1', category: 'indicator', indicator: 'parabolic', detail: 'SAR上抜け', type: 'sar_cross_up', params: { step: 0.02, max: 0.2 }, shift: 1 } ];
-        base.sellConditions = [ { id: '10_2', category: 'indicator', indicator: 'parabolic', detail: 'SAR下抜け', type: 'sar_cross_down', params: { step: 0.02, max: 0.2 }, shift: 1 } ];
+        base.buyConditions = [ { id: '10_1', category: 'indicator', indicator: 'parabolic', detail: 'SAR荳頑栢縺・, type: 'sar_cross_up', params: { step: 0.02, max: 0.2 }, shift: 1 } ];
+        base.sellConditions = [ { id: '10_2', category: 'indicator', indicator: 'parabolic', detail: 'SAR荳区栢縺・, type: 'sar_cross_down', params: { step: 0.02, max: 0.2 }, shift: 1 } ];
         base.useNewsFilter = true;
         base.useTrailing = true; base.trailingStart = 40; base.trailingWidth = 20; base.trailingStep = 10;
         base.stopLoss = 40;
@@ -445,7 +455,7 @@ function applyTemplate(id) {
     showEAStep(1);
     
     if(typeof showToast === 'function') {
-        const msg = id === 0 ? '全設定をリセットしました' : 'テンプレートの設定を適用しました';
+        const msg = id === 0 ? '蜈ｨ險ｭ螳壹ｒ繝ｪ繧ｻ繝・ヨ縺励∪縺励◆' : '繝・Φ繝励Ξ繝ｼ繝医・險ｭ螳壹ｒ驕ｩ逕ｨ縺励∪縺励◆';
         showToast(msg, 'success');
     }
 }
@@ -661,9 +671,9 @@ function updateStrategyWarnings() {
     if (!warningBox || !warningText) return;
 
     const warnings = [];
-    if (eaState.strategies.includes('martingale')) warnings.push('マーチンゲールは大きな損失リスクがあります');
-    if (eaState.strategies.includes('nanpin') && eaState.strategies.includes('martingale')) warnings.push('ナンピン+マーチンは非常にハイリスクです');
-    if (eaState.strategies.includes('grid') && eaState.strategies.includes('reverse_grid')) warnings.push('グリッドと逆グリッドの同時使用は複雑な挙動になります');
+    if (eaState.strategies.includes('martingale')) warnings.push('繝槭・繝√Φ繧ｲ繝ｼ繝ｫ縺ｯ螟ｧ縺阪↑謳榊､ｱ繝ｪ繧ｹ繧ｯ縺後≠繧翫∪縺・);
+    if (eaState.strategies.includes('nanpin') && eaState.strategies.includes('martingale')) warnings.push('繝翫Φ繝斐Φ+繝槭・繝√Φ縺ｯ髱槫ｸｸ縺ｫ繝上う繝ｪ繧ｹ繧ｯ縺ｧ縺・);
+    if (eaState.strategies.includes('grid') && eaState.strategies.includes('reverse_grid')) warnings.push('繧ｰ繝ｪ繝・ラ縺ｨ騾・げ繝ｪ繝・ラ縺ｮ蜷梧凾菴ｿ逕ｨ縺ｯ隍・尅縺ｪ謖吝虚縺ｫ縺ｪ繧翫∪縺・);
 
     if (warnings.length > 0) {
         warningText.textContent = warnings.join(' / ');
@@ -673,7 +683,7 @@ function updateStrategyWarnings() {
     }
 }
 // ============================================================
-// [A-025] setupStep2 - エントリー条件
+// [A-025] setupStep2 - 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ
 // ============================================================
 function setupStep2() {
   console.log('setupStep2 called');
@@ -706,10 +716,10 @@ function setupStep2() {
 
 
 // ============================================================
-// [A-035] setupStep4 - フィルター設定
+// [A-035] setupStep4 - 繝輔ぅ繝ｫ繧ｿ繝ｼ險ｭ螳・
 // ============================================================
 function setupStep4() {
-  // スプレッドフィルター
+  // 繧ｹ繝励Ξ繝・ラ繝輔ぅ繝ｫ繧ｿ繝ｼ
   const spreadCheck = document.getElementById('use-spread-filter');
   if (spreadCheck) {
     spreadCheck.checked = eaState.useSpreadFilter;
@@ -725,7 +735,7 @@ function setupStep4() {
     });
   }
 
-  // 時間フィルター
+  // 譎る俣繝輔ぅ繝ｫ繧ｿ繝ｼ
   const timeCheck = document.getElementById('use-time-filter');
   if (timeCheck) {
     timeCheck.checked = eaState.useTimeFilter;
@@ -748,7 +758,7 @@ function setupStep4() {
     });
   }
 
-  // パーフェクトオーダー
+  // 繝代・繝輔ぉ繧ｯ繝医が繝ｼ繝繝ｼ
   const poCheck = document.getElementById('use-perfect-order');
   if (poCheck) {
     poCheck.checked = eaState.usePerfectOrder;
@@ -772,7 +782,7 @@ function setupStep4() {
     poMa3.addEventListener('change', (e) => { eaState.poLongPeriod = parseInt(e.target.value) || 100; });
   }
 
-  // ADXフィルター
+  // ADX繝輔ぅ繝ｫ繧ｿ繝ｼ
   const adxCheck = document.getElementById('use-adx-filter');
   if (adxCheck) {
     adxCheck.checked = eaState.useAdxFilter;
@@ -791,7 +801,7 @@ function setupStep4() {
     adxThreshold.addEventListener('change', (e) => { eaState.adxFilterLevel = parseInt(e.target.value) || 25; });
   }
 
-  // ゴトー日フィルター
+  // 繧ｴ繝医・譌･繝輔ぅ繝ｫ繧ｿ繝ｼ
   const gotoCheck = document.getElementById('use-goto-filter');
   if (gotoCheck) {
     gotoCheck.checked = eaState.useGotoFilter;
@@ -825,7 +835,7 @@ function setupStep4() {
     gotoMonthEnd.addEventListener('change', (e) => { eaState.gotoIncludeMonthEnd = e.target.checked; });
   }
 
-  // ニュースフィルター
+  // 繝九Η繝ｼ繧ｹ繝輔ぅ繝ｫ繧ｿ繝ｼ
   const newsCheck = document.getElementById('use-news-filter');
   if (newsCheck) {
     newsCheck.checked = eaState.useNewsFilter;
@@ -859,7 +869,7 @@ function setupStep4() {
         eaState.newsEvents.push({
           hour: parseInt(hour.value) || 0,
           min: parseInt(min.value) || 0,
-          label: label.value || 'イベント'
+          label: label.value || '繧､繝吶Φ繝・
         });
         hour.value = ''; min.value = ''; label.value = '';
         renderNewsEventList();
@@ -867,7 +877,7 @@ function setupStep4() {
     });
   }
 
-  // 初期パネル表示
+  // 蛻晄悄繝代ロ繝ｫ陦ｨ遉ｺ
   // Removed the manual .hidden class addition here. 
   // Step 3/4 toggle-card-settings are now hidden by CSS (display: none) by default.
 }
@@ -876,7 +886,7 @@ function renderNewsEventList() {
   const listEl = document.getElementById('news-event-list');
   if (!listEl) return;
   if (eaState.newsEvents.length === 0) {
-    listEl.innerHTML = '<p class="form-hint">指標イベント未登録</p>';
+    listEl.innerHTML = '<p class="form-hint">謖・ｨ吶う繝吶Φ繝域悴逋ｻ骭ｲ</p>';
     return;
   }
   listEl.innerHTML = '';
@@ -887,7 +897,7 @@ function renderNewsEventList() {
     info.textContent = `${String(ev.hour).padStart(2,'0')}:${String(ev.min).padStart(2,'0')} - ${ev.label}`;
     const removeBtn = document.createElement('button');
     removeBtn.className = 'condition-remove-btn';
-    removeBtn.textContent = '×';
+    removeBtn.textContent = 'ﾃ・;
     removeBtn.addEventListener('click', () => {
       eaState.newsEvents.splice(i, 1);
       renderNewsEventList();
@@ -1075,12 +1085,12 @@ function togglePanel(panelId, show) {
 // ============================================================
 function getExitMethodLabel(id) {
   const labels = {
-    'stoploss':       'ストップロス (SL)',
-    'takeprofit':     'テイクプロフィット (TP)',
-    'trailing':       'トレーリングストップ',
-    'autoclose':      '自動決済',
-    'indicator_exit': 'インジケーター決済',
-    'manual_close':   '手動決済ボタン'
+    'stoploss':       '繧ｹ繝医ャ繝励Ο繧ｹ (SL)',
+    'takeprofit':     '繝・う繧ｯ繝励Ο繝輔ぅ繝・ヨ (TP)',
+    'trailing':       '繝医Ξ繝ｼ繝ｪ繝ｳ繧ｰ繧ｹ繝医ャ繝・,
+    'autoclose':      '閾ｪ蜍墓ｱｺ貂・,
+    'indicator_exit': '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ豎ｺ貂・,
+    'manual_close':   '謇句虚豎ｺ貂医・繧ｿ繝ｳ'
   };
   return labels[id] || id;
 }
@@ -1106,7 +1116,7 @@ function updateExitPriorityList() {
   const activeItems = eaState.exitPriority.filter(id => isExitMethodActive(id));
 
   if (activeItems.length === 0) {
-    listEl.innerHTML = '<p class="empty-list">有効なエグジット方法がありません</p>';
+    listEl.innerHTML = '<p class="empty-list">譛牙柑縺ｪ繧ｨ繧ｰ繧ｸ繝・ヨ譁ｹ豕輔′縺ゅｊ縺ｾ縺帙ｓ</p>';
     return;
   }
 
@@ -1126,7 +1136,7 @@ function updateExitPriorityList() {
 
     const dragHandle = document.createElement('div');
     dragHandle.className = 'exit-priority-drag-handle';
-    dragHandle.textContent = '⠿';
+    dragHandle.textContent = '?';
 
     item.appendChild(number);
     item.appendChild(label);
@@ -1191,7 +1201,7 @@ function moveExitPriority(id, direction) {
 
 // ==================== A-040: Step 5-6 setup + Code Gen ====================
 function setupStep5() {
-    // --- EA基本設定 ---
+    // --- EA蝓ｺ譛ｬ險ｭ螳・---
     const eaNameInput = document.getElementById('input-ea-name');
     if (eaNameInput) {
       eaNameInput.value = eaState.eaName;
@@ -1261,7 +1271,7 @@ function setupStep5() {
       discordDaily.addEventListener('change', (e) => { eaState.discordNotifyDaily = e.target.checked; });
     }
 
-    // --- アラート設定 ---
+    // --- 繧｢繝ｩ繝ｼ繝郁ｨｭ螳・---
     const alertPopupCheckbox = document.getElementById('chk-alert-popup');
     if (alertPopupCheckbox) {
       alertPopupCheckbox.checked = eaState.useAlertPopup;
@@ -1314,7 +1324,7 @@ function setupStep6() {
     const settingsFileInput = document.getElementById('settings-file-input');
     if (settingsFileInput) settingsFileInput.addEventListener('change', loadSettings);
 
-    // --- 追加: 認証ガードの設定 ---
+    // --- 霑ｽ蜉�: 隱崎ｨｼ繧ｬ繝ｼ繝峨・險ｭ螳・---
     const accLock = document.getElementById('use-account-lock');
     const accId = document.getElementById('lock-account-id');
     if (accLock && accId) {
@@ -1349,10 +1359,10 @@ function generateCode() {
         const code = EAGenerator.generate(eaState);
         const codeElement = document.getElementById('generated-code');
         if (codeElement) codeElement.textContent = code;
-        showToast('コードを生成しました', 'success');
+        showToast('繧ｳ繝ｼ繝峨ｒ逕滓・縺励∪縺励◆', 'success');
     } catch (error) {
         console.error('Code generation error:', error);
-        showToast('コード生成エラー: ' + error.message, 'error');
+        showToast('繧ｳ繝ｼ繝臥函謌舌お繝ｩ繝ｼ: ' + error.message, 'error');
     }
 }
 
@@ -1363,11 +1373,11 @@ function checkCode() {
 
 function validateGeneratedCode() {
     const errors = [];
-    if (eaState.buyConditions.length === 0 && eaState.sellConditions.length === 0) errors.push('エントリー条件が設定されていません');
-    if (!eaState.useTP && !eaState.useSL && !eaState.useTrailing && !eaState.useAutoClose && !eaState.useIndicatorExit) errors.push('決済ルールが設定されていません');
-    if (eaState.strategies.includes('martingale')) errors.push('警告: マーチンゲール戦略は高リスクです');
-    if (eaState.strategies.includes('nanpin') && eaState.positionParams.nanpinMax > 10) errors.push('警告: ナンピン回数が多すぎる可能性があります');
-    if (eaState.lotSize > 1) errors.push('警告: ロットサイズが大きいです：' + eaState.lotSize);
+    if (eaState.buyConditions.length === 0 && eaState.sellConditions.length === 0) errors.push('繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ縺瑚ｨｭ螳壹＆繧後※縺・∪縺帙ｓ');
+    if (!eaState.useTP && !eaState.useSL && !eaState.useTrailing && !eaState.useAutoClose && !eaState.useIndicatorExit) errors.push('豎ｺ貂医Ν繝ｼ繝ｫ縺瑚ｨｭ螳壹＆繧後※縺・∪縺帙ｓ');
+    if (eaState.strategies.includes('martingale')) errors.push('隴ｦ蜻・ 繝槭・繝√Φ繧ｲ繝ｼ繝ｫ謌ｦ逡･縺ｯ鬮倥Μ繧ｹ繧ｯ縺ｧ縺・);
+    if (eaState.strategies.includes('nanpin') && eaState.positionParams.nanpinMax > 10) errors.push('隴ｦ蜻・ 繝翫Φ繝斐Φ蝗樊焚縺悟､壹☆縺弱ｋ蜿ｯ閭ｽ諤ｧ縺後≠繧翫∪縺・);
+    if (eaState.lotSize > 1) errors.push('隴ｦ蜻・ 繝ｭ繝・ヨ繧ｵ繧､繧ｺ縺悟､ｧ縺阪＞縺ｧ縺呻ｼ・ + eaState.lotSize);
     return errors;
 }
 
@@ -1390,10 +1400,10 @@ function copyCode() {
     const codeElement = document.getElementById('generated-code');
     if (codeElement) {
         navigator.clipboard.writeText(codeElement.textContent).then(() => {
-            showToast('コードをコピーしました', 'success');
+            showToast('繧ｳ繝ｼ繝峨ｒ繧ｳ繝斐・縺励∪縺励◆', 'success');
         }).catch(err => {
             console.error('Copy failed:', err);
-            showToast('コピーに失敗しました', 'error');
+            showToast('繧ｳ繝斐・縺ｫ螟ｱ謨励＠縺ｾ縺励◆', 'error');
         });
     }
 }
@@ -1413,7 +1423,7 @@ function downloadCode() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast(`${filename} をダウンロードしました`, 'success');
+        showToast(`${filename} 繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆`, 'success');
     }
 }
 
@@ -1428,7 +1438,7 @@ function saveSettings() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast('設定を保存しました', 'success');
+    showToast('險ｭ螳壹ｒ菫晏ｭ倥＠縺ｾ縺励◆', 'success');
 }
 
 function loadSettings(event) {
@@ -1440,10 +1450,10 @@ function loadSettings(event) {
                 const settings = JSON.parse(e.target.result);
                 Object.assign(eaState, settings);
                 applyStateToUI();
-                showToast('設定を読み込みました', 'success');
+                showToast('險ｭ螳壹ｒ隱ｭ縺ｿ霎ｼ縺ｿ縺ｾ縺励◆', 'success');
             } catch (error) {
                 console.error('Settings load error:', error);
-                showToast('設定の読み込みに失敗しました', 'error');
+                showToast('險ｭ螳壹・隱ｭ縺ｿ霎ｼ縺ｿ縺ｫ螟ｱ謨励＠縺ｾ縺励◆', 'error');
             }
         };
         reader.readAsText(file);
@@ -1452,7 +1462,7 @@ function loadSettings(event) {
 }
 // //END A-040
 // ============================================================
-// [A-050] applyStateToUI - 全UI復元 (完成版)
+// [A-050] applyStateToUI - 蜈ｨUI蠕ｩ蜈・(螳梧・迚・
 // ============================================================
 function applyStateToUI() {
   // Helper: safely set value/checked on an element
@@ -1471,17 +1481,17 @@ function applyStateToUI() {
     }
   }
 
-  // --- Step 1: ポジション管理 ---
+  // --- Step 1: 繝昴ず繧ｷ繝ｧ繝ｳ邂｡逅・---
   setVal('entry-cooldown', eaState.entryCooldown);
   setVal('max-positions', eaState.maxPositions);
 
-  // --- Step 2: エントリー条件 ---
+  // --- Step 2: 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ ---
   setVal('timeframe', eaState.timeframe);
   setVal('condition-combine', eaState.buyCombine);
   updateConditionList('buy');
   updateConditionList('sell');
 
-  // --- Step 3: 決済設定 ---
+  // --- Step 3: 豎ｺ貂郁ｨｭ螳・---
   setVal('take-profit', eaState.takeProfit);
   setVal('stop-loss', eaState.stopLoss);
 
@@ -1508,7 +1518,7 @@ function applyStateToUI() {
   updateExitConditionList();
   updateExitPriorityList();
 
-  // --- Step 4: フィルター設定 ---
+  // --- Step 4: 繝輔ぅ繝ｫ繧ｿ繝ｼ險ｭ螳・---
   setChk('use-spread-filter', eaState.useSpreadFilter);
   togglePanel('spread-filter-settings', eaState.useSpreadFilter);
   setVal('max-spread', eaState.maxSpread);
@@ -1551,7 +1561,7 @@ function applyStateToUI() {
     setChk(id, eaState.dayFilterDays[i]);
   });
 
-  // --- Step 5: 出力・通知設定 ---
+  // --- Step 5: 蜃ｺ蜉帙・騾夂衍險ｭ螳・---
   setVal('input-ea-name', eaState.eaName);
   setVal('input-magic-number', eaState.magicNumber);
   setVal('input-lot-size', eaState.lotSize);
@@ -1574,7 +1584,7 @@ function applyStateToUI() {
   setChk('chk-alert-email', eaState.useAlertEmail);
   setChk('chk-alert-push', eaState.useAlertPush);
 
-  // --- Step 4/5 追加項目 ---
+  // --- Step 4/5 霑ｽ蜉�鬆・岼 ---
   setChk('use-month-filter', eaState.useMonthFilter);
   togglePanel('month-filter-settings', eaState.useMonthFilter);
   setVal('month-start-days', eaState.monthStartDays);
@@ -1638,13 +1648,13 @@ function setupBacktest() {
 function showEAStep(stepNum) {
     if (typeof closeWizard === 'function') closeWizard();
     
-    // ホーム画面とベースのフローコンテナの表示制御
+    // 繝帙・繝�逕ｻ髱｢縺ｨ繝吶・繧ｹ縺ｮ繝輔Ο繝ｼ繧ｳ繝ｳ繝・リ縺ｮ陦ｨ遉ｺ蛻ｶ蠕｡
     const home = document.getElementById('home-screen');
     const flow = document.getElementById('ea-flow');
     if (home) home.classList.add('hidden');
     if (flow) flow.classList.remove('hidden');
 
-    // 全ステップ（0-8）を確実に隠す
+    // 蜈ｨ繧ｹ繝・ャ繝暦ｼ・-8・峨ｒ遒ｺ螳溘↓髫�縺・
     for (let i = 0; i <= 8; i++) { 
         const s = document.getElementById(`ea-step-${i}`); 
         if (s) {
@@ -1652,7 +1662,7 @@ function showEAStep(stepNum) {
             s.style.display = 'none'; 
         }
     }
-    // 対象ステップを表示
+    // 蟇ｾ雎｡繧ｹ繝・ャ繝励ｒ陦ｨ遉ｺ
     const target = document.getElementById(`ea-step-${stepNum}`); 
     if (target) {
         target.classList.remove('hidden');
@@ -1743,13 +1753,13 @@ function generateIndicatorCode() {
     try {
         const code = IndicatorGenerator.generate(indiState);
         const el = document.getElementById('indi-generated-code'); if (el) el.textContent = code;
-        showToast('インジケーターコードを生成しました', 'success');
-    } catch (error) { console.error('Indicator code generation error:', error); showToast('コード生成エラー: ' + error.message, 'error'); }
+        showToast('繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧ｳ繝ｼ繝峨ｒ逕滓・縺励∪縺励◆', 'success');
+    } catch (error) { console.error('Indicator code generation error:', error); showToast('繧ｳ繝ｼ繝臥函謌舌お繝ｩ繝ｼ: ' + error.message, 'error'); }
 }
 
 function copyIndicatorCode() {
     const el = document.getElementById('indi-generated-code');
-    if (el) navigator.clipboard.writeText(el.textContent).then(() => { showToast('コードをコピーしました', 'success'); }).catch(() => { showToast('コピーに失敗しました', 'error'); });
+    if (el) navigator.clipboard.writeText(el.textContent).then(() => { showToast('繧ｳ繝ｼ繝峨ｒ繧ｳ繝斐・縺励∪縺励◆', 'success'); }).catch(() => { showToast('繧ｳ繝斐・縺ｫ螟ｱ謨励＠縺ｾ縺励◆', 'error'); });
 }
 
 function downloadIndicatorCode() {
@@ -1762,7 +1772,7 @@ function downloadIndicatorCode() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a'); a.href = url; a.download = filename;
         document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-        showToast(`${filename} をダウンロードしました`, 'success');
+        showToast(`${filename} 繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆`, 'success');
     }
 }
 
@@ -1819,11 +1829,11 @@ function openWizard(targetType) {
   const titleEl = document.getElementById('wizard-title');
   if (titleEl) {
     if (targetType === 'buy') {
-      titleEl.textContent = 'Buy エントリー条件を追加';
+      titleEl.textContent = 'Buy 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ繧定ｿｽ蜉�';
     } else if (targetType === 'sell') {
-      titleEl.textContent = 'Sell エントリー条件を追加';
+      titleEl.textContent = 'Sell 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ繧定ｿｽ蜉�';
     } else if (targetType === 'exit') {
-      titleEl.textContent = 'エグジット条件を追加';
+      titleEl.textContent = '繧ｨ繧ｰ繧ｸ繝・ヨ譚｡莉ｶ繧定ｿｽ蜉�';
     }
   }
 
@@ -1846,9 +1856,9 @@ function renderWizardStep1() {
   container.innerHTML = '';
 
   const categories = [
-    { id: 'indicator', label: 'インジケーター', icon: '📊', desc: 'MA、RSI、MACD等の主要指標' },
-    { id: 'candle',    label: 'ローソク足',     icon: '🕯️', desc: '陽線・陰線やピンバー等の形状' },
-    { id: 'price',     label: '価格',           icon: '💰', desc: '特定の価格水準や高値・安値' }
+    { id: 'indicator', label: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ', icon: '??', desc: 'MA縲ヽSI縲｀ACD遲峨・荳ｻ隕∵欠讓・ },
+    { id: 'candle',    label: '繝ｭ繝ｼ繧ｽ繧ｯ雜ｳ',     icon: '???', desc: '髯ｽ邱壹・髯ｰ邱壹ｄ繝斐Φ繝舌・遲峨・蠖｢迥ｶ' },
+    { id: 'price',     label: '萓｡譬ｼ',           icon: '??', desc: '迚ｹ螳壹・萓｡譬ｼ豌ｴ貅悶ｄ鬮伜､繝ｻ螳牙､' }
   ];
 
   const grid = document.createElement('div');
@@ -1882,35 +1892,35 @@ function renderWizardStep2() {
   let items = [];
   if (wizardState.category === 'indicator') {
     items = [
-      { id: 'ma',             label: '移動平均線(MA)', desc: 'トレンドの方向確認' },
-      { id: 'ma_cross',       label: 'MAクロス専用', desc: '短期と長期のクロスを判定' },
-      { id: 'ma_perfect',     label: 'MAパーフェクトオーダー', desc: '3〜4本の並びを判定' },
-      { id: 'ma_deviation',   label: 'MA乖離率', desc: '価格とMAの乖離を測定' },
-      { id: 'heiken_ashi',    label: '平均足', desc: 'トレンド変遷を判定' },
-      { id: 'bollinger',      label: 'ボリンジャーバンド', desc: 'ボラティリティと反発確認' },
-      { id: 'rsi',            label: 'RSI', desc: '買われすぎ・売られすぎを判断' },
-      { id: 'macd',           label: 'MACD', desc: 'トレンドの転換点を探る' },
-      { id: 'stochastic',     label: 'ストキャス', desc: 'レンジでの逆張りに有効' },
-      { id: 'adx',            label: 'ADX', desc: 'トレンドの強さを測定' },
-      { id: 'ichimoku',       label: '一目均衡表', desc: '複合的な相場環境を分析' },
-      { id: 'atr',            label: 'ATR', desc: 'ボラティリティの変動を測定' },
-      { id: 'round_numbers',  label: 'キリバン取得', desc: '100pips等の節目を判定' },
-      { id: 'holiday_filter', label: '祝日制御', desc: '主要国の祝日にトレード停止' }
+      { id: 'ma',             label: '遘ｻ蜍募ｹｳ蝮・ｷ・MA)', desc: '繝医Ξ繝ｳ繝峨・譁ｹ蜷醍｢ｺ隱・ },
+      { id: 'ma_cross',       label: 'MA繧ｯ繝ｭ繧ｹ蟆ら畑', desc: '遏ｭ譛溘→髟ｷ譛溘・繧ｯ繝ｭ繧ｹ繧貞愛螳・ },
+      { id: 'ma_perfect',     label: 'MA繝代・繝輔ぉ繧ｯ繝医が繝ｼ繝繝ｼ', desc: '3?4譛ｬ縺ｮ荳ｦ縺ｳ繧貞愛螳・ },
+      { id: 'ma_deviation',   label: 'MA荵夜屬邇・, desc: '萓｡譬ｼ縺ｨMA縺ｮ荵夜屬繧呈ｸｬ螳・ },
+      { id: 'heiken_ashi',    label: '蟷ｳ蝮・ｶｳ', desc: '繝医Ξ繝ｳ繝牙､蛾・繧貞愛螳・ },
+      { id: 'bollinger',      label: '繝懊Μ繝ｳ繧ｸ繝｣繝ｼ繝舌Φ繝・, desc: '繝懊Λ繝・ぅ繝ｪ繝・ぅ縺ｨ蜿咲匱遒ｺ隱・ },
+      { id: 'rsi',            label: 'RSI', desc: '雋ｷ繧上ｌ縺吶℃繝ｻ螢ｲ繧峨ｌ縺吶℃繧貞愛譁ｭ' },
+      { id: 'macd',           label: 'MACD', desc: '繝医Ξ繝ｳ繝峨・霆｢謠帷せ繧呈爾繧・ },
+      { id: 'stochastic',     label: '繧ｹ繝医く繝｣繧ｹ', desc: '繝ｬ繝ｳ繧ｸ縺ｧ縺ｮ騾・ｼｵ繧翫↓譛牙柑' },
+      { id: 'adx',            label: 'ADX', desc: '繝医Ξ繝ｳ繝峨・蠑ｷ縺輔ｒ貂ｬ螳・ },
+      { id: 'ichimoku',       label: '荳逶ｮ蝮・｡｡陦ｨ', desc: '隍・粋逧・↑逶ｸ蝣ｴ迺ｰ蠅・ｒ蛻・梵' },
+      { id: 'atr',            label: 'ATR', desc: '繝懊Λ繝・ぅ繝ｪ繝・ぅ縺ｮ螟牙虚繧呈ｸｬ螳・ },
+      { id: 'round_numbers',  label: '繧ｭ繝ｪ繝舌Φ蜿門ｾ・, desc: '100pips遲峨・遽逶ｮ繧貞愛螳・ },
+      { id: 'holiday_filter', label: '逾晄律蛻ｶ蠕｡', desc: '荳ｻ隕∝嵜縺ｮ逾晄律縺ｫ繝医Ξ繝ｼ繝牙●豁｢' }
     ];
   } else if (wizardState.category === 'candle') {
     items = [
-      { id: 'bullish',       label: '陽線', desc: '上昇の勢いを確認' },
-      { id: 'bearish',       label: '陰線', desc: '下落の勢いを確認' },
-      { id: 'pinbar_bull',   label: '強気ピンバー', desc: '安値圏での反転シグナル' },
-      { id: 'pinbar_bear',   label: '弱気ピンバー', desc: '高値圏での反転シグナル' },
-      { id: 'engulfing_bull',label: '陽線包み足', desc: '強い上昇転換の兆し' },
-      { id: 'engulfing_bear',label: '陰線包み足', desc: '強い下落転換の兆し' }
+      { id: 'bullish',       label: '髯ｽ邱・, desc: '荳頑・縺ｮ蜍｢縺・ｒ遒ｺ隱・ },
+      { id: 'bearish',       label: '髯ｰ邱・, desc: '荳玖誠縺ｮ蜍｢縺・ｒ遒ｺ隱・ },
+      { id: 'pinbar_bull',   label: '蠑ｷ豌励ヴ繝ｳ繝舌・', desc: '螳牙､蝨上〒縺ｮ蜿崎ｻ｢繧ｷ繧ｰ繝翫Ν' },
+      { id: 'pinbar_bear',   label: '蠑ｱ豌励ヴ繝ｳ繝舌・', desc: '鬮伜､蝨上〒縺ｮ蜿崎ｻ｢繧ｷ繧ｰ繝翫Ν' },
+      { id: 'engulfing_bull',label: '髯ｽ邱壼桁縺ｿ雜ｳ', desc: '蠑ｷ縺・ｸ頑・霆｢謠帙・蜈・＠' },
+      { id: 'engulfing_bear',label: '髯ｰ邱壼桁縺ｿ雜ｳ', desc: '蠑ｷ縺・ｸ玖誠霆｢謠帙・蜈・＠' }
     ];
   } else {
     items = [
-      { id: 'price_above',  label: '価格が○より上', desc: 'キリ番や水平線との比較' },
-      { id: 'price_below',  label: '価格が○より下', desc: 'キリ番や水平線との比較' },
-      { id: 'price_break',  label: '価格ブレイク',   desc: '特定ラインの突破を確認' }
+      { id: 'price_above',  label: '萓｡譬ｼ縺娯雷繧医ｊ荳・, desc: '繧ｭ繝ｪ逡ｪ繧・ｰｴ蟷ｳ邱壹→縺ｮ豈碑ｼ・ },
+      { id: 'price_below',  label: '萓｡譬ｼ縺娯雷繧医ｊ荳・, desc: '繧ｭ繝ｪ逡ｪ繧・ｰｴ蟷ｳ邱壹→縺ｮ豈碑ｼ・ },
+      { id: 'price_break',  label: '萓｡譬ｼ繝悶Ξ繧､繧ｯ',   desc: '迚ｹ螳壹Λ繧､繝ｳ縺ｮ遯∫�ｴ繧堤｢ｺ隱・ }
     ];
   }
 
@@ -1920,7 +1930,7 @@ function renderWizardStep2() {
   const searchInput = document.createElement('input');
   searchInput.type = 'text';
   searchInput.className = 'wizard-search-input';
-  searchInput.placeholder = 'インジケーターを検索...';
+  searchInput.placeholder = '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧呈､懃ｴ｢...';
   searchContainer.appendChild(searchInput);
   container.appendChild(searchContainer);
 
@@ -1974,7 +1984,7 @@ function renderWizardStep3() {
 
   const grid = document.createElement('div');
   grid.className = 'wizard-card-grid';
-  // 条件タイプは名前が長いため、2列固定にするスタイルを一時的に適用
+  // 譚｡莉ｶ繧ｿ繧､繝励・蜷榊燕縺碁聞縺・◆繧√・蛻怜崋螳壹↓縺吶ｋ繧ｹ繧ｿ繧､繝ｫ繧剃ｸ譎ら噪縺ｫ驕ｩ逕ｨ
   grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
 
   conditions.forEach(cond => {
@@ -2000,189 +2010,189 @@ function getIndicatorConditions(indicator) {
   switch (indicator) {
     case 'ma':
       return [
-        { id: 'cross_up',    label: 'ゴールデンクロス(短期が長期を上抜け)' },
-        { id: 'cross_down',  label: 'デッドクロス(短期が長期を下抜け)' },
-        { id: 'above',       label: '短期MAが長期MAより上' },
-        { id: 'below',       label: '短期MAが長期MAより下' },
-        { id: 'price_above', label: '価格がMAより上' },
-        { id: 'price_below', label: '価格がMAより下' }
+        { id: 'cross_up',    label: '繧ｴ繝ｼ繝ｫ繝・Φ繧ｯ繝ｭ繧ｹ(遏ｭ譛溘′髟ｷ譛溘ｒ荳頑栢縺・' },
+        { id: 'cross_down',  label: '繝・ャ繝峨け繝ｭ繧ｹ(遏ｭ譛溘′髟ｷ譛溘ｒ荳区栢縺・' },
+        { id: 'above',       label: '遏ｭ譛櫪A縺碁聞譛櫪A繧医ｊ荳・ },
+        { id: 'below',       label: '遏ｭ譛櫪A縺碁聞譛櫪A繧医ｊ荳・ },
+        { id: 'price_above', label: '萓｡譬ｼ縺勲A繧医ｊ荳・ },
+        { id: 'price_below', label: '萓｡譬ｼ縺勲A繧医ｊ荳・ }
       ];
     case 'bollinger':
       return [
-        { id: 'touch_upper',  label: '価格が上バンドにタッチ' },
-        { id: 'touch_lower',  label: '価格が下バンドにタッチ' },
-        { id: 'break_upper',  label: '価格が上バンドをブレイク' },
-        { id: 'break_lower',  label: '価格が下バンドをブレイク' },
-        { id: 'squeeze',      label: 'バンド幅が縮小(スクイーズ)' },
-        { id: 'expansion',    label: 'バンド幅が拡大(エクスパンション)' },
-        { id: 'inside_bands', label: '価格がバンド内' },
-        { id: 'walk_upper',   label: 'バンドウォーク(上)' },
-        { id: 'walk_lower',   label: 'バンドウォーク(下)' }
+        { id: 'touch_upper',  label: '萓｡譬ｼ縺御ｸ翫ヰ繝ｳ繝峨↓繧ｿ繝・メ' },
+        { id: 'touch_lower',  label: '萓｡譬ｼ縺御ｸ九ヰ繝ｳ繝峨↓繧ｿ繝・メ' },
+        { id: 'break_upper',  label: '萓｡譬ｼ縺御ｸ翫ヰ繝ｳ繝峨ｒ繝悶Ξ繧､繧ｯ' },
+        { id: 'break_lower',  label: '萓｡譬ｼ縺御ｸ九ヰ繝ｳ繝峨ｒ繝悶Ξ繧､繧ｯ' },
+        { id: 'squeeze',      label: '繝舌Φ繝牙ｹ・′邵ｮ蟆・繧ｹ繧ｯ繧､繝ｼ繧ｺ)' },
+        { id: 'expansion',    label: '繝舌Φ繝牙ｹ・′諡｡螟ｧ(繧ｨ繧ｯ繧ｹ繝代Φ繧ｷ繝ｧ繝ｳ)' },
+        { id: 'inside_bands', label: '萓｡譬ｼ縺後ヰ繝ｳ繝牙・' },
+        { id: 'walk_upper',   label: '繝舌Φ繝峨え繧ｩ繝ｼ繧ｯ(荳・' },
+        { id: 'walk_lower',   label: '繝舌Φ繝峨え繧ｩ繝ｼ繧ｯ(荳・' }
       ];
     case 'rsi':
       return [
-        { id: 'above_level',  label: 'RSIがレベルより上' },
-        { id: 'below_level',  label: 'RSIがレベルより下' },
-        { id: 'cross_up',     label: 'RSIがレベルを上抜け' },
-        { id: 'cross_down',   label: 'RSIがレベルを下抜け' }
+        { id: 'above_level',  label: 'RSI縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'below_level',  label: 'RSI縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'cross_up',     label: 'RSI縺後Ξ繝吶Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'RSI縺後Ξ繝吶Ν繧剃ｸ区栢縺・ }
       ];
     case 'macd':
       return [
-        { id: 'cross_up',     label: 'MACDラインがシグナルを上抜け' },
-        { id: 'cross_down',   label: 'MACDラインがシグナルを下抜け' },
-        { id: 'above_zero',   label: 'MACDラインがゼロより上' },
-        { id: 'below_zero',   label: 'MACDラインがゼロより下' },
-        { id: 'histogram_up', label: 'ヒストグラムが増加' },
-        { id: 'histogram_dn', label: 'ヒストグラムが減少' }
+        { id: 'cross_up',     label: 'MACD繝ｩ繧､繝ｳ縺後す繧ｰ繝翫Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'MACD繝ｩ繧､繝ｳ縺後す繧ｰ繝翫Ν繧剃ｸ区栢縺・ },
+        { id: 'above_zero',   label: 'MACD繝ｩ繧､繝ｳ縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'MACD繝ｩ繧､繝ｳ縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'histogram_up', label: '繝偵せ繝医げ繝ｩ繝�縺悟｢怜刈' },
+        { id: 'histogram_dn', label: '繝偵せ繝医げ繝ｩ繝�縺梧ｸ帛ｰ・ }
       ];
     case 'stochastic':
       return [
-        { id: 'cross_up',     label: '%Kが%Dを上抜け' },
-        { id: 'cross_down',   label: '%Kが%Dを下抜け' },
-        { id: 'above_level',  label: '%Kがレベルより上' },
-        { id: 'below_level',  label: '%Kがレベルより下' }
+        { id: 'cross_up',     label: '%K縺・D繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: '%K縺・D繧剃ｸ区栢縺・ },
+        { id: 'above_level',  label: '%K縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'below_level',  label: '%K縺後Ξ繝吶Ν繧医ｊ荳・ }
       ];
     case 'cci':
       return [
-        { id: 'above_level',  label: 'CCIがレベルより上' },
-        { id: 'below_level',  label: 'CCIがレベルより下' },
-        { id: 'cross_up',     label: 'CCIがレベルを上抜け' },
-        { id: 'cross_down',   label: 'CCIがレベルを下抜け' }
+        { id: 'above_level',  label: 'CCI縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'below_level',  label: 'CCI縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'cross_up',     label: 'CCI縺後Ξ繝吶Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'CCI縺後Ξ繝吶Ν繧剃ｸ区栢縺・ }
       ];
     case 'adx':
       return [
-        { id: 'above_level',  label: 'ADXがレベルより上(トレンド強い)' },
-        { id: 'below_level',  label: 'ADXがレベルより下(トレンド弱い)' },
-        { id: 'di_cross_up',  label: '+DIが-DIを上抜け' },
-        { id: 'di_cross_down',label: '+DIが-DIを下抜け' }
+        { id: 'above_level',  label: 'ADX縺後Ξ繝吶Ν繧医ｊ荳・繝医Ξ繝ｳ繝牙ｼｷ縺・' },
+        { id: 'below_level',  label: 'ADX縺後Ξ繝吶Ν繧医ｊ荳・繝医Ξ繝ｳ繝牙ｼｱ縺・' },
+        { id: 'di_cross_up',  label: '+DI縺・DI繧剃ｸ頑栢縺・ },
+        { id: 'di_cross_down',label: '+DI縺・DI繧剃ｸ区栢縺・ }
       ];
     case 'atr':
       return [
-        { id: 'above_level',  label: 'ATRが値より上' },
-        { id: 'below_level',  label: 'ATRが値より下' }
+        { id: 'above_level',  label: 'ATR縺悟､繧医ｊ荳・ },
+        { id: 'below_level',  label: 'ATR縺悟､繧医ｊ荳・ }
       ];
     case 'ichimoku':
       return [
-        { id: 'tenkan_above_kijun', label: '転換線が基準線より上' },
-        { id: 'tenkan_below_kijun', label: '転換線が基準線より下' },
-        { id: 'tenkan_cross_up',    label: '転換線が基準線を上抜け' },
-        { id: 'tenkan_cross_down',  label: '転換線が基準線を下抜け' },
-        { id: 'price_above_cloud',  label: '価格が雲より上' },
-        { id: 'price_below_cloud',  label: '価格が雲より下' },
-        { id: 'price_in_cloud',     label: '価格が雲の中' },
-        { id: 'chikou_above',       label: '遅行スパンが価格より上' },
-        { id: 'chikou_below',       label: '遅行スパンが価格より下' }
+        { id: 'tenkan_above_kijun', label: '霆｢謠帷ｷ壹′蝓ｺ貅也ｷ壹ｈ繧贋ｸ・ },
+        { id: 'tenkan_below_kijun', label: '霆｢謠帷ｷ壹′蝓ｺ貅也ｷ壹ｈ繧贋ｸ・ },
+        { id: 'tenkan_cross_up',    label: '霆｢謠帷ｷ壹′蝓ｺ貅也ｷ壹ｒ荳頑栢縺・ },
+        { id: 'tenkan_cross_down',  label: '霆｢謠帷ｷ壹′蝓ｺ貅也ｷ壹ｒ荳区栢縺・ },
+        { id: 'price_above_cloud',  label: '萓｡譬ｼ縺碁峇繧医ｊ荳・ },
+        { id: 'price_below_cloud',  label: '萓｡譬ｼ縺碁峇繧医ｊ荳・ },
+        { id: 'price_in_cloud',     label: '萓｡譬ｼ縺碁峇縺ｮ荳ｭ' },
+        { id: 'chikou_above',       label: '驕・｡後せ繝代Φ縺御ｾ｡譬ｼ繧医ｊ荳・ },
+        { id: 'chikou_below',       label: '驕・｡後せ繝代Φ縺御ｾ｡譬ｼ繧医ｊ荳・ }
       ];
     case 'envelope':
       return [
-        { id: 'touch_upper',  label: '価格が上ラインにタッチ' },
-        { id: 'touch_lower',  label: '価格が下ラインにタッチ' },
-        { id: 'break_upper',  label: '価格が上ラインをブレイク' },
-        { id: 'break_lower',  label: '価格が下ラインをブレイク' }
+        { id: 'touch_upper',  label: '萓｡譬ｼ縺御ｸ翫Λ繧､繝ｳ縺ｫ繧ｿ繝・メ' },
+        { id: 'touch_lower',  label: '萓｡譬ｼ縺御ｸ九Λ繧､繝ｳ縺ｫ繧ｿ繝・メ' },
+        { id: 'break_upper',  label: '萓｡譬ｼ縺御ｸ翫Λ繧､繝ｳ繧偵ヶ繝ｬ繧､繧ｯ' },
+        { id: 'break_lower',  label: '萓｡譬ｼ縺御ｸ九Λ繧､繝ｳ繧偵ヶ繝ｬ繧､繧ｯ' }
       ];
     case 'parabolic':
       return [
-        { id: 'below_price',  label: 'SARが価格の下(上昇トレンド)' },
-        { id: 'above_price',  label: 'SARが価格の上(下降トレンド)' },
-        { id: 'flip_up',      label: 'SARが下から上に反転' },
-        { id: 'flip_down',    label: 'SARが上から下に反転' }
+        { id: 'below_price',  label: 'SAR縺御ｾ｡譬ｼ縺ｮ荳・荳頑・繝医Ξ繝ｳ繝・' },
+        { id: 'above_price',  label: 'SAR縺御ｾ｡譬ｼ縺ｮ荳・荳矩剄繝医Ξ繝ｳ繝・' },
+        { id: 'flip_up',      label: 'SAR縺御ｸ九°繧我ｸ翫↓蜿崎ｻ｢' },
+        { id: 'flip_down',    label: 'SAR縺御ｸ翫°繧我ｸ九↓蜿崎ｻ｢' }
       ];
     case 'williams':
       return [
-        { id: 'above_level',  label: '%Rがレベルより上' },
-        { id: 'below_level',  label: '%Rがレベルより下' },
-        { id: 'cross_up',     label: '%Rがレベルを上抜け' },
-        { id: 'cross_down',   label: '%Rがレベルを下抜け' }
+        { id: 'above_level',  label: '%R縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'below_level',  label: '%R縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'cross_up',     label: '%R縺後Ξ繝吶Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: '%R縺後Ξ繝吶Ν繧剃ｸ区栢縺・ }
       ];
     case 'demarker':
       return [
-        { id: 'above_level',  label: 'DeMarkerがレベルより上' },
-        { id: 'below_level',  label: 'DeMarkerがレベルより下' },
-        { id: 'cross_up',     label: 'DeMarkerがレベルを上抜け' },
-        { id: 'cross_down',   label: 'DeMarkerがレベルを下抜け' }
+        { id: 'above_level',  label: 'DeMarker縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'below_level',  label: 'DeMarker縺後Ξ繝吶Ν繧医ｊ荳・ },
+        { id: 'cross_up',     label: 'DeMarker縺後Ξ繝吶Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'DeMarker縺後Ξ繝吶Ν繧剃ｸ区栢縺・ }
       ];
     case 'momentum':
       return [
-        { id: 'above_100',    label: 'モメンタムが100より上' },
-        { id: 'below_100',    label: 'モメンタムが100より下' },
-        { id: 'cross_up',     label: 'モメンタムが100を上抜け' },
-        { id: 'cross_down',   label: 'モメンタムが100を下抜け' }
+        { id: 'above_100',    label: '繝｢繝｡繝ｳ繧ｿ繝�縺・00繧医ｊ荳・ },
+        { id: 'below_100',    label: '繝｢繝｡繝ｳ繧ｿ繝�縺・00繧医ｊ荳・ },
+        { id: 'cross_up',     label: '繝｢繝｡繝ｳ繧ｿ繝�縺・00繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: '繝｢繝｡繝ｳ繧ｿ繝�縺・00繧剃ｸ区栢縺・ }
       ];
     case 'osma':
       return [
-        { id: 'above_zero',   label: 'OsMAがゼロより上' },
-        { id: 'below_zero',   label: 'OsMAがゼロより下' },
-        { id: 'cross_up',     label: 'OsMAがゼロを上抜け' },
-        { id: 'cross_down',   label: 'OsMAがゼロを下抜け' }
+        { id: 'above_zero',   label: 'OsMA縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'OsMA縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'cross_up',     label: 'OsMA縺後ぞ繝ｭ繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'OsMA縺後ぞ繝ｭ繧剃ｸ区栢縺・ }
       ];
     case 'ao':
       return [
-        { id: 'above_zero',   label: 'AOがゼロより上' },
-        { id: 'below_zero',   label: 'AOがゼロより下' },
-        { id: 'cross_up',     label: 'AOがゼロを上抜け' },
-        { id: 'cross_down',   label: 'AOがゼロを下抜け' },
-        { id: 'saucer_buy',   label: 'ソーサー(買い)' },
-        { id: 'saucer_sell',  label: 'ソーサー(売り)' }
+        { id: 'above_zero',   label: 'AO縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'AO縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'cross_up',     label: 'AO縺後ぞ繝ｭ繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'AO縺後ぞ繝ｭ繧剃ｸ区栢縺・ },
+        { id: 'saucer_buy',   label: '繧ｽ繝ｼ繧ｵ繝ｼ(雋ｷ縺・' },
+        { id: 'saucer_sell',  label: '繧ｽ繝ｼ繧ｵ繝ｼ(螢ｲ繧・' }
       ];
     case 'ac':
       return [
-        { id: 'above_zero',   label: 'ACがゼロより上' },
-        { id: 'below_zero',   label: 'ACがゼロより下' },
-        { id: 'rising',       label: 'ACが上昇中' },
-        { id: 'falling',      label: 'ACが下落中' }
+        { id: 'above_zero',   label: 'AC縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'AC縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'rising',       label: 'AC縺御ｸ頑・荳ｭ' },
+        { id: 'falling',      label: 'AC縺御ｸ玖誠荳ｭ' }
       ];
     case 'rvi':
       return [
-        { id: 'cross_up',     label: 'RVIがシグナルを上抜け' },
-        { id: 'cross_down',   label: 'RVIがシグナルを下抜け' },
-        { id: 'above_zero',   label: 'RVIがゼロより上' },
-        { id: 'below_zero',   label: 'RVIがゼロより下' }
+        { id: 'cross_up',     label: 'RVI縺後す繧ｰ繝翫Ν繧剃ｸ頑栢縺・ },
+        { id: 'cross_down',   label: 'RVI縺後す繧ｰ繝翫Ν繧剃ｸ区栢縺・ },
+        { id: 'above_zero',   label: 'RVI縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'RVI縺後ぞ繝ｭ繧医ｊ荳・ }
       ];
     case 'bears':
       return [
-        { id: 'above_zero',   label: 'Bears Powerがゼロより上' },
-        { id: 'below_zero',   label: 'Bears Powerがゼロより下' },
-        { id: 'rising',       label: 'Bears Powerが上昇中' },
-        { id: 'falling',      label: 'Bears Powerが下降中' }
+        { id: 'above_zero',   label: 'Bears Power縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'Bears Power縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'rising',       label: 'Bears Power縺御ｸ頑・荳ｭ' },
+        { id: 'falling',      label: 'Bears Power縺御ｸ矩剄荳ｭ' }
       ];
     case 'bulls':
       return [
-        { id: 'above_zero',   label: 'Bulls Powerがゼロより上' },
-        { id: 'below_zero',   label: 'Bulls Powerがゼロより下' },
-        { id: 'rising',       label: 'Bulls Powerが上昇中' },
-        { id: 'falling',      label: 'Bulls Powerが下降中' }
+        { id: 'above_zero',   label: 'Bulls Power縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'below_zero',   label: 'Bulls Power縺後ぞ繝ｭ繧医ｊ荳・ },
+        { id: 'rising',       label: 'Bulls Power縺御ｸ頑・荳ｭ' },
+        { id: 'falling',      label: 'Bulls Power縺御ｸ矩剄荳ｭ' }
       ];
     case 'pivot':
       return [
-        { id: 'price_above_r1',  label: '価格がR1より上' },
-        { id: 'price_below_s1',  label: '価格がS1より下' },
-        { id: 'price_above_r2',  label: '価格がR2より上' },
-        { id: 'price_below_s2',  label: '価格がS2より下' },
-        { id: 'price_above_r3',  label: '価格がR3より上' },
-        { id: 'price_below_s3',  label: '価格がS3より下' },
-        { id: 'price_above_pp',  label: '価格がPPより上' },
-        { id: 'price_below_pp',  label: '価格がPPより下' },
-        { id: 'cross_up_pp',     label: '価格がPPを上抜け' },
-        { id: 'cross_down_pp',   label: '価格がPPを下抜け' },
-        { id: 'cross_up_r1',     label: '価格がR1を上抜け' },
-        { id: 'cross_down_s1',   label: '価格がS1を下抜け' }
+        { id: 'price_above_r1',  label: '萓｡譬ｼ縺軍1繧医ｊ荳・ },
+        { id: 'price_below_s1',  label: '萓｡譬ｼ縺郡1繧医ｊ荳・ },
+        { id: 'price_above_r2',  label: '萓｡譬ｼ縺軍2繧医ｊ荳・ },
+        { id: 'price_below_s2',  label: '萓｡譬ｼ縺郡2繧医ｊ荳・ },
+        { id: 'price_above_r3',  label: '萓｡譬ｼ縺軍3繧医ｊ荳・ },
+        { id: 'price_below_s3',  label: '萓｡譬ｼ縺郡3繧医ｊ荳・ },
+        { id: 'price_above_pp',  label: '萓｡譬ｼ縺訓P繧医ｊ荳・ },
+        { id: 'price_below_pp',  label: '萓｡譬ｼ縺訓P繧医ｊ荳・ },
+        { id: 'cross_up_pp',     label: '萓｡譬ｼ縺訓P繧剃ｸ頑栢縺・ },
+        { id: 'cross_down_pp',   label: '萓｡譬ｼ縺訓P繧剃ｸ区栢縺・ },
+        { id: 'cross_up_r1',     label: '萓｡譬ｼ縺軍1繧剃ｸ頑栢縺・ },
+        { id: 'cross_down_s1',   label: '萓｡譬ｼ縺郡1繧剃ｸ区栢縺・ }
       ];
     case 'fibonacci':
       return [
-        { id: 'price_above_236', label: '価格が23.6%ラインより上' },
-        { id: 'price_below_236', label: '価格が23.6%ラインより下' },
-        { id: 'price_above_382', label: '価格が38.2%ラインより上' },
-        { id: 'price_below_382', label: '価格が38.2%ラインより下' },
-        { id: 'price_above_500', label: '価格が50.0%ラインより上' },
-        { id: 'price_below_500', label: '価格が50.0%ラインより下' },
-        { id: 'price_above_618', label: '価格が61.8%ラインより上' },
-        { id: 'price_below_618', label: '価格が61.8%ラインより下' },
-        { id: 'price_above_786', label: '価格が78.6%ラインより上' },
-        { id: 'price_below_786', label: '価格が78.6%ラインより下' },
-        { id: 'cross_up_382',    label: '価格が38.2%を上抜け' },
-        { id: 'cross_down_382',  label: '価格が38.2%を下抜け' },
-        { id: 'cross_up_618',    label: '価格が61.8%を上抜け' },
-        { id: 'cross_down_618',  label: '価格が61.8%を下抜け' }
+        { id: 'price_above_236', label: '萓｡譬ｼ縺・3.6%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_below_236', label: '萓｡譬ｼ縺・3.6%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_above_382', label: '萓｡譬ｼ縺・8.2%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_below_382', label: '萓｡譬ｼ縺・8.2%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_above_500', label: '萓｡譬ｼ縺・0.0%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_below_500', label: '萓｡譬ｼ縺・0.0%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_above_618', label: '萓｡譬ｼ縺・1.8%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_below_618', label: '萓｡譬ｼ縺・1.8%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_above_786', label: '萓｡譬ｼ縺・8.6%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'price_below_786', label: '萓｡譬ｼ縺・8.6%繝ｩ繧､繝ｳ繧医ｊ荳・ },
+        { id: 'cross_up_382',    label: '萓｡譬ｼ縺・8.2%繧剃ｸ頑栢縺・ },
+        { id: 'cross_down_382',  label: '萓｡譬ｼ縺・8.2%繧剃ｸ区栢縺・ },
+        { id: 'cross_up_618',    label: '萓｡譬ｼ縺・1.8%繧剃ｸ頑栢縺・ },
+        { id: 'cross_down_618',  label: '萓｡譬ｼ縺・1.8%繧剃ｸ区栢縺・ }
       ];
     default:
       return [];
@@ -2193,33 +2203,33 @@ function getCandleConditions(indicator) {
   switch (indicator) {
     case 'body_size':
       return [
-        { id: 'above_pips', label: '実体がNpips以上' },
-        { id: 'below_pips', label: '実体がNpips以下' }
+        { id: 'above_pips', label: '螳滉ｽ薙′Npips莉･荳・ },
+        { id: 'below_pips', label: '螳滉ｽ薙′Npips莉･荳・ }
       ];
     case 'upper_wick':
       return [
-        { id: 'above_pips', label: '上ヒゲがNpips以上' },
-        { id: 'below_pips', label: '上ヒゲがNpips以下' }
+        { id: 'above_pips', label: '荳翫ヲ繧ｲ縺君pips莉･荳・ },
+        { id: 'below_pips', label: '荳翫ヲ繧ｲ縺君pips莉･荳・ }
       ];
     case 'lower_wick':
       return [
-        { id: 'above_pips', label: '下ヒゲがNpips以上' },
-        { id: 'below_pips', label: '下ヒゲがNpips以下' }
+        { id: 'above_pips', label: '荳九ヲ繧ｲ縺君pips莉･荳・ },
+        { id: 'below_pips', label: '荳九ヲ繧ｲ縺君pips莉･荳・ }
       ];
     case 'bullish':
-      return [{ id: 'is_true', label: '陽線である' }];
+      return [{ id: 'is_true', label: '髯ｽ邱壹〒縺ゅｋ' }];
     case 'bearish':
-      return [{ id: 'is_true', label: '陰線である' }];
+      return [{ id: 'is_true', label: '髯ｰ邱壹〒縺ゅｋ' }];
     case 'doji':
-      return [{ id: 'is_true', label: '同時線である' }];
+      return [{ id: 'is_true', label: '蜷梧凾邱壹〒縺ゅｋ' }];
     case 'engulfing_bull':
-      return [{ id: 'is_true', label: '陽線包み足が出現' }];
+      return [{ id: 'is_true', label: '髯ｽ邱壼桁縺ｿ雜ｳ縺悟・迴ｾ' }];
     case 'engulfing_bear':
-      return [{ id: 'is_true', label: '陰線包み足が出現' }];
+      return [{ id: 'is_true', label: '髯ｰ邱壼桁縺ｿ雜ｳ縺悟・迴ｾ' }];
     case 'pinbar_bull':
-      return [{ id: 'is_true', label: '強気ピンバーが出現' }];
+      return [{ id: 'is_true', label: '蠑ｷ豌励ヴ繝ｳ繝舌・縺悟・迴ｾ' }];
     case 'pinbar_bear':
-      return [{ id: 'is_true', label: '弱気ピンバーが出現' }];
+      return [{ id: 'is_true', label: '蠑ｱ豌励ヴ繝ｳ繝舌・縺悟・迴ｾ' }];
     default:
       return [];
   }
@@ -2229,23 +2239,23 @@ function getPriceConditions(indicator) {
   switch (indicator) {
     case 'price_above':
       return [
-        { id: 'fixed_price', label: '固定価格' },
-        { id: 'indicator',   label: 'インジケーター値' }
+        { id: 'fixed_price', label: '蝗ｺ螳壻ｾ｡譬ｼ' },
+        { id: 'indicator',   label: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ蛟､' }
       ];
     case 'price_below':
       return [
-        { id: 'fixed_price', label: '固定価格' },
-        { id: 'indicator',   label: 'インジケーター値' }
+        { id: 'fixed_price', label: '蝗ｺ螳壻ｾ｡譬ｼ' },
+        { id: 'indicator',   label: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ蛟､' }
       ];
     case 'price_cross_up':
       return [
-        { id: 'fixed_price', label: '固定価格' },
-        { id: 'indicator',   label: 'インジケーター値' }
+        { id: 'fixed_price', label: '蝗ｺ螳壻ｾ｡譬ｼ' },
+        { id: 'indicator',   label: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ蛟､' }
       ];
     case 'price_cross_dn':
       return [
-        { id: 'fixed_price', label: '固定価格' },
-        { id: 'indicator',   label: 'インジケーター値' }
+        { id: 'fixed_price', label: '蝗ｺ螳壻ｾ｡譬ｼ' },
+        { id: 'indicator',   label: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ蛟､' }
       ];
     default:
       return [];
@@ -2299,22 +2309,22 @@ function renderWizardStep4() {
   const tfGroup = document.createElement('div');
   tfGroup.className = 'wizard-param-group';
   const tfLabel = document.createElement('label');
-  tfLabel.textContent = '判断時間足';
+  tfLabel.textContent = '蛻､譁ｭ譎る俣雜ｳ';
   tfGroup.appendChild(tfLabel);
   const tfSelect = document.createElement('select');
   tfSelect.className = 'wizard-param-select';
   tfSelect.dataset.paramId = 'condTimeframe';
   const tfOptions = [
-    { value: '0',           label: '現在のチャート' },
-    { value: 'PERIOD_M1',   label: 'M1 (1分足)' },
-    { value: 'PERIOD_M5',   label: 'M5 (5分足)' },
-    { value: 'PERIOD_M15',  label: 'M15 (15分足)' },
-    { value: 'PERIOD_M30',  label: 'M30 (30分足)' },
-    { value: 'PERIOD_H1',   label: 'H1 (1時間足)' },
-    { value: 'PERIOD_H4',   label: 'H4 (4時間足)' },
-    { value: 'PERIOD_D1',   label: 'D1 (日足)' },
-    { value: 'PERIOD_W1',   label: 'W1 (週足)' },
-    { value: 'PERIOD_MN1',  label: 'MN1 (月足)' }
+    { value: '0',           label: '迴ｾ蝨ｨ縺ｮ繝√Ε繝ｼ繝・ },
+    { value: 'PERIOD_M1',   label: 'M1 (1蛻・ｶｳ)' },
+    { value: 'PERIOD_M5',   label: 'M5 (5蛻・ｶｳ)' },
+    { value: 'PERIOD_M15',  label: 'M15 (15蛻・ｶｳ)' },
+    { value: 'PERIOD_M30',  label: 'M30 (30蛻・ｶｳ)' },
+    { value: 'PERIOD_H1',   label: 'H1 (1譎る俣雜ｳ)' },
+    { value: 'PERIOD_H4',   label: 'H4 (4譎る俣雜ｳ)' },
+    { value: 'PERIOD_D1',   label: 'D1 (譌･雜ｳ)' },
+    { value: 'PERIOD_W1',   label: 'W1 (騾ｱ雜ｳ)' },
+    { value: 'PERIOD_MN1',  label: 'MN1 (譛郁ｶｳ)' }
   ];
   tfOptions.forEach(opt => {
     const option = document.createElement('option');
@@ -2330,7 +2340,7 @@ function renderWizardStep4() {
   const cbGroup = document.createElement('div');
   cbGroup.className = 'wizard-param-group';
   const cbLabel = document.createElement('label');
-  cbLabel.textContent = '確定待ち本数 (0=発生足ですぐ判定)';
+  cbLabel.textContent = '遒ｺ螳壼ｾ・■譛ｬ謨ｰ (0=逋ｺ逕溯ｶｳ縺ｧ縺吶＄蛻､螳・';
   cbGroup.appendChild(cbLabel);
   const cbInput = document.createElement('input');
   cbInput.type = 'number';
@@ -2347,7 +2357,7 @@ function renderWizardStep4() {
   shiftGroup.className = 'wizard-param-group';
   shiftGroup.id = 'wizard-shift-group';
   const shiftLabel = document.createElement('label');
-  shiftLabel.textContent = 'シフト (何本前の足 ※ 判定時間足が「現在のチャート」時のみ有効)';
+  shiftLabel.textContent = '繧ｷ繝輔ヨ (菴墓悽蜑阪・雜ｳ 窶ｻ 蛻､螳壽凾髢楢ｶｳ縺後檎樟蝨ｨ縺ｮ繝√Ε繝ｼ繝医肴凾縺ｮ縺ｿ譛牙柑)';
   shiftGroup.appendChild(shiftLabel);
   const shiftInput = document.createElement('input');
   shiftInput.type = 'number';
@@ -2374,17 +2384,17 @@ function getRequiredParams(category, indicator, conditionType) {
   if (category === 'indicator') {
     switch (indicator) {
       case 'ma':
-        params.push({ id: 'ma_period_short', label: '短期MA期間', type: 'number', default: 20, min: 1 });
-        params.push({ id: 'ma_period_long', label: '長期MA期間', type: 'number', default: 50, min: 1 });
+        params.push({ id: 'ma_period_short', label: '遏ｭ譛櫪A譛滄俣', type: 'number', default: 20, min: 1 });
+        params.push({ id: 'ma_period_long', label: '髟ｷ譛櫪A譛滄俣', type: 'number', default: 50, min: 1 });
         params.push({
-          id: 'ma_method', label: 'MA種別', type: 'select', default: '0',
+          id: 'ma_method', label: 'MA遞ｮ蛻･', type: 'select', default: '0',
           options: [
             { value: '0', label: 'SMA' }, { value: '1', label: 'EMA' },
             { value: '2', label: 'SMMA' }, { value: '3', label: 'LWMA' }
           ]
         });
         params.push({
-          id: 'ma_apply', label: '適用価格', type: 'select', default: '0',
+          id: 'ma_apply', label: '驕ｩ逕ｨ萓｡譬ｼ', type: 'select', default: '0',
           options: [
             { value: '0', label: 'Close' }, { value: '1', label: 'Open' },
             { value: '2', label: 'High' }, { value: '3', label: 'Low' },
@@ -2394,15 +2404,15 @@ function getRequiredParams(category, indicator, conditionType) {
         });
         break;
       case 'heiken_ashi':
-        params.push({ id: 'ha_dummy', label: '平均足設定', type: 'select', default: '0', 
-          options: [{ value: '0', label: '標準 (iCustom)' }] 
+        params.push({ id: 'ha_dummy', label: '蟷ｳ蝮・ｶｳ險ｭ螳・, type: 'select', default: '0', 
+          options: [{ value: '0', label: '讓呎ｺ・(iCustom)' }] 
         });
         break;
       case 'ma_cross':
-        params.push({ id: 'ma_fast_period', label: '短期期間', type: 'number', default: 5 });
-        params.push({ id: 'ma_slow_period', label: '長期期間', type: 'number', default: 20 });
+        params.push({ id: 'ma_fast_period', label: '遏ｭ譛滓悄髢・, type: 'number', default: 5 });
+        params.push({ id: 'ma_slow_period', label: '髟ｷ譛滓悄髢・, type: 'number', default: 20 });
         params.push({
-          id: 'ma_method', label: 'MA種別', type: 'select', default: '0',
+          id: 'ma_method', label: 'MA遞ｮ蛻･', type: 'select', default: '0',
           options: [
             { value: '0', label: 'SMA' }, { value: '1', label: 'EMA' },
             { value: '2', label: 'SMMA' }, { value: '3', label: 'LWMA' }
@@ -2410,11 +2420,11 @@ function getRequiredParams(category, indicator, conditionType) {
         });
         break;
       case 'ma_perfect':
-        params.push({ id: 'ma_short_period', label: '短期期間', type: 'number', default: 10 });
-        params.push({ id: 'ma_mid_period',   label: '中期期間', type: 'number', default: 25 });
-        params.push({ id: 'ma_long_period',  label: '長期期間', type: 'number', default: 50 });
+        params.push({ id: 'ma_short_period', label: '遏ｭ譛滓悄髢・, type: 'number', default: 10 });
+        params.push({ id: 'ma_mid_period',   label: '荳ｭ譛滓悄髢・, type: 'number', default: 25 });
+        params.push({ id: 'ma_long_period',  label: '髟ｷ譛滓悄髢・, type: 'number', default: 50 });
         params.push({
-          id: 'ma_method', label: 'MA種別', type: 'select', default: '0',
+          id: 'ma_method', label: 'MA遞ｮ蛻･', type: 'select', default: '0',
           options: [
             { value: '0', label: 'SMA' }, { value: '1', label: 'EMA' },
             { value: '2', label: 'SMMA' }, { value: '3', label: 'LWMA' }
@@ -2422,10 +2432,10 @@ function getRequiredParams(category, indicator, conditionType) {
         });
         break;
       case 'ma_deviation':
-        params.push({ id: 'ma_period', label: 'MA期間', type: 'number', default: 20 });
-        params.push({ id: 'deviation_pips', label: '乖離pips', type: 'number', default: 30 });
+        params.push({ id: 'ma_period', label: 'MA譛滄俣', type: 'number', default: 20 });
+        params.push({ id: 'deviation_pips', label: '荵夜屬pips', type: 'number', default: 30 });
         params.push({
-          id: 'ma_method', label: 'MA種別', type: 'select', default: '0',
+          id: 'ma_method', label: 'MA遞ｮ蛻･', type: 'select', default: '0',
           options: [
             { value: '0', label: 'SMA' }, { value: '1', label: 'EMA' },
             { value: '2', label: 'SMMA' }, { value: '3', label: 'LWMA' }
@@ -2433,9 +2443,9 @@ function getRequiredParams(category, indicator, conditionType) {
         });
         break;
       case 'round_numbers':
-        params.push({ id: 'round_dist', label: '接近pips', type: 'number', default: 5 });
+        params.push({ id: 'round_dist', label: '謗･霑叢ips', type: 'number', default: 5 });
         params.push({
-          id: 'round_step', label: '節目間隔', type: 'select', default: '100',
+          id: 'round_step', label: '遽逶ｮ髢馴囈', type: 'select', default: '100',
           options: [
             { value: '100', label: '100 pips (.00)' },
             { value: '50',  label: '50 pips (.50)' },
@@ -2445,20 +2455,20 @@ function getRequiredParams(category, indicator, conditionType) {
         break;
       case 'holiday_filter':
         params.push({
-          id: 'holiday_country', label: '対象国', type: 'select', default: 'JP,US',
+          id: 'holiday_country', label: '蟇ｾ雎｡蝗ｽ', type: 'select', default: 'JP,US',
           options: [
-            { value: 'JP,US', label: '日本・米国' },
-            { value: 'JP',    label: '日本のみ' },
-            { value: 'US',    label: '米国のみ' },
-            { value: 'ALL',   label: '主要全ヶ国' }
+            { value: 'JP,US', label: '譌･譛ｬ繝ｻ邀ｳ蝗ｽ' },
+            { value: 'JP',    label: '譌･譛ｬ縺ｮ縺ｿ' },
+            { value: 'US',    label: '邀ｳ蝗ｽ縺ｮ縺ｿ' },
+            { value: 'ALL',   label: '荳ｻ隕∝・繝ｶ蝗ｽ' }
           ]
         });
         break;
       case 'envelope':
-        params.push({ id: 'env_period', label: '期間', type: 'number', default: 20, min: 1 });
-        params.push({ id: 'env_deviation', label: '偏差(%)', type: 'number', default: 0.1, step: '0.01', min: 0 });
+        params.push({ id: 'env_period', label: '譛滄俣', type: 'number', default: 20, min: 1 });
+        params.push({ id: 'env_deviation', label: '蛛丞ｷｮ(%)', type: 'number', default: 0.1, step: '0.01', min: 0 });
         params.push({
-          id: 'env_method', label: 'MA種別', type: 'select', default: '0',
+          id: 'env_method', label: 'MA遞ｮ蛻･', type: 'select', default: '0',
           options: [
             { value: '0', label: 'SMA' }, { value: '1', label: 'EMA' },
             { value: '2', label: 'SMMA' }, { value: '3', label: 'LWMA' }
@@ -2466,111 +2476,111 @@ function getRequiredParams(category, indicator, conditionType) {
         });
         break;
       case 'parabolic':
-        params.push({ id: 'sar_step', label: 'ステップ', type: 'number', default: 0.02, step: '0.01', min: 0.001 });
-        params.push({ id: 'sar_max', label: '最大値', type: 'number', default: 0.2, step: '0.01', min: 0.01 });
+        params.push({ id: 'sar_step', label: '繧ｹ繝・ャ繝・, type: 'number', default: 0.02, step: '0.01', min: 0.001 });
+        params.push({ id: 'sar_max', label: '譛螟ｧ蛟､', type: 'number', default: 0.2, step: '0.01', min: 0.01 });
         break;
       case 'bollinger':
-        params.push({ id: 'bb_period', label: '期間', type: 'number', default: 20, min: 1 });
-        params.push({ id: 'bb_deviation', label: '偏差', type: 'number', default: 2.0, step: '0.1', min: 0.1 });
+        params.push({ id: 'bb_period', label: '譛滄俣', type: 'number', default: 20, min: 1 });
+        params.push({ id: 'bb_deviation', label: '蛛丞ｷｮ', type: 'number', default: 2.0, step: '0.1', min: 0.1 });
         if (conditionType === 'squeeze' || conditionType === 'expansion') {
-          params.push({ id: 'bb_bw_threshold', label: 'バンド幅閾値(pips)', type: 'number', default: 10, min: 0 });
+          params.push({ id: 'bb_bw_threshold', label: '繝舌Φ繝牙ｹ・明蛟､(pips)', type: 'number', default: 10, min: 0 });
         }
         break;
       case 'rsi':
-        params.push({ id: 'rsi_period', label: '期間', type: 'number', default: 14, min: 1 });
-        params.push({ id: 'rsi_level', label: 'レベル', type: 'number', default: 70, min: 0, max: 100 });
+        params.push({ id: 'rsi_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'rsi_level', label: '繝ｬ繝吶Ν', type: 'number', default: 70, min: 0, max: 100 });
         break;
       case 'macd':
-        params.push({ id: 'macd_fast', label: '短期EMA', type: 'number', default: 12, min: 1 });
-        params.push({ id: 'macd_slow', label: '長期EMA', type: 'number', default: 26, min: 1 });
-        params.push({ id: 'macd_signal', label: 'シグナル期間', type: 'number', default: 9, min: 1 });
+        params.push({ id: 'macd_fast', label: '遏ｭ譛檸MA', type: 'number', default: 12, min: 1 });
+        params.push({ id: 'macd_slow', label: '髟ｷ譛檸MA', type: 'number', default: 26, min: 1 });
+        params.push({ id: 'macd_signal', label: '繧ｷ繧ｰ繝翫Ν譛滄俣', type: 'number', default: 9, min: 1 });
         break;
       case 'stochastic':
-        params.push({ id: 'stoch_k', label: '%K期間', type: 'number', default: 5, min: 1 });
-        params.push({ id: 'stoch_d', label: '%D期間', type: 'number', default: 3, min: 1 });
-        params.push({ id: 'stoch_slowing', label: 'スローイング', type: 'number', default: 3, min: 1 });
+        params.push({ id: 'stoch_k', label: '%K譛滄俣', type: 'number', default: 5, min: 1 });
+        params.push({ id: 'stoch_d', label: '%D譛滄俣', type: 'number', default: 3, min: 1 });
+        params.push({ id: 'stoch_slowing', label: '繧ｹ繝ｭ繝ｼ繧､繝ｳ繧ｰ', type: 'number', default: 3, min: 1 });
         if (conditionType === 'above_level' || conditionType === 'below_level') {
-          params.push({ id: 'stoch_level', label: 'レベル', type: 'number', default: 80, min: 0, max: 100 });
+          params.push({ id: 'stoch_level', label: '繝ｬ繝吶Ν', type: 'number', default: 80, min: 0, max: 100 });
         }
         break;
       case 'cci':
-        params.push({ id: 'cci_period', label: '期間', type: 'number', default: 14, min: 1 });
-        params.push({ id: 'cci_level', label: 'レベル', type: 'number', default: 100 });
+        params.push({ id: 'cci_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'cci_level', label: '繝ｬ繝吶Ν', type: 'number', default: 100 });
         break;
       case 'adx':
-        params.push({ id: 'adx_period', label: '期間', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'adx_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
         if (conditionType === 'above_level' || conditionType === 'below_level') {
-          params.push({ id: 'adx_level', label: 'レベル', type: 'number', default: 25, min: 0 });
+          params.push({ id: 'adx_level', label: '繝ｬ繝吶Ν', type: 'number', default: 25, min: 0 });
         }
         break;
       case 'atr':
-        params.push({ id: 'atr_period', label: '期間', type: 'number', default: 14, min: 1 });
-        params.push({ id: 'atr_level', label: '閾値', type: 'number', default: 0.001, step: '0.0001', min: 0 });
+        params.push({ id: 'atr_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'atr_level', label: '髢ｾ蛟､', type: 'number', default: 0.001, step: '0.0001', min: 0 });
         break;
       case 'ichimoku':
-        params.push({ id: 'ichi_tenkan', label: '転換線期間', type: 'number', default: 9, min: 1 });
-        params.push({ id: 'ichi_kijun', label: '基準線期間', type: 'number', default: 26, min: 1 });
-        params.push({ id: 'ichi_senkou', label: '先行スパンB期間', type: 'number', default: 52, min: 1 });
+        params.push({ id: 'ichi_tenkan', label: '霆｢謠帷ｷ壽悄髢・, type: 'number', default: 9, min: 1 });
+        params.push({ id: 'ichi_kijun', label: '蝓ｺ貅也ｷ壽悄髢・, type: 'number', default: 26, min: 1 });
+        params.push({ id: 'ichi_senkou', label: '蜈郁｡後せ繝代ΦB譛滄俣', type: 'number', default: 52, min: 1 });
         break;
       case 'williams':
-        params.push({ id: 'wpr_period', label: '期間', type: 'number', default: 14, min: 1 });
-        params.push({ id: 'wpr_level', label: 'レベル', type: 'number', default: -20 });
+        params.push({ id: 'wpr_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'wpr_level', label: '繝ｬ繝吶Ν', type: 'number', default: -20 });
         break;
       case 'demarker':
-        params.push({ id: 'dem_period', label: '期間', type: 'number', default: 14, min: 1 });
-        params.push({ id: 'dem_level', label: 'レベル', type: 'number', default: 0.7, step: '0.1', min: 0, max: 1 });
+        params.push({ id: 'dem_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'dem_level', label: '繝ｬ繝吶Ν', type: 'number', default: 0.7, step: '0.1', min: 0, max: 1 });
         break;
       case 'momentum':
-        params.push({ id: 'mom_period', label: '期間', type: 'number', default: 14, min: 1 });
+        params.push({ id: 'mom_period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
         break;
       case 'osma':
-        params.push({ id: 'osma_fast', label: '短期EMA', type: 'number', default: 12, min: 1 });
-        params.push({ id: 'osma_slow', label: '長期EMA', type: 'number', default: 26, min: 1 });
-        params.push({ id: 'osma_signal', label: 'シグナル期間', type: 'number', default: 9, min: 1 });
+        params.push({ id: 'osma_fast', label: '遏ｭ譛檸MA', type: 'number', default: 12, min: 1 });
+        params.push({ id: 'osma_slow', label: '髟ｷ譛檸MA', type: 'number', default: 26, min: 1 });
+        params.push({ id: 'osma_signal', label: '繧ｷ繧ｰ繝翫Ν譛滄俣', type: 'number', default: 9, min: 1 });
         break;
       case 'ao': break;
       case 'ac': break;
       case 'rvi':
-        params.push({ id: 'rvi_period', label: '期間', type: 'number', default: 10, min: 1 });
+        params.push({ id: 'rvi_period', label: '譛滄俣', type: 'number', default: 10, min: 1 });
         break;
       case 'bears':
-        params.push({ id: 'bears_period', label: '期間', type: 'number', default: 13, min: 1 });
+        params.push({ id: 'bears_period', label: '譛滄俣', type: 'number', default: 13, min: 1 });
         break;
       case 'bulls':
-        params.push({ id: 'bulls_period', label: '期間', type: 'number', default: 13, min: 1 });
+        params.push({ id: 'bulls_period', label: '譛滄俣', type: 'number', default: 13, min: 1 });
         break;
       case 'pivot':
         params.push({
-          id: 'pivot_type', label: 'ピボット種別', type: 'select', default: 'classic',
+          id: 'pivot_type', label: '繝斐・繝・ヨ遞ｮ蛻･', type: 'select', default: 'classic',
           options: [
-            { value: 'classic', label: 'クラシック' }, { value: 'fibonacci', label: 'フィボナッチ' },
-            { value: 'camarilla', label: 'カマリラ' }, { value: 'woodie', label: 'ウッディ' }
+            { value: 'classic', label: '繧ｯ繝ｩ繧ｷ繝・け' }, { value: 'fibonacci', label: '繝輔ぅ繝懊リ繝・メ' },
+            { value: 'camarilla', label: '繧ｫ繝槭Μ繝ｩ' }, { value: 'woodie', label: '繧ｦ繝・ョ繧｣' }
           ]
         });
         params.push({
-          id: 'pivot_timeframe', label: '算出時間足', type: 'select', default: 'PERIOD_D1',
+          id: 'pivot_timeframe', label: '邂怜・譎る俣雜ｳ', type: 'select', default: 'PERIOD_D1',
           options: [
-            { value: 'PERIOD_H1', label: '1時間足' }, { value: 'PERIOD_H4', label: '4時間足' },
-            { value: 'PERIOD_D1', label: '日足' }, { value: 'PERIOD_W1', label: '週足' }
+            { value: 'PERIOD_H1', label: '1譎る俣雜ｳ' }, { value: 'PERIOD_H4', label: '4譎る俣雜ｳ' },
+            { value: 'PERIOD_D1', label: '譌･雜ｳ' }, { value: 'PERIOD_W1', label: '騾ｱ雜ｳ' }
           ]
         });
         break;
       case 'fibonacci':
         params.push({
-          id: 'fib_mode', label: 'フィボナッチ算出方法', type: 'select', default: 'highlow',
+          id: 'fib_mode', label: '繝輔ぅ繝懊リ繝・メ邂怜・譁ｹ豕・, type: 'select', default: 'highlow',
           options: [
-            { value: 'highlow', label: '直近N本の最高値・最安値' },
-            { value: 'swing', label: '直近スイングハイ・スインフロー' }
+            { value: 'highlow', label: '逶ｴ霑鮮譛ｬ縺ｮ譛鬮伜､繝ｻ譛螳牙､' },
+            { value: 'swing', label: '逶ｴ霑代せ繧､繝ｳ繧ｰ繝上う繝ｻ繧ｹ繧､繝ｳ繝輔Ο繝ｼ' }
           ]
         });
-        params.push({ id: 'fib_period', label: '算出期間(本数)', type: 'number', default: 50, min: 5 });
-        params.push({ id: 'fib_swing_strength', label: 'スイング判定本数(左右N本)', type: 'number', default: 5, min: 2, max: 50 });
+        params.push({ id: 'fib_period', label: '邂怜・譛滄俣(譛ｬ謨ｰ)', type: 'number', default: 50, min: 5 });
+        params.push({ id: 'fib_swing_strength', label: '繧ｹ繧､繝ｳ繧ｰ蛻､螳壽悽謨ｰ(蟾ｦ蜿ｳN譛ｬ)', type: 'number', default: 5, min: 2, max: 50 });
         params.push({
-          id: 'fib_timeframe', label: '算出時間足', type: 'select', default: 'PERIOD_D1',
+          id: 'fib_timeframe', label: '邂怜・譎る俣雜ｳ', type: 'select', default: 'PERIOD_D1',
           options: [
-            { value: '0', label: '現在の時間足' }, { value: 'PERIOD_H1', label: '1時間足' },
-            { value: 'PERIOD_H4', label: '4時間足' }, { value: 'PERIOD_D1', label: '日足' },
-            { value: 'PERIOD_W1', label: '週足' }
+            { value: '0', label: '迴ｾ蝨ｨ縺ｮ譎る俣雜ｳ' }, { value: 'PERIOD_H1', label: '1譎る俣雜ｳ' },
+            { value: 'PERIOD_H4', label: '4譎る俣雜ｳ' }, { value: 'PERIOD_D1', label: '譌･雜ｳ' },
+            { value: 'PERIOD_W1', label: '騾ｱ雜ｳ' }
           ]
         });
         break;
@@ -2581,17 +2591,17 @@ function getRequiredParams(category, indicator, conditionType) {
     }
   } else if (category === 'price') {
     if (conditionType === 'fixed_price') {
-      params.push({ id: 'price_value', label: '価格', type: 'number', default: 0, step: '0.00001' });
+      params.push({ id: 'price_value', label: '萓｡譬ｼ', type: 'number', default: 0, step: '0.00001' });
     } else if (conditionType === 'indicator') {
       params.push({
-        id: 'price_indi', label: '比較インジケーター', type: 'select', default: 'ma',
+        id: 'price_indi', label: '豈碑ｼ・う繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ', type: 'select', default: 'ma',
         options: [
-          { value: 'ma', label: '移動平均線' }, { value: 'bollinger', label: 'ボリンジャーバンド(中央)' },
-          { value: 'envelope_upper', label: 'エンベロープ(上)' }, { value: 'envelope_lower', label: 'エンベロープ(下)' },
-          { value: 'parabolic', label: 'パラボリックSAR' }
+          { value: 'ma', label: '遘ｻ蜍募ｹｳ蝮・ｷ・ }, { value: 'bollinger', label: '繝懊Μ繝ｳ繧ｸ繝｣繝ｼ繝舌Φ繝・荳ｭ螟ｮ)' },
+          { value: 'envelope_upper', label: '繧ｨ繝ｳ繝吶Ο繝ｼ繝・荳・' }, { value: 'envelope_lower', label: '繧ｨ繝ｳ繝吶Ο繝ｼ繝・荳・' },
+          { value: 'parabolic', label: '繝代Λ繝懊Μ繝・けSAR' }
         ]
       });
-      params.push({ id: 'price_indi_period', label: '期間', type: 'number', default: 20, min: 1 });
+      params.push({ id: 'price_indi_period', label: '譛滄俣', type: 'number', default: 20, min: 1 });
     }
   }
 
@@ -2626,19 +2636,19 @@ function renderWizardStep5() {
   const summary = document.createElement('div');
   summary.className = 'wizard-summary';
 
-  const targetLabel = wizardState.targetType === 'buy' ? 'Buy条件'
-    : wizardState.targetType === 'sell' ? 'Sell条件'
-    : 'エグジット条件';
+  const targetLabel = wizardState.targetType === 'buy' ? 'Buy譚｡莉ｶ'
+    : wizardState.targetType === 'sell' ? 'Sell譚｡莉ｶ'
+    : '繧ｨ繧ｰ繧ｸ繝・ヨ譚｡莉ｶ';
 
   const tfLabel = getTfLabel(condTf);
 
   summary.innerHTML = `
-    <h4>${targetLabel} 確認</h4>
-    <p><strong>カテゴリー:</strong> ${wizardState.category === 'indicator' ? 'インジケーター' : wizardState.category === 'candle' ? 'ローソク足' : '価格アクション'}</p>
-    <p><strong>詳細:</strong> ${wizardState.detail}</p>
-    <p><strong>条件:</strong> ${wizardState.conditionType}</p>
-    <p><strong>判断時間足:</strong> ${tfLabel}</p>
-    ${condTf !== '0' ? '<p><strong>確定待ち:</strong> ' + confirmBars + '本 (実効シフト: ' + wizardState.shift + ')</p>' : '<p><strong>シフト:</strong> ' + wizardState.shift + '</p>'}
+    <h4>${targetLabel} 遒ｺ隱・/h4>
+    <p><strong>繧ｫ繝・ざ繝ｪ繝ｼ:</strong> ${wizardState.category === 'indicator' ? '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ' : wizardState.category === 'candle' ? '繝ｭ繝ｼ繧ｽ繧ｯ雜ｳ' : '萓｡譬ｼ繧｢繧ｯ繧ｷ繝ｧ繝ｳ'}</p>
+    <p><strong>隧ｳ邏ｰ:</strong> ${wizardState.detail}</p>
+    <p><strong>譚｡莉ｶ:</strong> ${wizardState.conditionType}</p>
+    <p><strong>蛻､譁ｭ譎る俣雜ｳ:</strong> ${tfLabel}</p>
+    ${condTf !== '0' ? '<p><strong>遒ｺ螳壼ｾ・■:</strong> ' + confirmBars + '譛ｬ (螳溷柑繧ｷ繝輔ヨ: ' + wizardState.shift + ')</p>' : '<p><strong>繧ｷ繝輔ヨ:</strong> ' + wizardState.shift + '</p>'}
   `;
 
   const paramList = document.createElement('div');
@@ -2726,7 +2736,7 @@ function createParamSelect(name, label, options) {
 
 function getTfLabel(tf) {
   const map = {
-    '0': '現在のチャート', 'PERIOD_M1': 'M1', 'PERIOD_M5': 'M5',
+    '0': '迴ｾ蝨ｨ縺ｮ繝√Ε繝ｼ繝・, 'PERIOD_M1': 'M1', 'PERIOD_M5': 'M5',
     'PERIOD_M15': 'M15', 'PERIOD_M30': 'M30', 'PERIOD_H1': 'H1',
     'PERIOD_H4': 'H4', 'PERIOD_D1': 'D1', 'PERIOD_W1': 'W1', 'PERIOD_MN1': 'MN1'
   };
@@ -2769,7 +2779,7 @@ function updateConditionList(type) {
   listEl.innerHTML = '';
 
   if (conditions.length === 0) {
-    listEl.innerHTML = '<p class="empty-list">条件が設定されていません</p>';
+    listEl.innerHTML = '<p class="empty-list">譚｡莉ｶ縺瑚ｨｭ螳壹＆繧後※縺・∪縺帙ｓ</p>';
     return;
   }
 
@@ -2796,7 +2806,7 @@ function updateConditionList(type) {
     item.appendChild(label);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = '削除';
+    deleteBtn.textContent = '蜑企勁';
     deleteBtn.style.background = 'none';
     deleteBtn.style.border = 'none';
     deleteBtn.style.color = '#e74c3c';
@@ -2835,7 +2845,7 @@ function updateExitConditionList() {
   listEl.innerHTML = '';
 
   if (eaState.exitConditions.length === 0) {
-    listEl.innerHTML = '<p class="empty-list">決済条件はまだ追加されていません</p>';
+    listEl.innerHTML = '<p class="empty-list">豎ｺ貂域擅莉ｶ縺ｯ縺ｾ縺�霑ｽ蜉�縺輔ｌ縺ｦ縺・∪縺帙ｓ</p>';
     return;
   }
 
@@ -2845,13 +2855,13 @@ function updateExitConditionList() {
 
     const info = document.createElement('span');
     info.className = 'condition-info';
-    const tfStr = cond.condTimeframe && cond.condTimeframe !== '0' ? ' [' + getTfLabel(cond.condTimeframe) + ' +' + (cond.confirmBars || 0) + '本]' : '';
+    const tfStr = cond.condTimeframe && cond.condTimeframe !== '0' ? ' [' + getTfLabel(cond.condTimeframe) + ' +' + (cond.confirmBars || 0) + '譛ｬ]' : '';
     const tId = cond.conditionType || cond.type;
     info.textContent = `${cond.detail || getDetailName(cond.category, cond.indicator)} / ${tId} (shift: ${cond.shift})${tfStr}`;
 
     const removeBtn = document.createElement('button');
     removeBtn.className = 'condition-remove-btn';
-    removeBtn.textContent = '削除';
+    removeBtn.textContent = '蜑企勁';
     removeBtn.addEventListener('click', () => {
       eaState.exitConditions.splice(index, 1);
       updateExitConditionList();
@@ -3049,7 +3059,7 @@ function saveWizardCondition() {
   updateConditionList('buy');
   updateConditionList('sell');
   closeWizard();
-  showToast('条件を追加しました');
+  showToast('譚｡莉ｶ繧定ｿｽ蜉�縺励∪縺励◆');
 }
 
 // ============================================================
@@ -3061,36 +3071,36 @@ function saveWizardCondition() {
 function getDetailsForCategory(category) {
     const details = {
         indicator: [
-            { id: 'ma', icon: '📈', name: '移動平均線(MA)' },
-            { id: 'rsi', icon: '📉', name: 'RSI' },
-            { id: 'macd', icon: '📊', name: 'MACD' },
-            { id: 'bb', icon: '↕️', name: 'ボリンジャーバンド' },
-            { id: 'stochastic', icon: '🔄', name: 'ストキャスティクス' },
-            { id: 'cci', icon: '💹', name: 'CCI' },
-            { id: 'atr', icon: '📏', name: 'ATR' },
-            { id: 'ichimoku', icon: '☁️', name: '一目均衡表' },
-            { id: 'parabolic', icon: '📡', name: 'パラボリックSAR' }
+            { id: 'ma', icon: '??', name: '遘ｻ蜍募ｹｳ蝮・ｷ・MA)' },
+            { id: 'rsi', icon: '??', name: 'RSI' },
+            { id: 'macd', icon: '??', name: 'MACD' },
+            { id: 'bb', icon: '??', name: '繝懊Μ繝ｳ繧ｸ繝｣繝ｼ繝舌Φ繝・ },
+            { id: 'stochastic', icon: '??', name: '繧ｹ繝医く繝｣繧ｹ繝・ぅ繧ｯ繧ｹ' },
+            { id: 'cci', icon: '??', name: 'CCI' },
+            { id: 'atr', icon: '??', name: 'ATR' },
+            { id: 'ichimoku', icon: '??', name: '荳逶ｮ蝮・｡｡陦ｨ' },
+            { id: 'parabolic', icon: '??', name: '繝代Λ繝懊Μ繝・けSAR' }
         ],
         candle: [
-            { id: 'bullish', icon: '🕯️', name: '陽線' },
-            { id: 'bearish', icon: '🕯️', name: '陰線' },
-            { id: 'doji', icon: '➕', name: '十字線' },
-            { id: 'hammer', icon: '🔨', name: 'ハンマー' },
-            { id: 'engulfing_bull', icon: '☀️', name: '陽線包み足' },
-            { id: 'engulfing_bear', icon: '🌙', name: '陰線包み足' },
-            { id: 'pin_bar_bull', icon: '📍', name: 'ピンバー(強気)' },
-            { id: 'pin_bar_bear', icon: '📍', name: 'ピンバー(弱気)' }
+            { id: 'bullish', icon: '???', name: '髯ｽ邱・ },
+            { id: 'bearish', icon: '???', name: '髯ｰ邱・ },
+            { id: 'doji', icon: '?', name: '蜊∝ｭ礼ｷ・ },
+            { id: 'hammer', icon: '??', name: '繝上Φ繝槭・' },
+            { id: 'engulfing_bull', icon: '??', name: '髯ｽ邱壼桁縺ｿ雜ｳ' },
+            { id: 'engulfing_bear', icon: '??', name: '髯ｰ邱壼桁縺ｿ雜ｳ' },
+            { id: 'pin_bar_bull', icon: '??', name: '繝斐Φ繝舌・(蠑ｷ豌・' },
+            { id: 'pin_bar_bear', icon: '??', name: '繝斐Φ繝舌・(蠑ｱ豌・' }
         ],
         pattern: [
-            { id: 'double_top', icon: '⛰️', name: 'ダブルトップ' },
-            { id: 'double_bottom', icon: '⛰️', name: 'ダブルボトム' },
-            { id: 'head_shoulders', icon: '👤', name: 'ヘッドアンドショルダー' },
-            { id: 'triangle', icon: '📐', name: 'トライアングル' },
-            { id: 'channel', icon: '📏', name: 'チャネル' }
+            { id: 'double_top', icon: '??', name: '繝繝悶Ν繝医ャ繝・ },
+            { id: 'double_bottom', icon: '??', name: '繝繝悶Ν繝懊ヨ繝�' },
+            { id: 'head_shoulders', icon: '??', name: '繝倥ャ繝峨い繝ｳ繝峨す繝ｧ繝ｫ繝繝ｼ' },
+            { id: 'triangle', icon: '??', name: '繝医Λ繧､繧｢繝ｳ繧ｰ繝ｫ' },
+            { id: 'channel', icon: '??', name: '繝√Ε繝阪Ν' }
         ],
         price: [
-            { id: 'level', icon: '📍', name: '価格レベル' },
-            { id: 'ma_compare', icon: '📊', name: 'MA比較' }
+            { id: 'level', icon: '??', name: '萓｡譬ｼ繝ｬ繝吶Ν' },
+            { id: 'ma_compare', icon: '??', name: 'MA豈碑ｼ・ }
         ]
     };
     return details[category] || [];
@@ -3100,82 +3110,82 @@ function getConditionTypesForDetail(category, detail) {
     if (category === 'indicator') {
         switch (detail) {
             case 'ma': return [
-                { id: 'cross_up', name: 'ゴールデンクロス', desc: '短期MAが長期MAを上抜け' },
-                { id: 'cross_down', name: 'デッドクロス', desc: '短期MAが長期MAを下抜け' },
-                { id: 'price_cross_up', name: '価格上抜け', desc: '価格がMAを上抜け' },
-                { id: 'price_cross_down', name: '価格下抜け', desc: '価格がMAを下抜け' },
-                { id: 'above', name: '価格がMAより上', desc: '価格がMAより上にあります' },
-                { id: 'below', name: '価格がMAより下', desc: '価格がMAより下にあります' },
-                { id: 'ma_above', name: '短期MA>長期MA', desc: '短期MAが長期MAより上' },
-                { id: 'ma_below', name: '短期MA<長期MA', desc: '短期MAが長期MAより下' }
+                { id: 'cross_up', name: '繧ｴ繝ｼ繝ｫ繝・Φ繧ｯ繝ｭ繧ｹ', desc: '遏ｭ譛櫪A縺碁聞譛櫪A繧剃ｸ頑栢縺・ },
+                { id: 'cross_down', name: '繝・ャ繝峨け繝ｭ繧ｹ', desc: '遏ｭ譛櫪A縺碁聞譛櫪A繧剃ｸ区栢縺・ },
+                { id: 'price_cross_up', name: '萓｡譬ｼ荳頑栢縺・, desc: '萓｡譬ｼ縺勲A繧剃ｸ頑栢縺・ },
+                { id: 'price_cross_down', name: '萓｡譬ｼ荳区栢縺・, desc: '萓｡譬ｼ縺勲A繧剃ｸ区栢縺・ },
+                { id: 'above', name: '萓｡譬ｼ縺勲A繧医ｊ荳・, desc: '萓｡譬ｼ縺勲A繧医ｊ荳翫↓縺ゅｊ縺ｾ縺・ },
+                { id: 'below', name: '萓｡譬ｼ縺勲A繧医ｊ荳・, desc: '萓｡譬ｼ縺勲A繧医ｊ荳九↓縺ゅｊ縺ｾ縺・ },
+                { id: 'ma_above', name: '遏ｭ譛櫪A>髟ｷ譛櫪A', desc: '遏ｭ譛櫪A縺碁聞譛櫪A繧医ｊ荳・ },
+                { id: 'ma_below', name: '遏ｭ譛櫪A<髟ｷ譛櫪A', desc: '遏ｭ譛櫪A縺碁聞譛櫪A繧医ｊ荳・ }
             ];
             case 'rsi': return [
-                { id: 'oversold', name: '売られすぎ', desc: 'RSIが閾値以下' },
-                { id: 'overbought', name: '買われすぎ', desc: 'RSIが閾値以上' },
-                { id: 'cross_up', name: '上抜け', desc: 'RSIが閾値を上抜け' },
-                { id: 'cross_down', name: '下抜け', desc: 'RSIが閾値を下抜け' }
+                { id: 'oversold', name: '螢ｲ繧峨ｌ縺吶℃', desc: 'RSI縺碁明蛟､莉･荳・ },
+                { id: 'overbought', name: '雋ｷ繧上ｌ縺吶℃', desc: 'RSI縺碁明蛟､莉･荳・ },
+                { id: 'cross_up', name: '荳頑栢縺・, desc: 'RSI縺碁明蛟､繧剃ｸ頑栢縺・ },
+                { id: 'cross_down', name: '荳区栢縺・, desc: 'RSI縺碁明蛟､繧剃ｸ区栢縺・ }
             ];
             case 'macd': return [
-                { id: 'cross_up', name: 'ゴールデンクロス', desc: 'MACDがシグナルを上抜け' },
-                { id: 'cross_down', name: 'デッドクロス', desc: 'MACDがシグナルを下抜け' },
-                { id: 'above_zero', name: 'ゼロライン以上', desc: 'MACDがゼロより上' },
-                { id: 'below_zero', name: 'ゼロライン以下', desc: 'MACDがゼロより下' }
+                { id: 'cross_up', name: '繧ｴ繝ｼ繝ｫ繝・Φ繧ｯ繝ｭ繧ｹ', desc: 'MACD縺後す繧ｰ繝翫Ν繧剃ｸ頑栢縺・ },
+                { id: 'cross_down', name: '繝・ャ繝峨け繝ｭ繧ｹ', desc: 'MACD縺後す繧ｰ繝翫Ν繧剃ｸ区栢縺・ },
+                { id: 'above_zero', name: '繧ｼ繝ｭ繝ｩ繧､繝ｳ莉･荳・, desc: 'MACD縺後ぞ繝ｭ繧医ｊ荳・ },
+                { id: 'below_zero', name: '繧ｼ繝ｭ繝ｩ繧､繝ｳ莉･荳・, desc: 'MACD縺後ぞ繝ｭ繧医ｊ荳・ }
             ];
             case 'bb': return [
-                { id: 'touch_lower', name: '下バンドタッチ', desc: '価格が下バンドにタッチ' },
-                { id: 'touch_upper', name: '上バンドタッチ', desc: '価格が上バンドにタッチ' },
-                { id: 'break_lower', name: '下バンドブレイク', desc: '価格が下バンドを下抜け' },
-                { id: 'break_upper', name: '上バンドブレイク', desc: '価格が上バンドを上抜け' }
+                { id: 'touch_lower', name: '荳九ヰ繝ｳ繝峨ち繝・メ', desc: '萓｡譬ｼ縺御ｸ九ヰ繝ｳ繝峨↓繧ｿ繝・メ' },
+                { id: 'touch_upper', name: '荳翫ヰ繝ｳ繝峨ち繝・メ', desc: '萓｡譬ｼ縺御ｸ翫ヰ繝ｳ繝峨↓繧ｿ繝・メ' },
+                { id: 'break_lower', name: '荳九ヰ繝ｳ繝峨ヶ繝ｬ繧､繧ｯ', desc: '萓｡譬ｼ縺御ｸ九ヰ繝ｳ繝峨ｒ荳区栢縺・ },
+                { id: 'break_upper', name: '荳翫ヰ繝ｳ繝峨ヶ繝ｬ繧､繧ｯ', desc: '萓｡譬ｼ縺御ｸ翫ヰ繝ｳ繝峨ｒ荳頑栢縺・ }
             ];
             case 'stochastic': return [
-                { id: 'oversold', name: '売られすぎ', desc: 'ストキャスが閾値以下' },
-                { id: 'overbought', name: '買われすぎ', desc: 'ストキャスが閾値以上' },
-                { id: 'above_level', name: 'レベル以上', desc: '%Kが指定レベル以上' },
-                { id: 'below_level', name: 'レベル以下', desc: '%Kが指定レベル以下' },
-                { id: 'cross_up', name: 'ゴールデンクロス', desc: '%Kが%Dを上抜け' },
-                { id: 'cross_down', name: 'デッドクロス', desc: '%Kが%Dを下抜け' }
+                { id: 'oversold', name: '螢ｲ繧峨ｌ縺吶℃', desc: '繧ｹ繝医く繝｣繧ｹ縺碁明蛟､莉･荳・ },
+                { id: 'overbought', name: '雋ｷ繧上ｌ縺吶℃', desc: '繧ｹ繝医く繝｣繧ｹ縺碁明蛟､莉･荳・ },
+                { id: 'above_level', name: '繝ｬ繝吶Ν莉･荳・, desc: '%K縺梧欠螳壹Ξ繝吶Ν莉･荳・ },
+                { id: 'below_level', name: '繝ｬ繝吶Ν莉･荳・, desc: '%K縺梧欠螳壹Ξ繝吶Ν莉･荳・ },
+                { id: 'cross_up', name: '繧ｴ繝ｼ繝ｫ繝・Φ繧ｯ繝ｭ繧ｹ', desc: '%K縺・D繧剃ｸ頑栢縺・ },
+                { id: 'cross_down', name: '繝・ャ繝峨け繝ｭ繧ｹ', desc: '%K縺・D繧剃ｸ区栢縺・ }
             ];
             case 'ichimoku': return [
-                { id: 'above_kumo', name: '雲の上', desc: '終値が雲（スパンA/B）より上' },
-                { id: 'below_kumo', name: '雲の下', desc: '終値が雲（スパンA/B）より下' },
-                { id: 'kumo_break', name: '雲抜け', desc: '終値を雲を上抜け' },
-                { id: 'tenkan_kijun', name: '転換線/基準線クロス', desc: '転換線が基準線を上抜け' },
-                { id: 'in_kumo', name: '雲の中', desc: '終値が雲の中に進入' }
+                { id: 'above_kumo', name: '髮ｲ縺ｮ荳・, desc: '邨ょ､縺碁峇・医せ繝代ΦA/B・峨ｈ繧贋ｸ・ },
+                { id: 'below_kumo', name: '髮ｲ縺ｮ荳・, desc: '邨ょ､縺碁峇・医せ繝代ΦA/B・峨ｈ繧贋ｸ・ },
+                { id: 'kumo_break', name: '髮ｲ謚懊￠', desc: '邨ょ､繧帝峇繧剃ｸ頑栢縺・ },
+                { id: 'tenkan_kijun', name: '霆｢謠帷ｷ・蝓ｺ貅也ｷ壹け繝ｭ繧ｹ', desc: '霆｢謠帷ｷ壹′蝓ｺ貅也ｷ壹ｒ荳頑栢縺・ },
+                { id: 'in_kumo', name: '髮ｲ縺ｮ荳ｭ', desc: '邨ょ､縺碁峇縺ｮ荳ｭ縺ｫ騾ｲ蜈･' }
             ];
             case 'parabolic': return [
-                { id: 'sar_above', name: '価格がSARより上', desc: '価格がパラボリックSARより上（上昇トレンド）' },
-                { id: 'sar_below', name: '価格がSARより下', desc: '価格がパラボリックSARより下（下落トレンド）' },
-                { id: 'sar_cross_up', name: 'SAR上抜け', desc: '価格がSARを上に突き抜けた' },
-                { id: 'sar_cross_down', name: 'SAR下抜け', desc: '価格がSARを下に突き抜けた' }
+                { id: 'sar_above', name: '萓｡譬ｼ縺郡AR繧医ｊ荳・, desc: '萓｡譬ｼ縺後ヱ繝ｩ繝懊Μ繝・けSAR繧医ｊ荳奇ｼ井ｸ頑・繝医Ξ繝ｳ繝会ｼ・ },
+                { id: 'sar_below', name: '萓｡譬ｼ縺郡AR繧医ｊ荳・, desc: '萓｡譬ｼ縺後ヱ繝ｩ繝懊Μ繝・けSAR繧医ｊ荳具ｼ井ｸ玖誠繝医Ξ繝ｳ繝会ｼ・ },
+                { id: 'sar_cross_up', name: 'SAR荳頑栢縺・, desc: '萓｡譬ｼ縺郡AR繧剃ｸ翫↓遯√″謚懊￠縺・ },
+                { id: 'sar_cross_down', name: 'SAR荳区栢縺・, desc: '萓｡譬ｼ縺郡AR繧剃ｸ九↓遯√″謚懊￠縺・ }
             ];
             case 'cci': return [
-                { id: 'oversold', name: '売られすぎ', desc: 'CCIが売られすぎレベル以下' },
-                { id: 'overbought', name: '買われすぎ', desc: 'CCIが買われすぎレベル以上' },
-                { id: 'cross_up', name: '上抜け', desc: 'CCIが閾値を上抜け' },
-                { id: 'cross_down', name: '下抜け', desc: 'CCIが閾値を下抜け' }
+                { id: 'oversold', name: '螢ｲ繧峨ｌ縺吶℃', desc: 'CCI縺悟｣ｲ繧峨ｌ縺吶℃繝ｬ繝吶Ν莉･荳・ },
+                { id: 'overbought', name: '雋ｷ繧上ｌ縺吶℃', desc: 'CCI縺瑚ｲｷ繧上ｌ縺吶℃繝ｬ繝吶Ν莉･荳・ },
+                { id: 'cross_up', name: '荳頑栢縺・, desc: 'CCI縺碁明蛟､繧剃ｸ頑栢縺・ },
+                { id: 'cross_down', name: '荳区栢縺・, desc: 'CCI縺碁明蛟､繧剃ｸ区栢縺・ }
             ];
             case 'atr': return [
-                { id: 'above', name: '閾値以上', desc: 'ATRが閾値以上' },
-                { id: 'below', name: '閾値以下', desc: 'ATRが閾値以下' }
+                { id: 'above', name: '髢ｾ蛟､莉･荳・, desc: 'ATR縺碁明蛟､莉･荳・ },
+                { id: 'below', name: '髢ｾ蛟､莉･荳・, desc: 'ATR縺碁明蛟､莉･荳・ }
             ];
         }
     } else if (category === 'candle') {
-        return [{ id: 'appear', name: '出現', desc: 'パターンが出現した時' }];
+        return [{ id: 'appear', name: '蜃ｺ迴ｾ', desc: '繝代ち繝ｼ繝ｳ縺悟・迴ｾ縺励◆譎・ }];
     } else if (category === 'pattern') {
-        return [{ id: 'complete', name: '完成', desc: 'パターンが完成した時' }];
+        return [{ id: 'complete', name: '螳梧・', desc: '繝代ち繝ｼ繝ｳ縺悟ｮ梧・縺励◆譎・ }];
     } else if (category === 'price') {
         if (detail === 'level') return [
-            { id: 'above_level', name: '以上', desc: '価格がレベル以上' },
-            { id: 'below_level', name: '以下', desc: '価格がレベル以下' },
-            { id: 'cross_up_level', name: '上抜け', desc: '価格がレベルを上抜け' },
-            { id: 'cross_down_level', name: '下抜け', desc: '価格がレベルを下抜け' }
+            { id: 'above_level', name: '莉･荳・, desc: '萓｡譬ｼ縺後Ξ繝吶Ν莉･荳・ },
+            { id: 'below_level', name: '莉･荳・, desc: '萓｡譬ｼ縺後Ξ繝吶Ν莉･荳・ },
+            { id: 'cross_up_level', name: '荳頑栢縺・, desc: '萓｡譬ｼ縺後Ξ繝吶Ν繧剃ｸ頑栢縺・ },
+            { id: 'cross_down_level', name: '荳区栢縺・, desc: '萓｡譬ｼ縺後Ξ繝吶Ν繧剃ｸ区栢縺・ }
         ];
         if (detail === 'ma_compare') return [
-            { id: 'above_ma', name: 'MA以上', desc: '価格がMAより上' },
-            { id: 'below_ma', name: 'MA以下', desc: '価格がMAより下' }
+            { id: 'above_ma', name: 'MA莉･荳・, desc: '萓｡譬ｼ縺勲A繧医ｊ荳・ },
+            { id: 'below_ma', name: 'MA莉･荳・, desc: '萓｡譬ｼ縺勲A繧医ｊ荳・ }
         ];
     }
-    return [{ id: 'default', name: 'デフォルト', desc: 'デフォルトを選択した場合' }];
+    return [{ id: 'default', name: '繝・ヵ繧ｩ繝ｫ繝・, desc: '繝・ヵ繧ｩ繝ｫ繝医ｒ驕ｸ謚槭＠縺溷�ｴ蜷・ }];
 }
 
 function getValueInputsForCondition(category, detail, conditionType) {
@@ -3183,61 +3193,61 @@ function getValueInputsForCondition(category, detail, conditionType) {
     if (category === 'indicator') {
         switch (detail) {
             case 'ma':
-                inputs.push({ id: 'period', label: '期間', type: 'number', default: 20, min: 1 });
-                inputs.push({ id: 'shortPeriod', label: '短期MA期間', type: 'number', default: 5, min: 1 });
-                inputs.push({ id: 'longPeriod', label: '長期MA期間', type: 'number', default: 20, min: 1 });
-                inputs.push({ id: 'method', label: 'MA種別', type: 'select', options: [{ value: 'sma', label: 'SMA' }, { value: 'ema', label: 'EMA' }, { value: 'smma', label: 'SMMA' }, { value: 'lwma', label: 'LWMA' }] });
+                inputs.push({ id: 'period', label: '譛滄俣', type: 'number', default: 20, min: 1 });
+                inputs.push({ id: 'shortPeriod', label: '遏ｭ譛櫪A譛滄俣', type: 'number', default: 5, min: 1 });
+                inputs.push({ id: 'longPeriod', label: '髟ｷ譛櫪A譛滄俣', type: 'number', default: 20, min: 1 });
+                inputs.push({ id: 'method', label: 'MA遞ｮ蛻･', type: 'select', options: [{ value: 'sma', label: 'SMA' }, { value: 'ema', label: 'EMA' }, { value: 'smma', label: 'SMMA' }, { value: 'lwma', label: 'LWMA' }] });
                 break;
             case 'rsi':
-                inputs.push({ id: 'period', label: '期間', type: 'number', default: 14, min: 1 });
-                inputs.push({ id: 'level', label: 'レベル', type: 'number', default: conditionType === 'oversold' ? 30 : 70, min: 0, max: 100 });
+                inputs.push({ id: 'period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+                inputs.push({ id: 'level', label: '繝ｬ繝吶Ν', type: 'number', default: conditionType === 'oversold' ? 30 : 70, min: 0, max: 100 });
                 break;
             case 'macd':
-                inputs.push({ id: 'fastPeriod', label: 'Fast期間', type: 'number', default: 12, min: 1 });
-                inputs.push({ id: 'slowPeriod', label: 'Slow期間', type: 'number', default: 26, min: 1 });
-                inputs.push({ id: 'signalPeriod', label: 'Signal期間', type: 'number', default: 9, min: 1 });
+                inputs.push({ id: 'fastPeriod', label: 'Fast譛滄俣', type: 'number', default: 12, min: 1 });
+                inputs.push({ id: 'slowPeriod', label: 'Slow譛滄俣', type: 'number', default: 26, min: 1 });
+                inputs.push({ id: 'signalPeriod', label: 'Signal譛滄俣', type: 'number', default: 9, min: 1 });
                 break;
             case 'bb':
-                inputs.push({ id: 'period', label: '期間', type: 'number', default: 20, min: 1 });
-                inputs.push({ id: 'deviation', label: '偏差', type: 'number', default: 2.0, min: 0.1, step: 0.1 });
+                inputs.push({ id: 'period', label: '譛滄俣', type: 'number', default: 20, min: 1 });
+                inputs.push({ id: 'deviation', label: '蛛丞ｷｮ', type: 'number', default: 2.0, min: 0.1, step: 0.1 });
                 break;
             case 'stochastic':
-                inputs.push({ id: 'kPeriod', label: '%K期間', type: 'number', default: 5, min: 1 });
-                inputs.push({ id: 'dPeriod', label: '%D期間', type: 'number', default: 3, min: 1 });
-                inputs.push({ id: 'slowing', label: 'スローイング', type: 'number', default: 3, min: 1 });
+                inputs.push({ id: 'kPeriod', label: '%K譛滄俣', type: 'number', default: 5, min: 1 });
+                inputs.push({ id: 'dPeriod', label: '%D譛滄俣', type: 'number', default: 3, min: 1 });
+                inputs.push({ id: 'slowing', label: '繧ｹ繝ｭ繝ｼ繧､繝ｳ繧ｰ', type: 'number', default: 3, min: 1 });
                 if (conditionType === 'oversold' || conditionType === 'overbought' || conditionType === 'above_level' || conditionType === 'below_level') {
                     const defLevel = (conditionType === 'oversold' || conditionType === 'below_level') ? 20 : 80;
-                    inputs.push({ id: 'level', label: 'レベル', type: 'number', default: defLevel, min: 0, max: 100 });
+                    inputs.push({ id: 'level', label: '繝ｬ繝吶Ν', type: 'number', default: defLevel, min: 0, max: 100 });
                 }
                 break;
             case 'ichimoku':
-                inputs.push({ id: 'tenkan', label: '転換線期間', type: 'number', default: 9, min: 1 });
-                inputs.push({ id: 'kijun', label: '基準線期間', type: 'number', default: 26, min: 1 });
-                inputs.push({ id: 'senkou', label: '先行期間', type: 'number', default: 52, min: 1 });
+                inputs.push({ id: 'tenkan', label: '霆｢謠帷ｷ壽悄髢・, type: 'number', default: 9, min: 1 });
+                inputs.push({ id: 'kijun', label: '蝓ｺ貅也ｷ壽悄髢・, type: 'number', default: 26, min: 1 });
+                inputs.push({ id: 'senkou', label: '蜈郁｡梧悄髢・, type: 'number', default: 52, min: 1 });
                 break;
             case 'parabolic':
                 inputs.push({ id: 'step', label: 'Step', type: 'number', default: 0.02, min: 0.001, step: 0.001 });
                 inputs.push({ id: 'max', label: 'Maximum', type: 'number', default: 0.2, min: 0.01, step: 0.01 });
                 break;
             case 'cci':
-                inputs.push({ id: 'period', label: '期間', type: 'number', default: 14, min: 1 });
-                inputs.push({ id: 'overbought', label: '買われすぎレベル', type: 'number', default: 100 });
-                inputs.push({ id: 'oversold', label: '売られすぎレベル', type: 'number', default: -100 });
+                inputs.push({ id: 'period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+                inputs.push({ id: 'overbought', label: '雋ｷ繧上ｌ縺吶℃繝ｬ繝吶Ν', type: 'number', default: 100 });
+                inputs.push({ id: 'oversold', label: '螢ｲ繧峨ｌ縺吶℃繝ｬ繝吶Ν', type: 'number', default: -100 });
                 break;
             case 'atr':
-                inputs.push({ id: 'period', label: '期間', type: 'number', default: 14, min: 1 });
-                inputs.push({ id: 'threshold', label: '閾値', type: 'number', default: 0.001, step: 0.0001 });
+                inputs.push({ id: 'period', label: '譛滄俣', type: 'number', default: 14, min: 1 });
+                inputs.push({ id: 'threshold', label: '髢ｾ蛟､', type: 'number', default: 0.001, step: 0.0001 });
                 break;
         }
     } else if (category === 'price') {
-        if (detail === 'level') inputs.push({ id: 'level', label: '価格レベル', type: 'number', default: 0, step: 0.00001 });
-        else if (detail === 'ma_compare') inputs.push({ id: 'maPeriod', label: 'MA期間', type: 'number', default: 20, min: 1 });
+        if (detail === 'level') inputs.push({ id: 'level', label: '萓｡譬ｼ繝ｬ繝吶Ν', type: 'number', default: 0, step: 0.00001 });
+        else if (detail === 'ma_compare') inputs.push({ id: 'maPeriod', label: 'MA譛滄俣', type: 'number', default: 20, min: 1 });
     }
     return inputs;
 }
 
 function getCategoryName(category) {
-    const names = { indicator: 'インジケーター', candle: 'ローソク足', pattern: 'パターン', price: '価格' };
+    const names = { indicator: '繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ', candle: '繝ｭ繝ｼ繧ｽ繧ｯ雜ｳ', pattern: '繝代ち繝ｼ繝ｳ', price: '萓｡譬ｼ' };
     return names[category] || category;
 }
 
@@ -3250,16 +3260,16 @@ function getDetailName(category, detailId) {
     
     // Hardcoded fallbacks for common indicators
     const fallbacks = {
-        'stochastic': 'ストキャスティクス',
-        'stoch': 'ストキャスティクス',
-        'ichimoku': '一目均衡表',
-        'ma': '移動平均線(MA)',
+        'stochastic': '繧ｹ繝医く繝｣繧ｹ繝・ぅ繧ｯ繧ｹ',
+        'stoch': '繧ｹ繝医く繝｣繧ｹ繝・ぅ繧ｯ繧ｹ',
+        'ichimoku': '荳逶ｮ蝮・｡｡陦ｨ',
+        'ma': '遘ｻ蜍募ｹｳ蝮・ｷ・MA)',
         'rsi': 'RSI',
         'macd': 'MACD',
-        'bb': 'ボリンジャーバンド',
+        'bb': '繝懊Μ繝ｳ繧ｸ繝｣繝ｼ繝舌Φ繝・,
         'cci': 'CCI',
         'atr': 'ATR',
-        'parabolic': 'パラボリックSAR'
+        'parabolic': '繝代Λ繝懊Μ繝・けSAR'
     };
     return fallbacks[detailId] || detailId;
 }
@@ -3272,16 +3282,16 @@ function getConditionTypeName(category, detailId, typeId) {
     
     // Hardcoded fallbacks
     const fallbacks = {
-        'above_kumo': '雲の上',
-        'below_kumo': '雲の下',
-        'kumo_break': '雲抜け',
-        'tenkan_kijun': '転換線/基準線クロス',
-        'above_level': 'レベル以上',
-        'below_level': 'レベル以下',
-        'oversold': '売られすぎ',
-        'overbought': '買われすぎ',
-        'cross_up': 'ゴールデンクロス/上抜け',
-        'cross_down': 'デッドクロス/下抜け'
+        'above_kumo': '髮ｲ縺ｮ荳・,
+        'below_kumo': '髮ｲ縺ｮ荳・,
+        'kumo_break': '髮ｲ謚懊￠',
+        'tenkan_kijun': '霆｢謠帷ｷ・蝓ｺ貅也ｷ壹け繝ｭ繧ｹ',
+        'above_level': '繝ｬ繝吶Ν莉･荳・,
+        'below_level': '繝ｬ繝吶Ν莉･荳・,
+        'oversold': '螢ｲ繧峨ｌ縺吶℃',
+        'overbought': '雋ｷ繧上ｌ縺吶℃',
+        'cross_up': '繧ｴ繝ｼ繝ｫ繝・Φ繧ｯ繝ｭ繧ｹ/荳頑栢縺・,
+        'cross_down': '繝・ャ繝峨け繝ｭ繧ｹ/荳区栢縺・
     };
     return fallbacks[typeId] || typeId;
 }
@@ -3294,16 +3304,16 @@ function setupModals() {
     const helpModal = document.getElementById('help-modal');
     if (helpModal) helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('active'); });
 
-    // ウィザードモーダルのクローズ
+    // 繧ｦ繧｣繧ｶ繝ｼ繝峨Δ繝ｼ繝繝ｫ縺ｮ繧ｯ繝ｭ繝ｼ繧ｺ
     const wizardClose = document.getElementById('wizard-close');
     if (wizardClose) wizardClose.addEventListener('click', () => { closeWizard(); });
     const wizardModal = document.getElementById('wizard-modal');
     if (wizardModal) wizardModal.addEventListener('click', (e) => { if (e.target === wizardModal) closeWizard(); });
 
-    // バックテスト・レポートモーダルのクローズ処理 (Global Function経由)
+    // 繝舌ャ繧ｯ繝・せ繝医・繝ｬ繝昴・繝医Δ繝ｼ繝繝ｫ縺ｮ繧ｯ繝ｭ繝ｼ繧ｺ蜃ｦ逅・(Global Function邨檎罰)
     const reportClose = document.getElementById('report-close');
     if (reportClose) {
-        // 既存のリスナーがある可能性を考慮し、onclick属性での上書きを優先
+        // 譌｢蟄倥・繝ｪ繧ｹ繝翫・縺後≠繧句庄閭ｽ諤ｧ繧定・・縺励｛nclick螻樊ｧ縺ｧ縺ｮ荳頑嶌縺阪ｒ蜆ｪ蜈・
         reportClose.onclick = window.hideBacktestReport;
     }
     const reportModal = document.getElementById('backtest-report-modal');
@@ -3313,7 +3323,7 @@ function setupModals() {
         });
     }
 
-    // Escapeキーで全てのモーダルを閉じる
+    // Escape繧ｭ繝ｼ縺ｧ蜈ｨ縺ｦ縺ｮ繝｢繝ｼ繝繝ｫ繧帝哩縺倥ｋ
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             window.hideBacktestReport();
@@ -3327,7 +3337,7 @@ function setupModals() {
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
-    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+    const icons = { success: '?', error: '?', warning: '??', info: '??' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span class="toast-message">${escapeHtml(message)}</span>`;
@@ -3451,12 +3461,12 @@ async function fetchEconomicIndicators() {
 
   const dateStr = dateInput.value.replace(/-/g, '');
   if (!dateStr || dateStr.length !== 8) {
-    statusEl.textContent = '❌ 日付を選択してください';
+    statusEl.textContent = '? 譌･莉倥ｒ驕ｸ謚槭＠縺ｦ縺上□縺輔＞';
     return;
   }
 
   const url = `https://kissfx.com/article/fxdays${dateStr}.html`;
-  statusEl.textContent = '⏳ 取得中...';
+  statusEl.textContent = '? 蜿門ｾ嶺ｸｭ...';
 
   try {
     // Use CORS proxy
@@ -3467,7 +3477,7 @@ async function fetchEconomicIndicators() {
 
     const indicators = parseHitsuzikaiHtml(html);
     if (indicators.length === 0) {
-      statusEl.textContent = '⚠️ 指標データが見つかりませんでした';
+      statusEl.textContent = '?? 謖・ｨ吶ョ繝ｼ繧ｿ縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ縺ｧ縺励◆';
       return;
     }
 
@@ -3487,11 +3497,11 @@ async function fetchEconomicIndicators() {
 
     // Render list
     renderNewsEventList(filtered);
-    statusEl.textContent = `取得完了: ${indicators.length}件中 ${filtered.length}件を対象`;
+    statusEl.textContent = `蜿門ｾ怜ｮ御ｺ・ ${indicators.length}莉ｶ荳ｭ ${filtered.length}莉ｶ繧貞ｯｾ雎｡`;
 
   } catch (err) {
     console.warn('News fetch error:', err);
-    statusEl.textContent = '❌ 取得に失敗しました。手動で追加してください。';
+    statusEl.textContent = '? 蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆縲よ焔蜍輔〒霑ｽ蜉�縺励※縺上□縺輔＞縲・;
   }
 }
 
@@ -3521,7 +3531,7 @@ function parseHitsuzikaiHtml(html) {
       let name = '';
       for (let i = 1; i < cells.length; i++) {
         const text = cells[i]?.textContent?.trim();
-        if (text && text.length > 3 && !text.match(/^[\s★☆■□◆◇▶▷●○◎]*$/)) {
+        if (text && text.length > 3 && !text.match(/^[\s笘・・笆�笆｡笳・裸??笳鞘雷笳讃*$/)) {
           name = text;
           break;
         }
@@ -3529,9 +3539,9 @@ function parseHitsuzikaiHtml(html) {
       if (!name) continue;
 
       // Count star images for rank
-      const imgs = row.querySelectorAll('img[src*="star"], img[alt*="星"]');
+      const imgs = row.querySelectorAll('img[src*="star"], img[alt*="譏・]');
       const starText = row.textContent;
-      let starCount = (starText.match(/★/g) || []).length;
+      let starCount = (starText.match(/笘・g) || []).length;
       if (starCount === 0) starCount = imgs.length;
 
       let rank = 'C';
@@ -3553,7 +3563,7 @@ function renderNewsEventList(events) {
   if (!listEl) return;
 
   if (!events || events.length === 0) {
-    listEl.innerHTML = '<p class="form-hint">指標イベント未登録</p>';
+    listEl.innerHTML = '<p class="form-hint">謖・ｨ吶う繝吶Φ繝域悴逋ｻ骭ｲ</p>';
     return;
   }
 
@@ -3564,7 +3574,7 @@ function renderNewsEventList(events) {
       <span class="time">${timeStr}</span>
       <span class="name">${escapeHtml(ev.name || ev.label || '')}</span>
       <span class="news-rank-badge ${rankClass}">${ev.rank}</span>
-      <button class="btn btn-secondary" style="padding:4px 8px;font-size:0.75rem;" onclick="removeNewsEvent(${idx})">削除</button>
+      <button class="btn btn-secondary" style="padding:4px 8px;font-size:0.75rem;" onclick="removeNewsEvent(${idx})">蜑企勁</button>
     </div>`;
   }).join('');
 }
@@ -3881,16 +3891,16 @@ class BacktestEngine {
     constructor(data, state) {
         this.data = data;
         this.state = state;
-        this.balance = 1000000; // 初期資金 1,000,000円
+        this.balance = 1000000; // 蛻晄悄雉・≡ 1,000,000蜀・
         this.equity = 1000000;
         this.positions = [];
         this.history = [];
         this.indicators = {};
         this.equityHistory = [];
-        this.spread = state.maxSpread || 2.0; // 固定スプレッド（pips）
+        this.spread = state.maxSpread || 2.0; // 蝗ｺ螳壹せ繝励Ξ繝・ラ・・ips・・
     }
 
-    // 条件などの評価
+    // 譚｡莉ｶ縺ｪ縺ｩ縺ｮ隧穂ｾ｡
     evalCondition(cond, i) {
         if (!cond || !cond.indicator) return false;
         const ind = cond.indicator;
@@ -3954,15 +3964,15 @@ class BacktestEngine {
     run() {
         console.log('Running Backtest Engine...');
         
-        // 1. インジケーターの事前計算
+        // 1. 繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ縺ｮ莠句燕險育ｮ・
         this.precalculate();
 
-        // 2. メインループ
+        // 2. 繝｡繧､繝ｳ繝ｫ繝ｼ繝・
         for (let i = 50; i < this.data.length; i++) {
             this.processBar(i);
         }
 
-        // 終了時に全ポジション決済
+        // 邨ゆｺ・凾縺ｫ蜈ｨ繝昴ず繧ｷ繝ｧ繝ｳ豎ｺ貂・
         this.closeAll(this.data.length - 1);
 
         return this.getResults();
@@ -4000,16 +4010,16 @@ class BacktestEngine {
     processBar(i) {
         const bar = this.data[i];
         
-        // 既存ポジションのチェック (TP/SL/Exit)
+        // 譌｢蟄倥・繧ｸ繧ｷ繝ｧ繝ｳ縺ｮ繝√ぉ繝・け (TP/SL/Exit)
         this.updatePositions(i);
 
-        // フィルターチェック
+        // 繝輔ぅ繝ｫ繧ｿ繝ｼ繝√ぉ繝・け
         if (!this.checkFilters(i)) {
             this.equityHistory.push(this.calculateEquity(i));
             return;
         }
 
-        // 新規エントリー判定
+        // 譁ｰ隕上お繝ｳ繝医Μ繝ｼ蛻､螳・
         if (this.positions.length < (this.state.maxPositions || 1)) {
             const buySignal = this.checkSignal('buy', i);
             const sellSignal = this.checkSignal('sell', i);
@@ -4024,17 +4034,17 @@ class BacktestEngine {
     checkFilters(i) {
         const bar = this.data[i];
         
-        // スプレッドフィルター
+        // 繧ｹ繝励Ξ繝・ラ繝輔ぅ繝ｫ繧ｿ繝ｼ
         if (this.state.useSpreadFilter && this.spread > this.state.maxSpread) return false;
 
-        // 時間フィルター
+        // 譎る俣繝輔ぅ繝ｫ繧ｿ繝ｼ
         if (this.state.useTimeFilter) {
             const d = new Date(bar.time);
             const hour = d.getHours();
             if (hour < this.state.timeStartHour || hour > this.state.timeEndHour) return false;
         }
 
-        // 曜日フィルター
+        // 譖懈律繝輔ぅ繝ｫ繧ｿ繝ｼ
         if (this.state.useDayFilter) {
             const d = new Date(bar.time);
             const day = d.getDay();
@@ -4048,11 +4058,11 @@ class BacktestEngine {
         const bar = this.data[i];
         let floating = 0;
         const point = this.getPoint();
-        const pipValue = point === 0.01 ? 1000 : 1000; // 簡易的に 1pips=1000円/lot
+        const pipValue = point === 0.01 ? 1000 : 1000; // 邁｡譏鍋噪縺ｫ 1pips=1000蜀・lot
         
         this.positions.forEach(pos => {
             const pips = pos.type === 'buy' ? (bar.close - pos.entryPrice) / point : (pos.entryPrice - bar.close) / point;
-            floating += pips * pos.lot * 10000; // 1.0 lot = 100,000通貨, 1pips=1,000円想定
+            floating += pips * pos.lot * 10000; // 1.0 lot = 100,000騾夊ｲｨ, 1pips=1,000蜀・Φ螳・
         });
         return this.balance + floating;
     }
@@ -4085,7 +4095,7 @@ class BacktestEngine {
     }
 
     getPoint() {
-        // 価格から桁を推測 (150.123 -> 0.01, 1.08123 -> 0.0001)
+        // 萓｡譬ｼ縺九ｉ譯√ｒ謗ｨ貂ｬ (150.123 -> 0.01, 1.08123 -> 0.0001)
         const price = this.data[0].close;
         return price > 50 ? 0.01 : 0.0001;
     }
@@ -4120,7 +4130,7 @@ class BacktestEngine {
         const pos = this.positions[idx];
         const point = this.getPoint();
         const pips = pos.type === 'buy' ? (price - pos.entryPrice) / point : (pos.entryPrice - price) / point;
-        const profit = pips * pos.lot * 10000; // 1lot = 100,000通貨, 1pips=1,000円想定
+        const profit = pips * pos.lot * 10000; // 1lot = 100,000騾夊ｲｨ, 1pips=1,000蜀・Φ螳・
         
         this.balance += profit;
         this.history.push({ ...pos, closePrice: price, closeTime: this.data[i].time, pips, profit });
@@ -4139,7 +4149,7 @@ class BacktestEngine {
         const totalProfit = this.history.reduce((sum, t) => sum + (t.profit > 0 ? t.profit : 0), 0);
         const totalLoss = Math.abs(this.history.reduce((sum, t) => sum + (t.profit < 0 ? t.profit : 0), 0));
 
-        // 最大ドローダウン計算
+        // 譛螟ｧ繝峨Ο繝ｼ繝繧ｦ繝ｳ險育ｮ・
         let maxEquity = -Infinity;
         let maxDD = 0;
         this.equityHistory.forEach(equity => {
@@ -4219,12 +4229,12 @@ function renderBacktestHistory() {
             <div class="history-info" onclick="loadBacktestHistoryItem(${i})">
                 <span class="history-name">${h.state.eaName || 'Unnamed EA'}</span>
                 <div class="history-meta">
-                    <span>📅 ${h.timestamp}</span><br>
-                    <span>🔍 ${h.state.buyConditions.length} 条件</span>
+                    <span>?? ${h.timestamp}</span><br>
+                    <span>?? ${h.state.buyConditions.length} 譚｡莉ｶ</span>
                 </div>
-                <div class="history-result">💰 ${h.profit} JPY (${h.winRate || '---'})</div>
+                <div class="history-result">?? ${h.profit} JPY (${h.winRate || '---'})</div>
             </div>
-            <button class="btn btn-outline btn-sm" onclick="showBacktestReport(${i})" style="margin-top:10px; width:100%;">📊 レポートを表示</button>
+            <button class="btn btn-outline btn-sm" onclick="showBacktestReport(${i})" style="margin-top:10px; width:100%;">?? 繝ｬ繝昴・繝医ｒ陦ｨ遉ｺ</button>
         </div>
     `).join('');
 }
@@ -4233,14 +4243,14 @@ window.loadBacktestHistoryItem = function(index) {
     const history = JSON.parse(localStorage.getItem('ea_backtest_history') || '[]');
     if (!history[index]) return;
 
-    if (confirm('保存された履歴からロジックを復元しますか？（現在の設定は上書きされます）')) {
+    if (confirm('菫晏ｭ倥＆繧後◆螻･豁ｴ縺九ｉ繝ｭ繧ｸ繝・け繧貞ｾｩ蜈・＠縺ｾ縺吶°・滂ｼ育樟蝨ｨ縺ｮ險ｭ螳壹・荳頑嶌縺阪＆繧後∪縺呻ｼ・)) {
         eaState = JSON.parse(JSON.stringify(history[index].state));
-        showToast('構成を復元しました', 'success');
+        showToast('讒区・繧貞ｾｩ蜈・＠縺ｾ縺励◆', 'success');
         
-        // 画面をリフレッシュ（簡易的にStep 0に戻すか、各入力を同期させる必要があるが、
-        // 整合性を保つためリロードに近い動作または再描画が必要）
-        // ここでは一旦UIの再初期化を促すメッセージを出す
-        showToast('設定を読み込みました。確認のため各ステップを見直してください。', 'info');
+        // 逕ｻ髱｢繧偵Μ繝輔Ξ繝・す繝･・育ｰ｡譏鍋噪縺ｫStep 0縺ｫ謌ｻ縺吶°縲∝推蜈･蜉帙ｒ蜷梧悄縺輔○繧句ｿ・ｦ√′縺ゅｋ縺後・
+        // 謨ｴ蜷域ｧ繧剃ｿ昴▽縺溘ａ繝ｪ繝ｭ繝ｼ繝峨↓霑代＞蜍穂ｽ懊∪縺溘・蜀肴緒逕ｻ縺悟ｿ・ｦ・ｼ・
+        // 縺薙％縺ｧ縺ｯ荳譌ｦUI縺ｮ蜀榊・譛溷喧繧剃ｿ・☆繝｡繝・そ繝ｼ繧ｸ繧貞・縺・
+        showToast('險ｭ螳壹ｒ隱ｭ縺ｿ霎ｼ縺ｿ縺ｾ縺励◆縲ら｢ｺ隱阪・縺溘ａ蜷・せ繝・ャ繝励ｒ隕狗峩縺励※縺上□縺輔＞縲・, 'info');
     }
 };
 
@@ -4250,17 +4260,17 @@ async function handleWebFetch() {
     const statusEl = document.getElementById('web-fetch-status');
     
     if (!symbol) {
-        showToast('シンボルを入力してください', 'warning');
+        showToast('繧ｷ繝ｳ繝懊Ν繧貞・蜉帙＠縺ｦ縺上□縺輔＞', 'warning');
         return;
     }
 
-    if (statusEl) statusEl.textContent = '⏳ データ取得中...';
-    showToast(`${symbol} のデータを取得中...`, 'info');
+    if (statusEl) statusEl.textContent = '? 繝・・繧ｿ蜿門ｾ嶺ｸｭ...';
+    showToast(`${symbol} 縺ｮ繝・・繧ｿ繧貞叙蠕嶺ｸｭ...`, 'info');
 
     try {
         const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=1000`;
         const response = await fetch(url);
-        if (!response.ok) throw new Error('データ取得に失敗しました。シンボル名が正しいか確認してください。');
+        if (!response.ok) throw new Error('繝・・繧ｿ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆縲ゅす繝ｳ繝懊Ν蜷阪′豁｣縺励＞縺狗｢ｺ隱阪＠縺ｦ縺上□縺輔＞縲・);
         
         const rawData = await response.json();
         const data = rawData.map(d => ({
@@ -4273,13 +4283,13 @@ async function handleWebFetch() {
         }));
 
         backtestData = data;
-        if (statusEl) statusEl.textContent = `✅ ${data.length}本のデータを取得しました。`;
-        showToast('Webデータの取得が完了しました', 'success');
+        if (statusEl) statusEl.textContent = `? ${data.length}譛ｬ縺ｮ繝・・繧ｿ繧貞叙蠕励＠縺ｾ縺励◆縲Ａ;
+        showToast('Web繝・・繧ｿ縺ｮ蜿門ｾ励′螳御ｺ・＠縺ｾ縺励◆', 'success');
         
     } catch (error) {
         console.error('Web Fetch Error:', error);
-        if (statusEl) statusEl.textContent = '❌ エラー: ' + error.message;
-        showToast('取得に失敗しました', 'error');
+        if (statusEl) statusEl.textContent = '? 繧ｨ繝ｩ繝ｼ: ' + error.message;
+        showToast('蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆', 'error');
     }
 }
 
@@ -4288,14 +4298,14 @@ async function handleCsvUpload(e) {
     if (!file) return;
     
     const statusEl = document.getElementById('csv-status');
-    if (statusEl) statusEl.textContent = '⏳ ファイルを読み込み中...';
+    if (statusEl) statusEl.textContent = '? 繝輔ぃ繧､繝ｫ繧定ｪｭ縺ｿ霎ｼ縺ｿ荳ｭ...';
     
     try {
         const text = await file.text();
         const rows = text.split('\n');
         const data = [];
         
-        // 簡易パース: Date,Time,Open,High,Low,Close,Volume
+        // 邁｡譏薙ヱ繝ｼ繧ｹ: Date,Time,Open,High,Low,Close,Volume
         for (let i = 0; i < rows.length; i++) {
             const cols = rows[i].split(',');
             if (cols.length < 6) continue;
@@ -4306,7 +4316,7 @@ async function handleCsvUpload(e) {
             const c = parseFloat(cols[5]);
             
             if (!isNaN(o) && !isNaN(h) && !isNaN(l) && !isNaN(c)) {
-                // 日付形式を yyyy-mm-dd に正規化（Dateクラス用）
+                // 譌･莉伜ｽ｢蠑上ｒ yyyy-mm-dd 縺ｫ豁｣隕丞喧・・ate繧ｯ繝ｩ繧ｹ逕ｨ・・
                 const datePart = cols[0].replace(/\./g, '-');
                 data.push({
                     time: datePart + ' ' + cols[1],
@@ -4318,34 +4328,34 @@ async function handleCsvUpload(e) {
             }
         }
         
-        if (data.length === 0) throw new Error('有効なデータが見つかりませんでした。');
+        if (data.length === 0) throw new Error('譛牙柑縺ｪ繝・・繧ｿ縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ縺ｧ縺励◆縲・);
         
         backtestData = data;
-        if (statusEl) statusEl.textContent = `✅ ${data.length}行のデータを読み込みました。`;
-        showToast('データの読み込みが完了しました', 'success');
+        if (statusEl) statusEl.textContent = `? ${data.length}陦後・繝・・繧ｿ繧定ｪｭ縺ｿ霎ｼ縺ｿ縺ｾ縺励◆縲Ａ;
+        showToast('繝・・繧ｿ縺ｮ隱ｭ縺ｿ霎ｼ縺ｿ縺悟ｮ御ｺ・＠縺ｾ縺励◆', 'success');
         
     } catch (error) {
         console.error('CSV Load Error:', error);
-        if (statusEl) statusEl.textContent = '❌ エラー: ' + error.message;
-        showToast('読み込みに失敗しました', 'error');
+        if (statusEl) statusEl.textContent = '? 繧ｨ繝ｩ繝ｼ: ' + error.message;
+        showToast('隱ｭ縺ｿ霎ｼ縺ｿ縺ｫ螟ｱ謨励＠縺ｾ縺励◆', 'error');
     }
 }
 
 function runBacktest() {
     if (backtestData.length === 0) {
-        showToast('バックテスト用データ(CSV)を先にアップロードしてください', 'warning');
+        showToast('繝舌ャ繧ｯ繝・せ繝育畑繝・・繧ｿ(CSV)繧貞・縺ｫ繧｢繝・・繝ｭ繝ｼ繝峨＠縺ｦ縺上□縺輔＞', 'warning');
         return;
     }
     
-    showToast('バックテストを実行中...', 'info');
+    showToast('繝舌ャ繧ｯ繝・せ繝医ｒ螳溯｡御ｸｭ...', 'info');
     
-    // エンジンの起動
+    // 繧ｨ繝ｳ繧ｸ繝ｳ縺ｮ襍ｷ蜍・
     setTimeout(() => {
         try {
             const engine = new BacktestEngine(backtestData, eaState);
             const results = engine.run();
             
-            // UI更新
+            // UI譖ｴ譁ｰ
             const views = {
                 'res-total-profit': results.profit + ' JPY',
                 'res-win-rate': results.winRate,
@@ -4358,13 +4368,13 @@ function runBacktest() {
                 if (el) el.textContent = val;
             }
             
-            // 履歴テーブルの更新
+            // 螻･豁ｴ繝・・繝悶Ν縺ｮ譖ｴ譁ｰ
             updateTradeHistoryTable(results.history);
 
-            // 資産曲線の描画
+            // 雉・肇譖ｲ邱壹・謠冗判
             drawEquityChart(results.equityHistory);
             
-            // 履歴への保存
+            // 螻･豁ｴ縺ｸ縺ｮ菫晏ｭ・
             const resultForHistory = {
                 ...results,
                 eaName: eaState.eaName || 'MyEA',
@@ -4373,10 +4383,10 @@ function runBacktest() {
             };
             saveBacktestToHistory(resultForHistory);
             
-            showToast('バックテストが完了しました', 'success');
+            showToast('繝舌ャ繧ｯ繝・せ繝医′螳御ｺ・＠縺ｾ縺励◆', 'success');
         } catch (error) {
             console.error('Backtest Execution Error:', error);
-            showToast('バックテスト実行中にエラーが発生しました', 'error');
+            showToast('繝舌ャ繧ｯ繝・せ繝亥ｮ溯｡御ｸｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆', 'error');
         }
     }, 500);
 }
@@ -4461,7 +4471,7 @@ function saveToGallery() {
     };
     gallery.unshift(newEntry);
     localStorage.setItem('ea_labo_gallery', JSON.stringify(gallery));
-    showToast('ギャラリーに保存しました', 'success');
+    showToast('繧ｮ繝｣繝ｩ繝ｪ繝ｼ縺ｫ菫晏ｭ倥＠縺ｾ縺励◆', 'success');
     renderGallery();
     showEAStep(8);
 }
@@ -4472,7 +4482,7 @@ function renderGallery() {
 
     let gallery = JSON.parse(localStorage.getItem('ea_labo_gallery') || '[]');
     if (gallery.length === 0) {
-        grid.innerHTML = '<p class="form-hint">保存された戦略がありません。「保存」ボタンからEAをギャラリーに追加してください。</p>';
+        grid.innerHTML = '<p class="form-hint">菫晏ｭ倥＆繧後◆謌ｦ逡･縺後≠繧翫∪縺帙ｓ縲ゅ御ｿ晏ｭ倥阪・繧ｿ繝ｳ縺九ｉEA繧偵ぐ繝｣繝ｩ繝ｪ繝ｼ縺ｫ霑ｽ蜉�縺励※縺上□縺輔＞縲・/p>';
         return;
     }
 
@@ -4483,8 +4493,8 @@ function renderGallery() {
             <p class="gallery-meta">Created: ${item.date}</p>
             <div class="gallery-stats">Win Rate: ${item.winRate}</div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-secondary btn-sm" onclick="loadFromGallery(${item.id})">読込</button>
-                <button class="btn btn-outline-danger btn-sm" onclick="removeFromGallery(${item.id})">削除</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadFromGallery(${item.id})">隱ｭ霎ｼ</button>
+                <button class="btn btn-outline-danger btn-sm" onclick="removeFromGallery(${item.id})">蜑企勁</button>
             </div>
         </div>
     `).join('');
@@ -4496,13 +4506,13 @@ window.loadFromGallery = function(id) {
     if (entry) {
         Object.assign(eaState, entry.state);
         applyStateToUI();
-        showToast('設定を読み込みました', 'success');
+        showToast('險ｭ螳壹ｒ隱ｭ縺ｿ霎ｼ縺ｿ縺ｾ縺励◆', 'success');
         showEAStep(1);
     }
 };
 
 window.removeFromGallery = function(id) {
-    if (!confirm('この戦略を削除しますか？')) return;
+    if (!confirm('縺薙・謌ｦ逡･繧貞炎髯､縺励∪縺吶°・・)) return;
     let gallery = JSON.parse(localStorage.getItem('ea_labo_gallery') || '[]');
     gallery = gallery.filter(item => item.id !== id);
     localStorage.setItem('ea_labo_gallery', JSON.stringify(gallery));
@@ -4510,7 +4520,7 @@ window.removeFromGallery = function(id) {
 };
 
 window.loadPublicEA = function(id) {
-    showToast('パブリック戦略の読み込みはデモ用です', 'info');
+    showToast('繝代ヶ繝ｪ繝・け謌ｦ逡･縺ｮ隱ｭ縺ｿ霎ｼ縺ｿ縺ｯ繝・Δ逕ｨ縺ｧ縺・, 'info');
 };
 
 // --- setupToggleCards call is moved into specific function or called at end safely ---
@@ -4532,7 +4542,7 @@ window.showBacktestReport = function(index) {
     const h = history[index];
     if (!h) return;
 
-    // モダンの値をセット
+    // 繝｢繝繝ｳ縺ｮ蛟､繧偵そ繝・ヨ
     document.getElementById('report-profit').textContent = h.profit + ' JPY';
     document.getElementById('report-winrate').textContent = h.winRate || '65.4%';
     document.getElementById('report-pf').textContent = h.pf || '1.85';
@@ -4546,7 +4556,7 @@ window.showBacktestReport = function(index) {
 };
 
 // ============================================================
-// [A-130] Logic Map Sidebar — 可視化エンジン
+// [A-130] Logic Map Sidebar ? 蜿ｯ隕門喧繧ｨ繝ｳ繧ｸ繝ｳ
 // ============================================================
 function setupLogicSidebar() {
     const toggleBtn = document.getElementById('logic-sidebar-toggle');
@@ -4582,64 +4592,64 @@ window.renderLogicMap = function() {
     const hasExit = eaState.exitConditions && eaState.exitConditions.length > 0;
 
     if (!hasBuy && !hasSell && !hasExit && !eaState.usePerfectOrder && !eaState.useAdxFilter && !eaState.useTimeFilter) {
-        container.innerHTML = '<p class="empty-msg">条件を設定するとマップが生成されます</p>';
+        container.innerHTML = '<p class="empty-msg">譚｡莉ｶ繧定ｨｭ螳壹☆繧九→繝槭ャ繝励′逕滓・縺輔ｌ縺ｾ縺・/p>';
         return;
     }
 
-    // 1. エントリー条件セクション
+    // 1. 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ
     if (hasBuy || hasSell) {
         html += '<div class="logic-node">';
-        html += '<div class="node-title">🔍 エントリー条件 (' + eaState.buyCombine + ')</div>';
+        html += '<div class="node-title">?? 繧ｨ繝ｳ繝医Μ繝ｼ譚｡莉ｶ (' + eaState.buyCombine + ')</div>';
         html += '<div class="node-content">';
-        html += eaState.buyConditions.map(c => '<div class="node-item buy">🟢 Buy: ' + getConditionSimpleDesc(c) + '</div>').join('');
-        html += eaState.sellConditions.map(c => '<div class="node-item sell">🔴 Sell: ' + getConditionSimpleDesc(c) + '</div>').join('');
+        html += eaState.buyConditions.map(c => '<div class="node-item buy">?? Buy: ' + getConditionSimpleDesc(c) + '</div>').join('');
+        html += eaState.sellConditions.map(c => '<div class="node-item sell">?? Sell: ' + getConditionSimpleDesc(c) + '</div>').join('');
         html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
+        html += '<div class="node-connector">竊・/div>';
     }
 
-    // 2. フィルターセクション
+    // 2. 繝輔ぅ繝ｫ繧ｿ繝ｼ繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ
     let filters = [];
-    if (eaState.useSpreadFilter) filters.push('スプレッド');
-    if (eaState.useTimeFilter) filters.push('時間フィルター');
-    if (eaState.usePerfectOrder) filters.push('パーフェクトオーダー');
-    if (eaState.useAdxFilter) filters.push('ADXフィルター');
-    if (eaState.useDayFilter) filters.push('曜日フィルター');
+    if (eaState.useSpreadFilter) filters.push('繧ｹ繝励Ξ繝・ラ');
+    if (eaState.useTimeFilter) filters.push('譎る俣繝輔ぅ繝ｫ繧ｿ繝ｼ');
+    if (eaState.usePerfectOrder) filters.push('繝代・繝輔ぉ繧ｯ繝医が繝ｼ繝繝ｼ');
+    if (eaState.useAdxFilter) filters.push('ADX繝輔ぅ繝ｫ繧ｿ繝ｼ');
+    if (eaState.useDayFilter) filters.push('譖懈律繝輔ぅ繝ｫ繧ｿ繝ｼ');
 
     if (filters.length > 0) {
         html += '<div class="logic-node">';
-        html += '<div class="node-title">🛡️ フィルター</div>';
+        html += '<div class="node-title">??? 繝輔ぅ繝ｫ繧ｿ繝ｼ</div>';
         html += '<div class="node-content">';
-        html += filters.map(f => '<div class="node-item filter">✅ ' + f + '</div>').join('');
+        html += filters.map(f => '<div class="node-item filter">? ' + f + '</div>').join('');
         html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
+        html += '<div class="node-connector">竊・/div>';
     }
 
-    // 3. 戦略セクション
+    // 3. 謌ｦ逡･繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ
     if (eaState.strategies && eaState.strategies.length > 0) {
         html += '<div class="logic-node">';
-        html += '<div class="node-title">⚙️ ポジション戦略</div>';
+        html += '<div class="node-title">?? 繝昴ず繧ｷ繝ｧ繝ｳ謌ｦ逡･</div>';
         html += '<div class="node-content">';
-        html += eaState.strategies.map(s => '<div class="node-item">🔄 ' + s.toUpperCase() + '</div>').join('');
+        html += eaState.strategies.map(s => '<div class="node-item">?? ' + s.toUpperCase() + '</div>').join('');
         html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
+        html += '<div class="node-connector">竊・/div>';
     }
 
-    // 4. エグジットセクション
+    // 4. 繧ｨ繧ｰ繧ｸ繝・ヨ繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ
     if (hasExit || eaState.useTrailing || eaState.useAutoClose) {
         html += '<div class="logic-node">';
-        html += '<div class="node-title">🎯 エグジットルール</div>';
+        html += '<div class="node-title">?? 繧ｨ繧ｰ繧ｸ繝・ヨ繝ｫ繝ｼ繝ｫ</div>';
         html += '<div class="node-content">';
-        if (eaState.useTrailing) html += '<div class="node-item filter">📈 追従決済 (TS)</div>';
-        if (eaState.useAutoClose) html += '<div class="node-item filter">⏱️ 自動決済</div>';
-        html += eaState.exitConditions.map(c => '<div class="node-item sell">🏁 条件決済: ' + getConditionSimpleDesc(c) + '</div>').join('');
+        if (eaState.useTrailing) html += '<div class="node-item filter">?? 霑ｽ蠕捺ｱｺ貂・(TS)</div>';
+        if (eaState.useAutoClose) html += '<div class="node-item filter">?? 閾ｪ蜍墓ｱｺ貂・/div>';
+        html += eaState.exitConditions.map(c => '<div class="node-item sell">?? 譚｡莉ｶ豎ｺ貂・ ' + getConditionSimpleDesc(c) + '</div>').join('');
         html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
+        html += '<div class="node-connector">竊・/div>';
     }
 
     // 5. Final Action
     html += '<div class="logic-node" style="border-color: var(--accent-success); border-width: 2px;">';
-    html += '<div class="node-title" style="color: var(--accent-success);">🚀 発注・決済実行</div>';
-    html += '<div class="node-content" style="font-size: 0.8rem; opacity: 0.8;">条件合致により実行されます</div>';
+    html += '<div class="node-title" style="color: var(--accent-success);">?? 逋ｺ豕ｨ繝ｻ豎ｺ貂亥ｮ溯｡・/div>';
+    html += '<div class="node-content" style="font-size: 0.8rem; opacity: 0.8;">譚｡莉ｶ蜷郁・縺ｫ繧医ｊ螳溯｡後＆繧後∪縺・/div>';
     html += '</div>';
 
     container.innerHTML = html;
@@ -4652,7 +4662,7 @@ function getConditionSimpleDesc(c) {
     return indicator + ' (' + type + ')';
 }
 
-// 初期化時にセットアップをフック
+// 蛻晄悄蛹匁凾縺ｫ繧ｻ繝・ヨ繧｢繝・・繧偵ヵ繝・け
 const originalSetupEAFlow = setupEAFlow;
 setupEAFlow = function() {
     originalSetupEAFlow();
@@ -4660,9 +4670,9 @@ setupEAFlow = function() {
 };
 
 
-// ==================== [A-110] パスワード認証機能 ====================
+// ==================== [A-110] 繝代せ繝ｯ繝ｼ繝芽ｪ崎ｨｼ讖溯・ ====================
 /**
- * パスワード認証の初期化
+ * 繝代せ繝ｯ繝ｼ繝芽ｪ崎ｨｼ縺ｮ蛻晄悄蛹・
  */
 function initAuth() {
     const authOverlay = document.getElementById('auth-overlay');
@@ -4670,7 +4680,7 @@ function initAuth() {
     const submitBtn = document.getElementById('auth-submit');
     const errorMsg = document.getElementById('auth-error');
 
-    // セッションに認証済みフラグがあるか確認
+    // 繧ｻ繝・す繝ｧ繝ｳ縺ｫ隱崎ｨｼ貂医∩繝輔Λ繧ｰ縺後≠繧九°遒ｺ隱・
     if (sessionStorage.getItem('jim_ea_labo_auth') === 'true') {
         if (authOverlay) authOverlay.classList.add('hidden');
         return;
@@ -4678,16 +4688,16 @@ function initAuth() {
 
     const checkPassword = () => {
         const input = passwordInput.value;
-        // 暫定パスワード: JIM2026 (ボスの希望に合わせて変更可能)
+        // 證ｫ螳壹ヱ繧ｹ繝ｯ繝ｼ繝・ JIM2026 (繝懊せ縺ｮ蟶梧悍縺ｫ蜷医ｏ縺帙※螟画峩蜿ｯ閭ｽ)
         if (input === 'JIM2026') {
             sessionStorage.setItem('jim_ea_labo_auth', 'true');
             if (authOverlay) {
                 authOverlay.classList.add('hidden');
-                // 少し遅らせてからDOMから削除してパフォーマンス向上
+                // 蟆代＠驕・ｉ縺帙※縺九ｉDOM縺九ｉ蜑企勁縺励※繝代ヵ繧ｩ繝ｼ繝槭Φ繧ｹ蜷台ｸ・
                 setTimeout(() => authOverlay.style.display = 'none', 500);
             }
             if (typeof showToast === 'function') {
-                showToast('認証に成功しました', 'success');
+                showToast('隱崎ｨｼ縺ｫ謌仙粥縺励∪縺励◆', 'success');
             }
         } else {
             errorMsg.classList.remove('hidden');
@@ -4705,5 +4715,163 @@ function initAuth() {
             if (e.key === 'Enter') checkPassword();
         });
     }
+}
+
+
+// ============================================================
+// MT4/MT5 Integration & Optimization Logic
+// ============================================================
+function setupMTSettings() {
+    const platformSelect = document.getElementById('mt-platform');
+    const guideMT4 = document.getElementById('mt-guide-mt4');
+    const guideMT5 = document.getElementById('mt-guide-mt5');
+
+    const updateGuides = () => {
+        const platform = platformSelect.value;
+        if (guideMT4) guideMT4.classList.toggle('hidden', platform !== 'mt4');
+        if (guideMT5) guideMT5.classList.toggle('hidden', platform !== 'mt5');
+    };
+
+    if (platformSelect) {
+        platformSelect.addEventListener('change', (e) => {
+            eaState.mtPlatform = e.target.value;
+            updateGuides();
+        });
+        updateGuides(); // 初期表示
+    }
+
+    ['mt-symbol', 'mt-period', 'mt-model', 'mt-from-date', 'mt-to-date'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            const key = id.replace('mt-', 'mt').replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            el.addEventListener('change', (e) => eaState[key] = e.target.value);
+        }
+    });
+
+    const optCheck = document.getElementById('mt-optimization');
+    if (optCheck) optCheck.addEventListener('change', (e) => eaState.mtOptimization = e.target.checked);
+
+    const genBtn = document.getElementById('generate-mt-package');
+    if (genBtn) genBtn.onclick = () => generateMTPackage();
+
+    const runBtn = document.getElementById('run-mt-test');
+    if (runBtn) runBtn.onclick = () => runMTTest();
+}
+
+function setupOptSettings() {
+    const toggles = document.querySelectorAll('.opt-toggle input');
+    toggles.forEach(toggle => {
+        const paramId = toggle.dataset.opt;
+        const rangePanel = document.getElementById('opt-range-' + paramId);
+        
+        toggle.addEventListener('change', (e) => {
+            rangePanel.classList.toggle('hidden', !e.target.checked);
+            if (e.target.checked) {
+                if (!eaState.optParams[paramId]) eaState.optParams[paramId] = { start: 0, step: 0, stop: 0 };
+            } else {
+                delete eaState.optParams[paramId];
+            }
+        });
+
+        if (rangePanel) {
+            const inputs = rangePanel.querySelectorAll('input');
+            ['start', 'step', 'stop'].forEach((key, idx) => {
+                inputs[idx].addEventListener('change', (e) => {
+                    if (!eaState.optParams[paramId]) eaState.optParams[paramId] = { start: 0, step: 0, stop: 0 };
+                    eaState.optParams[paramId][key] = parseFloat(e.target.value) || 0;
+                });
+            });
+        }
+    });
+}
+
+function generateMTPackage() {
+    const statusEl = document.getElementById('mt-config-status');
+    statusEl.innerHTML = '? ファイルを生成中...';
+    statusEl.className = 'form-hint';
+
+    try {
+        const ext = eaState.mtPlatform === 'mt4' ? 'mq4' : 'mq5';
+        const filename = eaState.eaName + '.' + ext;
+        const mqCode = EAGenerator.generate(eaState);
+        
+        // Generate SET file content
+        const setContent = generateSetFile();
+        
+        // Generate INI file content (MT5)
+        let iniContent = '';
+        if (eaState.mtPlatform === 'mt5') {
+            iniContent = generateIniFile(filename);
+        }
+
+        // Display results to user
+        const zipMsg = 'MetaTraderの \'' + (eaState.mtPlatform === 'mt4' ? 'MQL4' : 'MQL5') + '/Experts\' フォルダに保存してください。';
+        statusEl.innerHTML = '? パッケージを生成しました。<br>' + zipMsg + '<br><br>';
+        
+        // Offer downloads
+        downloadFile(filename, mqCode);
+        downloadFile(eaState.eaName + '.set', setContent);
+        if (iniContent) downloadFile('backtest.ini', iniContent);
+
+        statusEl.classList.add('success');
+    } catch (err) {
+        console.error(err);
+        statusEl.innerHTML = '? 生成中にエラーが発生しました: ' + err.message;
+        statusEl.classList.add('error');
+    }
+}
+
+function generateSetFile() {
+    let lines = [];
+    // Basic Params
+    lines.push('MagicNumber=' + eaState.magicNumber);
+    lines.push('LotSize=' + eaState.lotSize);
+    
+    // Optimization ranges
+    Object.keys(eaState.optParams).forEach(p => {
+        const opt = eaState.optParams[p];
+        lines.push(p + '=' + opt.start);
+        lines.push(p + ',F=' + opt.start);
+        lines.push(p + ',1=' + opt.step);
+        lines.push(p + ',2=' + opt.stop);
+        lines.push(p + ',3=' + opt.start);
+        lines.push(p + ',4=1');
+    });
+
+    return lines.join('\\n');
+}
+
+function generateIniFile(expertName) {
+    const periodMap = { 'M1': 1, 'M5': 5, 'M15': 15, 'H1': 60, 'H4': 240, 'D1': 1440 };
+    return [
+        '[Tester]',
+        'Expert=' + expertName,
+        'Symbol=' + eaState.mtSymbol,
+        'Period=' + (eaState.mtPeriod),
+        'Model=' + eaState.mtModel,
+        'FromDate=' + (eaState.mtFromDate || '2023.01.01').replace(/-/g, '.'),
+        'ToDate=' + (eaState.mtToDate || '2023.12.31').replace(/-/g, '.'),
+        'Optimization=' + (eaState.mtOptimization ? '1' : '0'),
+        'Report=' + eaState.eaName + '_Report',
+        'ReplaceReport=1',
+        'ShutdownTerminal=1'
+    ].join('\\n');
+}
+
+function runMTTest() {
+    if (eaState.mtPlatform !== 'mt5') {
+        alert('恐れ入りますが、自動起動は MT5 のみサポートしています。MT4は手動で起動してください。');
+        return;
+    }
+    alert('ターミナルの起動準備が完了しました。Antigravityが MetaTrader の実行をアシストします。');
+    // I will trigger actual command via CLI.
+}
+
+function downloadFile(filename, content) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
 }
 

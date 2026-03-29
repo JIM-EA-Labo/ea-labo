@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA Labo - MT4/MT5 EA & Indicator Generator</title>
-    <link rel="stylesheet" href="style.css?v=202603292247">
+    <link rel="stylesheet" href="style.css?v=202603300755">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -14,7 +14,7 @@
 
         <!-- ==================== H-010: Header + Home Screen ==================== -->
         <header class="header">
-            <div class="header-title-row"><h1>EA Labo</h1><span id="app-version" class="version-tag">Build: 2026.03.29.2247</span></div>
+            <div class="header-title-row"><h1>EA Labo</h1><span id="app-version" class="version-tag">Build: 2026.03.30.0755</span></div>
             <p>ノーコードでMT4/MT5のEA・インジケーターを作成</p>
         </header>
 
@@ -630,11 +630,27 @@
       <div class="toggle-card-settings" id="autoclose-panel">
         <div class="form-group">
           <label for="autoclose-profit-pips">利益pipsで決済 (0=無効)</label>
-          <input type="number" id="autoclose-profit-pips" class="form-input" value="0" min="0" step="0.1">
+          <div class="opt-input-group">
+            <input type="number" id="autoclose-profit-pips" class="form-input" value="0" min="0" step="0.1">
+            <label class="opt-toggle"><input type="checkbox" data-opt="TakeProfit"><span>最適化</span></label>
+          </div>
+          <div class="opt-range hidden" id="opt-range-TakeProfit">
+            <input type="number" placeholder="Start" class="form-input sm" value="10">
+            <input type="number" placeholder="Step" class="form-input sm" value="5">
+            <input type="number" placeholder="Stop" class="form-input sm" value="100">
+          </div>
         </div>
         <div class="form-group">
           <label for="autoclose-loss-pips">損失pipsで決済 (0=無効)</label>
-          <input type="number" id="autoclose-loss-pips" class="form-input" value="0" min="0" step="0.1">
+          <div class="opt-input-group">
+            <input type="number" id="autoclose-loss-pips" class="form-input" value="0" min="0" step="0.1">
+            <label class="opt-toggle"><input type="checkbox" data-opt="StopLoss"><span>最適化</span></label>
+          </div>
+          <div class="opt-range hidden" id="opt-range-StopLoss">
+            <input type="number" placeholder="Start" class="form-input sm" value="10">
+            <input type="number" placeholder="Step" class="form-input sm" value="5">
+            <input type="number" placeholder="Stop" class="form-input sm" value="100">
+          </div>
         </div>
         <div class="form-group">
           <label for="autoclose-profit-yen">利益金額で決済 (0=無効)</label>
@@ -738,15 +754,39 @@
                       <div class="toggle-card-settings" id="perfect-order-settings">
                         <div class="form-group">
                           <label class="form-label">短期MA期間</label>
-                          <input type="number" id="perfect-order-ma1" class="form-input" value="20" min="1">
+                          <div class="opt-input-group">
+                            <input type="number" id="perfect-order-ma1" class="form-input" value="20" min="1">
+                            <label class="opt-toggle"><input type="checkbox" data-opt="POMA1"><span>最適化</span></label>
+                          </div>
+                          <div class="opt-range hidden" id="opt-range-POMA1">
+                            <input type="number" placeholder="Start" class="form-input sm" value="10">
+                            <input type="number" placeholder="Step" class="form-input sm" value="5">
+                            <input type="number" placeholder="Stop" class="form-input sm" value="50">
+                          </div>
                         </div>
                         <div class="form-group">
                           <label class="form-label">中期MA期間</label>
-                          <input type="number" id="perfect-order-ma2" class="form-input" value="50" min="1">
+                          <div class="opt-input-group">
+                            <input type="number" id="perfect-order-ma2" class="form-input" value="50" min="1">
+                            <label class="opt-toggle"><input type="checkbox" data-opt="POMA2"><span>最適化</span></label>
+                          </div>
+                          <div class="opt-range hidden" id="opt-range-POMA2">
+                            <input type="number" placeholder="Start" class="form-input sm" value="20">
+                            <input type="number" placeholder="Step" class="form-input sm" value="10">
+                            <input type="number" placeholder="Stop" class="form-input sm" value="100">
+                          </div>
                         </div>
                         <div class="form-group">
                           <label class="form-label">長期MA期間</label>
-                          <input type="number" id="perfect-order-ma3" class="form-input" value="100" min="1">
+                          <div class="opt-input-group">
+                            <input type="number" id="perfect-order-ma3" class="form-input" value="100" min="1">
+                            <label class="opt-toggle"><input type="checkbox" data-opt="POMA3"><span>最適化</span></label>
+                          </div>
+                          <div class="opt-range hidden" id="opt-range-POMA3">
+                            <input type="number" placeholder="Start" class="form-input sm" value="50">
+                            <input type="number" placeholder="Step" class="form-input sm" value="25">
+                            <input type="number" placeholder="Stop" class="form-input sm" value="200">
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -767,7 +807,15 @@
                         </div>
                         <div class="form-group">
                           <label class="form-label">ADX閾値</label>
-                          <input type="number" id="adx-threshold" class="form-input" value="25" min="1" max="100">
+                          <div class="opt-input-group">
+                            <input type="number" id="adx-threshold" class="form-input" value="25" min="1" max="100">
+                            <label class="opt-toggle"><input type="checkbox" data-opt="ADXLevel"><span>最適化</span></label>
+                          </div>
+                          <div class="opt-range hidden" id="opt-range-ADXLevel">
+                            <input type="number" placeholder="Start" class="form-input sm" value="15">
+                            <input type="number" placeholder="Step" class="form-input sm" value="5">
+                            <input type="number" placeholder="Stop" class="form-input sm" value="40">
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -967,7 +1015,15 @@
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">ロットサイズ</label>
-        <input type="number" id="input-lot-size" class="form-input" value="0.01" min="0.01" step="0.01">
+        <div class="opt-input-group">
+          <input type="number" id="input-lot-size" class="form-input" value="0.01" min="0.01" step="0.01">
+          <label class="opt-toggle"><input type="checkbox" data-opt="LotSize"><span>最適化</span></label>
+        </div>
+        <div class="opt-range hidden" id="opt-range-LotSize">
+          <input type="number" placeholder="Start" class="form-input sm" step="0.01">
+          <input type="number" placeholder="Step" class="form-input sm" step="0.01">
+          <input type="number" placeholder="Stop" class="form-input sm" step="0.01">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">リスク (%) <span class="form-hint-inline">0 = 固定ロット</span></label>
@@ -1159,6 +1215,7 @@
                     <div class="tabs-header">
                         <button class="tab-btn active" data-tab="csv-tab">📁 CSVアップロード</button>
                         <button class="tab-btn" data-tab="web-tab">🌐 Webから取得</button>
+                        <button class="tab-btn" data-tab="mt-tab">🖥️ MT4/MT5 連携</button>
                     </div>
 
                     <div id="csv-tab" class="tab-content">
@@ -1206,6 +1263,105 @@
                         <div class="form-group" style="margin-top: 15px;">
                             <button class="btn btn-secondary" id="fetch-web-data">🚀 データを取得</button>
                             <span id="web-fetch-status" class="form-hint" style="margin-left: 10px;"></span>
+                        </div>
+                    </div>
+
+                    <div id="mt-tab" class="tab-content hidden">
+                        <h3>🖥️ MetaTrader 4/5 実環境テスト</h3>
+                        <p class="form-hint mb-4">テスト設定ファイル(.ini)とパラメータ設定ファイル(.set)を生成します。MT5では自動起動が可能です。</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>プラットフォーム</label>
+                                <select id="mt-platform" class="form-select">
+                                    <option value="mt4">MetaTrader 4</option>
+                                    <option value="mt5" selected>MetaTrader 5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>通貨ペア (Symbol)</label>
+                                <input type="text" id="mt-symbol" class="form-input" value="USDJPY">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>時間足 (Period)</label>
+                                <select id="mt-period" class="form-select">
+                                    <option value="M1">M1</option>
+                                    <option value="M5">M5</option>
+                                    <option value="M15">M15</option>
+                                    <option value="H1" selected>H1</option>
+                                    <option value="H4">H4</option>
+                                    <option value="D1">D1</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>モデル (Model)</label>
+                                <select id="mt-model" class="form-select">
+                                    <option value="0">Every tick (全ティック)</option>
+                                    <option value="1">1 minute OHLC (1分足OHLC)</option>
+                                    <option value="2" selected>Open prices only (始値のみ)</option>
+                                    <option value="4">Every tick based on real ticks (リアルティック)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>開始日</label>
+                                <input type="date" id="mt-from-date" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>終了日</label>
+                                <input type="date" id="mt-to-date" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="mt-optimization">
+                                <span>最適化 (Optimization) を実行する</span>
+                            </label>
+                        </div>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <button class="btn btn-primary" id="generate-mt-package">📦 テスト設定を生成 (MQ+INI+SET)</button>
+                            <button class="btn btn-secondary" id="run-mt-test" style="margin-left:10px">🚀 テストを開始（MT5のみ）</button>
+                        </div>
+                        <div id="mt-config-status" class="form-hint" style="margin-top:10px;"></div>
+
+                        <!-- MT Guide: MT4 -->
+                        <div id="mt-guide-mt4" class="mt-guide-section mt-4 hidden">
+                            <h4 class="guide-title"><span class="badge badge-primary">MT4</span> バックテスト手順</h4>
+                            <div class="guide-steps">
+                                <div class="guide-step">
+                                    <span class="step-num">1</span>
+                                    <p>「テスト設定を生成」をクリックして <strong>.mq4</strong> と <strong>.set</strong> を保存します。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">2</span>
+                                    <p>MT4の「ファイル」→「データフォルダを開く」から <strong>MQL4/Experts</strong> フォルダに .mq4 をコピーします。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">3</span>
+                                    <p>テスター（Ctrl+R）でEAを選択し、「エキスパート設定」→「読み込み」から <strong>.set</strong> を選択して開始してください。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MT Guide: MT5 -->
+                        <div id="mt-guide-mt5" class="mt-guide-section mt-4">
+                            <h4 class="guide-title"><span class="badge badge-accent">MT5</span> バックテスト手順</h4>
+                            <div class="guide-steps">
+                                <div class="guide-step">
+                                    <span class="step-num">1</span>
+                                    <p>「テスト設定を生成」をクリックして <strong>.mq5</strong>, <strong>.ini</strong>, <strong>.set</strong> を保存します。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">2</span>
+                                    <p>データフォルダ内の <strong>MQL5/Experts</strong> に .mq5 を配置します（初回のみ）。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">3</span>
+                                    <p>「テストを開始（MT5のみ）」をクリックするか、保存した <strong>run_backtest.bat</strong> を実行すれば自動で検証が始まります。</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -1669,10 +1825,11 @@
     </div>
     <!-- //END H-110 -->
 
-    <script src="generator.js?v=202603292247"></script>
-    <script src="app.js?v=202603292247"></script>
+    <script src="generator.js?v=202603300755"></script>
+    <script src="app.js?v=202603300755"></script>
 </body>
 </html>
+
 
 
 

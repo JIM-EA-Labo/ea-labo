@@ -2351,3 +2351,143 @@ body {
   font-size: 0.75rem;
   color: var(--text-dark-muted);
 }
+
+/* ==================== Optimization UI ==================== */
+.opt-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.opt-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.opt-toggle input {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent-primary);
+    margin: 0 !important;
+}
+
+.opt-range {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+.opt-range.hidden {
+    display: none !important;
+}
+
+.form-input.sm {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    max-width: 80px;
+    height: auto;
+}
+
+/* ==================== MT4/MT5 Integration ==================== */
+#mt-tab .form-hint {
+    color: var(--text-secondary);
+    background: rgba(99, 102, 241, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-primary);
+}
+
+#mt-config-status {
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+#mt-config-status.success {
+    background: rgba(0, 212, 170, 0.1);
+    color: var(--accent-success);
+    border: 1px solid var(--accent-success);
+}
+
+#mt-config-status.error {
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--accent-danger);
+    border: 1px solid var(--accent-danger);
+}
+
+
+/* ==================== MT4/MT5 Guide UI ==================== */
+.mt-guide-section {
+    background: rgba(99, 102, 241, 0.03);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.guide-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+.guide-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.guide-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.step-num {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.guide-step p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.badge-primary { background: var(--accent-primary); }
+.badge-accent { background: #6366F1; }
+

@@ -139,6 +139,14 @@ CTrade trade;
       code += `extern int    NewsStopAfter  = ${state.newsStopMinutesAfter || 60};\n`;
       code += `extern string NewsSeverity   = "${state.newsSeverity || 'low'}"; // high, medium, low\n`;
     }
+    if (state.usePerfectOrder) {
+      code += `extern int    POMA1          = ${state.poShortPeriod || 20};\n`;
+      code += `extern int    POMA2          = ${state.poMidPeriod || 50};\n`;
+      code += `extern int    POMA3          = ${state.poLongPeriod || 100};\n`;
+    }
+    if (state.useAdxFilter) {
+      code += `extern int    ADXLevel       = ${state.adxFilterLevel || 25};\n`;
+    }
 
     code += '\n';
     code += '//--- グローバル変数 ---\n';
@@ -196,6 +204,14 @@ CTrade trade;
 
     if (state.riskPercent > 0) {
       code += `input double RiskPercent    = ${state.riskPercent || 1.0};\n`;
+    }
+    if (state.usePerfectOrder) {
+      code += `input int    POMA1          = ${state.poShortPeriod || 20};\n`;
+      code += `input int    POMA2          = ${state.poMidPeriod || 50};\n`;
+      code += `input int    POMA3          = ${state.poLongPeriod || 100};\n`;
+    }
+    if (state.useAdxFilter) {
+      code += `input int    ADXLevel       = ${state.adxFilterLevel || 25};\n`;
     }
 
     code += '\n';
@@ -292,7 +308,27 @@ CTrade trade;
       ...(state.exitConditions || [])
     ];
 
-    let initCode = 'bool InitializeIndicators()\n{\n';
+    let initCode = '\n// Global Filter Handles\n';
+    if (state.usePerfectOrder) {
+      code += 'int hPOMA1 = INVALID_HANDLE;\n';
+      code += 'int hPOMA2 = INVALID_HANDLE;\n';
+      code += 'int hPOMA3 = INVALID_HANDLE;\n';
+    }
+    if (state.useAdxFilter) {
+      code += 'int hADX = INVALID_HANDLE;\n';
+    }
+
+    initCode += 'bool InitializeIndicators()\n{\n';
+    if (state.usePerfectOrder) {
+      initCode += '   hPOMA1 = iMA(Symbol(), Period(), POMA1, 0, MODE_SMA, PRICE_CLOSE);\n';
+      initCode += '   hPOMA2 = iMA(Symbol(), Period(), POMA2, 0, MODE_SMA, PRICE_CLOSE);\n';
+      initCode += '   hPOMA3 = iMA(Symbol(), Period(), POMA3, 0, MODE_SMA, PRICE_CLOSE);\n';
+      initCode += '   if(hPOMA1 == INVALID_HANDLE || hPOMA2 == INVALID_HANDLE || hPOMA3 == INVALID_HANDLE) return false;\n';
+    }
+    if (state.useAdxFilter) {
+      initCode += '   hADX = iADX(Symbol(), Period(), 14);\n';
+      initCode += '   if(hADX == INVALID_HANDLE) return false;\n';
+    }
 
     allConditions.forEach((c, idx) => {
       if (c.category !== 'indicator') return;
@@ -537,8 +573,17 @@ CTrade trade;
 
     // Entry conditions
     code += '   //--- エントリー条件の判定 ---\n';
-    code += '   bool buySignal  = ' + this.generateConditionBlock(state.buyConditions, state.buyCombine, 'buy', 'mt4') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + ';\n';
-    code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt4') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + ';\n\n';
+    let poBuy = '', poSell = '', adxFilter = '';
+    if (state.usePerfectOrder) {
+      poBuy = ' && (iMA(NULL,0,POMA1,0,MODE_SMA,PRICE_CLOSE,1) > iMA(NULL,0,POMA2,0,MODE_SMA,PRICE_CLOSE,1) && iMA(NULL,0,POMA2,0,MODE_SMA,PRICE_CLOSE,1) > iMA(NULL,0,POMA3,0,MODE_SMA,PRICE_CLOSE,1))';
+      poSell = ' && (iMA(NULL,0,POMA1,0,MODE_SMA,PRICE_CLOSE,1) < iMA(NULL,0,POMA2,0,MODE_SMA,PRICE_CLOSE,1) && iMA(NULL,0,POMA2,0,MODE_SMA,PRICE_CLOSE,1) < iMA(NULL,0,POMA3,0,MODE_SMA,PRICE_CLOSE,1))';
+    }
+    if (state.useAdxFilter) {
+      adxFilter = ' && (iADX(NULL,0,14,PRICE_CLOSE,MODE_MAIN,1) > ADXLevel)';
+    }
+
+    code += '   bool buySignal  = ' + this.generateConditionBlock(state.buyConditions, state.buyCombine, 'buy', 'mt4') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poBuy + adxFilter + ';\n';
+    code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt4') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poSell + adxFilter + ';\n\n';
 
     // Magic Stop Order Check MT4
     if (state.useMagicStopOrder) {
@@ -783,10 +828,24 @@ CTrade trade;
     code += '         if(PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_SELL) sellCount++;\n';
     code += '      }\n';
     code += '   }\n\n';
-
     code += '   //--- Entry Conditions\n';
-    code += '   bool buySignal  = ' + this.generateConditionBlock(state.buyConditions, state.buyCombine, 'buy', 'mt5') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + ';\n';
-    code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt5') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + ';\n\n';
+    let poBuy = '', poSell = '', adxFilter = '';
+    if (state.usePerfectOrder) {
+      code += '   double poma1[], poma2[], poma3[];\n';
+      code += '   CopyBuffer(hPOMA1, 0, 1, 1, poma1);\n';
+      code += '   CopyBuffer(hPOMA2, 0, 1, 1, poma2);\n';
+      code += '   CopyBuffer(hPOMA3, 0, 1, 1, poma3);\n';
+      poBuy = ' && (poma1[0] > poma2[0] && poma2[0] > poma3[0])';
+      poSell = ' && (poma1[0] < poma2[0] && poma2[0] < poma3[0])';
+    }
+    if (state.useAdxFilter) {
+      code += '   double adxBuf[];\n';
+      code += '   CopyBuffer(hADX, 0, 1, 1, adxBuf);\n';
+      adxFilter = ' && (adxBuf[0] > ADXLevel)';
+    }
+
+    code += '   bool buySignal  = ' + this.generateConditionBlock(state.buyConditions, state.buyCombine, 'buy', 'mt5') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poBuy + adxFilter + ';\n';
+    code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt5') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poSell + adxFilter + ';\n\n';
 
     // Magic Stop Order Check MT5
     if (state.useMagicStopOrder) {
