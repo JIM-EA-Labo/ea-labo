@@ -212,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupIndicatorFlow();
         setupGallery(); // ギャラリーの初期化を追加
         setupModals();
+        setupBacktest();
         console.log('EA Labo initialized successfully');
     } catch (error) {
         console.error('Initialization error:', error);
