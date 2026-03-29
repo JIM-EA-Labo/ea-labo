@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // [A-001] eaState — グローバル状態オブジェクト（完成版）
 // [FIX] CACHE BUSTER v4.0.0
 // ============================================================
@@ -206,7 +206,7 @@ const indiState = {
 // ==================== A-010: Initialization + Home Screen ====================
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        console.log('Initializing EA Labo...');
+        initAuth(); console.log('Initializing EA Labo...');
         setupHomeScreen();
         setupEAFlow();
         setupIndicatorFlow();
@@ -4658,3 +4658,52 @@ setupEAFlow = function() {
     originalSetupEAFlow();
     setupLogicSidebar();
 };
+
+
+// ==================== [A-110] パスワード認証機能 ====================
+/**
+ * パスワード認証の初期化
+ */
+function initAuth() {
+    const authOverlay = document.getElementById('auth-overlay');
+    const passwordInput = document.getElementById('auth-password');
+    const submitBtn = document.getElementById('auth-submit');
+    const errorMsg = document.getElementById('auth-error');
+
+    // セッションに認証済みフラグがあるか確認
+    if (sessionStorage.getItem('jim_ea_labo_auth') === 'true') {
+        if (authOverlay) authOverlay.classList.add('hidden');
+        return;
+    }
+
+    const checkPassword = () => {
+        const input = passwordInput.value;
+        // 暫定パスワード: JIM2026 (ボスの希望に合わせて変更可能)
+        if (input === 'JIM2026') {
+            sessionStorage.setItem('jim_ea_labo_auth', 'true');
+            if (authOverlay) {
+                authOverlay.classList.add('hidden');
+                // 少し遅らせてからDOMから削除してパフォーマンス向上
+                setTimeout(() => authOverlay.style.display = 'none', 500);
+            }
+            if (typeof showToast === 'function') {
+                showToast('認証に成功しました', 'success');
+            }
+        } else {
+            errorMsg.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    };
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', checkPassword);
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+    }
+}
+
