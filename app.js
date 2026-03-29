@@ -3299,6 +3299,37 @@ function setupModals() {
     if (wizardClose) wizardClose.addEventListener('click', () => { closeWizard(); });
     const wizardModal = document.getElementById('wizard-modal');
     if (wizardModal) wizardModal.addEventListener('click', (e) => { if (e.target === wizardModal) closeWizard(); });
+
+    // バックテスト・レポートモーダルのクローズ処理
+    const reportClose = document.getElementById('report-close');
+    const reportModal = document.getElementById('backtest-report-modal');
+
+    const hideReportModal = () => {
+        if (reportModal) {
+            reportModal.classList.remove('visible');
+            reportModal.classList.remove('active');
+            reportModal.style.display = 'none';
+        }
+    };
+
+    if (reportClose) {
+        reportClose.addEventListener('click', hideReportModal);
+    }
+    if (reportModal) {
+        reportModal.addEventListener('click', (e) => {
+            if (e.target === reportModal) hideReportModal();
+        });
+    }
+
+    // Escapeキーで全てのモーダルを閉じる
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hideReportModal();
+            if (typeof closeWizard === 'function') closeWizard();
+            const helpModal = document.getElementById('help-modal');
+            if (helpModal) helpModal.classList.remove('active');
+        }
+    });
 }
 
 function showToast(message, type = 'info') {
