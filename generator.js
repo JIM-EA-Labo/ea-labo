@@ -322,13 +322,16 @@ CTrade trade;
 
       switch(ind) {
         case 'ma':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period || 14}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
           break;
         case 'rsi':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iRSI(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period || 14}, PRICE_CLOSE);\n`;
           break;
         case 'stochastic':
           {
+            code += `int ${handleName} = INVALID_HANDLE;\n`;
             const k = params.kPeriod || params.stoch_k || 5;
             const d = params.dPeriod || params.stoch_d || 3;
             const sl = params.slowing || params.stoch_slowing || 3;
@@ -336,34 +339,52 @@ CTrade trade;
           }
           break;
         case 'macd':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iMACD(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.fastPeriod || 12}, ${params.slowPeriod || 26}, ${params.signalPeriod || 9}, PRICE_CLOSE);\n`;
           break;
         case 'bollinger':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iBands(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period || 20}, 0, ${params.deviation || 2.0}, PRICE_CLOSE);\n`;
           break;
         case 'ichimoku':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iIchimoku(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.tenkan || 9}, ${params.kijun || 26}, ${params.senkou || 52});\n`;
           break;
         case 'cci':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iCCI(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period || 14}, PRICE_TYPICAL);\n`;
           break;
         case 'ma_cross':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.slowPeriod || 25}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
           break;
         case 'ma_perfect':
-          initCode += `   ${handleName} = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period4 || 100}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
+          code += `int ${handleName}_1 = INVALID_HANDLE;\n`;
+          code += `int ${handleName}_2 = INVALID_HANDLE;\n`;
+          code += `int ${handleName}_3 = INVALID_HANDLE;\n`;
+          code += `int ${handleName}_4 = INVALID_HANDLE;\n`;
+          initCode += `   ${handleName}_1 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period1 || 10}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
+          initCode += `   ${handleName}_2 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period2 || 25}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
+          initCode += `   ${handleName}_3 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period3 || 50}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
+          initCode += `   ${handleName}_4 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period4 || 100}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
           break;
         case 'ma_deviation':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period || 20}, 0, (ENUM_MA_METHOD)(${params.method || 0}), PRICE_CLOSE);\n`;
           break;
         case 'heiken_ashi':
+          code += `int ${handleName} = INVALID_HANDLE;\n`;
           initCode += `   ${handleName} = iCustom(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, "Examples\\\\Heiken_Ashi");\n`;
           break;
         case 'round_numbers':
-          initCode += `   ${handleName} = INVALID_HANDLE; // Price based\n`;
+          // Price based, no handle
           break;
       }
-      initCode += `   if(${handleName} == INVALID_HANDLE && "${ind}" != "round_numbers") { Print("Failed to create handle for condition ${idx}"); return false; }\n`;
+      if (ind !== 'round_numbers' && ind !== 'ma_perfect') {
+          initCode += `   if(${handleName} == INVALID_HANDLE) { Print("Failed to create handle for condition ${idx}"); return false; }\n`;
+      } else if (ind === 'ma_perfect') {
+          initCode += `   if(${handleName}_1 == INVALID_HANDLE || ${handleName}_4 == INVALID_HANDLE) { Print("Failed to create handles for Perfect Order ${idx}"); return false; }\n`;
+      }
     });
 
     initCode += '   return true;\n}\n\n';
@@ -419,18 +440,19 @@ CTrade trade;
             else       code += `   return (iClose(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${shift}) < buffer0[0] && iClose(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${shift+1}) >= buffer0[1]);\n`;
             break;
           case 'ma_perfect':
-            code += `   double m1 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period1 || 10}, 0, MODE_SMA, PRICE_CLOSE, ${shift});\n`;
-            code += `   double m2 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period2 || 25}, 0, MODE_SMA, PRICE_CLOSE, ${shift});\n`;
-            code += `   double m3 = iMA(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${params.period3 || 50}, 0, MODE_SMA, PRICE_CLOSE, ${shift});\n`;
-            code += `   if(CopyBuffer(${handleName}, 0, ${shift}, 1, buffer0) < 1) return false;\n`;
-            if (isBuy) code += `   return (m1 > m2 && m2 > m3 && m3 > buffer0[0]);\n`;
-            else       code += `   return (m1 < m2 && m2 < m3 && m3 < buffer0[0]);\n`;
+            code += `   double m1[], m2[], m3[], m4[];\n`;
+            code += `   if(CopyBuffer(${handleName}_1, 0, ${shift}, 1, m1) < 1) return false;\n`;
+            code += `   if(CopyBuffer(${handleName}_2, 0, ${shift}, 1, m2) < 1) return false;\n`;
+            code += `   if(CopyBuffer(${handleName}_3, 0, ${shift}, 1, m3) < 1) return false;\n`;
+            code += `   if(CopyBuffer(${handleName}_4, 0, ${shift}, 1, m4) < 1) return false;\n`;
+            if (isBuy) code += `   return (m1[0] > m2[0] && m2[0] > m3[0] && m3[0] > m4[0]);\n`;
+            else       code += `   return (m1[0] < m2[0] && m2[0] < m3[0] && m3[0] < m4[0]);\n`;
             break;
           case 'ma_deviation':
             code += `   if(CopyBuffer(${handleName}, 0, ${shift}, 1, buffer0) < 1) return false;\n`;
             code += `   double closeV = iClose(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${shift});\n`;
-            if (isBuy) code += `   return ((closeV - buffer0[0]) / _Point >= ${params.limit || 10} * 10);\n`;
-            else       code += `   return ((buffer0[0] - closeV) / _Point >= ${params.limit || 10} * 10);\n`;
+            if (isBuy) code += `   return ((closeV - buffer0[0]) / _Point >= ${params.limit || 10} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
+            else       code += `   return ((buffer0[0] - closeV) / _Point >= ${params.limit || 10} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
             break;
           case 'heiken_ashi':
             code += `   if(CopyBuffer(${handleName}, 0, ${shift}, 2, buffer0) < 2) return false;\n`;

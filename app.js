@@ -2487,7 +2487,6 @@ function getRequiredParams(category, indicator, conditionType) {
           ]
         });
         break;
-        break;
       case 'envelope':
         params.push({ id: 'env_period', label: '期間', type: 'number', default: 20, min: 1 });
         params.push({ id: 'env_deviation', label: '偏差(%)', type: 'number', default: 0.1, step: '0.01', min: 0 });
@@ -4780,7 +4779,12 @@ function setupMTSettings() {
     if (genBtn) genBtn.onclick = () => generateMTPackage();
 
     const runBtn = document.getElementById('run-one-click-mt5');
-    if (runBtn) runBtn.onclick = () => runOneClickMT5();
+    if (runBtn) {
+        runBtn.addEventListener('click', () => {
+            console.log('One-Click Button Clicked');
+            runOneClickMT5();
+        });
+    }
 
     // Optimization Parameter Toggles
     document.querySelectorAll('.opt-toggle input').forEach(toggle => {
@@ -4913,10 +4917,16 @@ function generateIniFile(expertName) {
  * One-Click Runner: Bundles files into a single PowerShell script
  */
 function runOneClickMT5() {
-    if (eaState.mtPlatform !== 'mt5') {
-        alert('この全自動ワンクリック機能は MT5 専用です。MT4 の場合は「一括ダウンロード」から手動で配置してください。');
-        return;
-    }
+    try {
+        console.log('Starting runOneClickMT5...');
+        
+        // 重要: 統合環境でのプラットフォーム設定を同期
+        eaState.platform = eaState.mtPlatform || 'mt5';
+
+        if (eaState.mtPlatform !== 'mt5') {
+            alert('この全自動ワンクリック機能は MT5 専用です。MT4 の場合は「一括ダウンロード」から手動で配置してください。');
+            return;
+        }
 
     const baseName = `01_Source_${eaState.eaName}`;
     const mqCode = EAGenerator.generate(eaState);
@@ -4990,5 +5000,11 @@ Pause
 `;
 
     downloadFile(`🚀Run_MT5_Test_${eaState.eaName}.ps1`, psScript);
+    console.log('One-Click PS1 script triggered.');
+    showToast('全自動実行用スクリプトをダウンロードしました', 'success');
+} catch (error) {
+    console.error('One-Click Runner Error:', error);
+    alert('ワンクリック実行中にエラーが発生しました: ' + error.message + '\n設定内容を確認してください。');
+}
 }
 
