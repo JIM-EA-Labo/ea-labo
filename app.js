@@ -1,10 +1,5 @@
-﻿// ============================================================
-// [A-001] eaState 窶・繧ｰ繝ｭ繝ｼ繝舌Ν迥ｶ諷九が繝悶ず繧ｧ繧ｯ繝・// [FIX] REBUILT v4.2.0 - EMERGENCY RECOVERY
-// ============================================================
-console.log('EA Labo App.js v4.2.0 - RECOVERY SUCCESS');
-
-/**
- * 繝代せ繝ｯ繝ｼ繝芽ｪ崎ｨｼ縺ｮ蛻晄悄蛹・ */
+﻿// [REBUILT v4.2.3] EMERGENCY RECOVERY
+console.log('EA Labo App.js v4.2.3 - RECOVERY SUCCESS');
 function initAuth() {
     const authOverlay = document.getElementById('auth-overlay');
     const passwordInput = document.getElementById('auth-password');
@@ -50,6 +45,52 @@ function initAuth() {
     });
 }
 
+/**
+ * パスワード認証の初期化
+ */
+function initAuth() {
+    const authOverlay = document.getElementById('auth-overlay');
+    const passwordInput = document.getElementById('auth-password');
+    const submitBtn = document.getElementById('auth-submit');
+    const errorMsg = document.getElementById('auth-error');
+
+    if (!authOverlay || !passwordInput || !submitBtn) return;
+
+    if (sessionStorage.getItem('jim_ea_labo_auth') === 'true') {
+        authOverlay.classList.add('hidden');
+        authOverlay.style.display = 'none';
+        return;
+    }
+
+    const checkPassword = () => {
+        const input = passwordInput.value;
+        if (input === 'JIM2026') {
+            sessionStorage.setItem('jim_ea_labo_auth', 'true');
+            authOverlay.classList.add('hidden');
+            setTimeout(() => authOverlay.style.display = 'none', 500);
+            if (typeof showToast === 'function') {
+                showToast('認証に成功しました', 'success');
+            }
+        } else {
+            if (errorMsg) {
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => errorMsg.classList.add('hidden'), 3000);
+            }
+            passwordInput.value = '';
+            passwordInput.focus();
+            if (typeof showToast === 'function') {
+                showToast('パスワードが正しくありません', 'error');
+            }
+        }
+    };
+
+    submitBtn.addEventListener('click', checkPassword);
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkPassword();
+    });
+}
+
+const eaState = {
   // --- 基本設定 ---
   eaName: 'MyEA',
   platform: 'mt4',
@@ -258,7 +299,6 @@ const indiState = {
 // ============================================================
 // [END A-001]
 // ============================================================
-
 
 
 // ==================== A-010: Initialization + Home Screen ====================
@@ -4681,42 +4721,6 @@ window.renderLogicMap = function() {
     if (eaState.strategies && eaState.strategies.length > 0) {
         html += '<div class="logic-node">';
         html += '<div class="node-title">⚙️ ポジション戦略</div>';
-        html += '<div class="node-content">';
-        html += eaState.strategies.map(s => '<div class="node-item">🔄 ' + s.toUpperCase() + '</div>').join('');
-        html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
-    }
-
-    // 4. エグジットセクション
-    if (hasExit || eaState.useTrailing || eaState.useAutoClose) {
-        html += '<div class="logic-node">';
-        html += '<div class="node-title">🎯 エグジットルール</div>';
-        html += '<div class="node-content">';
-        if (eaState.useTrailing) html += '<div class="node-item filter">📈 追従決済 (TS)</div>';
-        if (eaState.useAutoClose) html += '<div class="node-item filter">⏱️ 自動決済</div>';
-        html += eaState.exitConditions.map(c => '<div class="node-item sell">🏁 条件決済: ' + getConditionSimpleDesc(c) + '</div>').join('');
-        html += '</div></div>';
-        html += '<div class="node-connector">↓</div>';
-    }
-
-    // 5. Final Action
-    html += '<div class="logic-node" style="border-color: var(--accent-success); border-width: 2px;">';
-    html += '<div class="node-title" style="color: var(--accent-success);">🚀 発注・決済実行</div>';
-    html += '<div class="node-content" style="font-size: 0.8rem; opacity: 0.8;">条件合致により実行されます</div>';
-    html += '</div>';
-
-    container.innerHTML = html;
-};
-
-function getConditionSimpleDesc(c) {
-    if (!c) return '---';
-    const indicator = c.indicator ? c.indicator.toUpperCase() : 'UNKNOWN';
-    const type = c.type ? c.type.replace(/_/g, ' ') : 'CONDITION';
-    return indicator + ' (' + type + ')';
-}
-
-// 初期化時にセットアップをフック
-const originalSetupEAFlow = setupEAFlow;
 setupEAFlow = function() {
     originalSetupEAFlow();
     setupLogicSidebar();
@@ -4727,6 +4731,41 @@ setupEAFlow = function() {
 /**
  * パスワード認証の初期化
  */
+function initAuth() {
+    const authOverlay = document.getElementById('auth-overlay');
+    const passwordInput = document.getElementById('auth-password');
+    const submitBtn = document.getElementById('auth-submit');
+    const errorMsg = document.getElementById('auth-error');
+
+    // セッションに認証済みフラグがあるか確認
+    if (sessionStorage.getItem('jim_ea_labo_auth') === 'true') {
+        if (authOverlay) authOverlay.classList.add('hidden');
+        return;
+    }
+
+    const checkPassword = () => {
+        const input = passwordInput.value;
+        // 暫定パスワード: JIM2026 (ボスの希望に合わせて変更可能)
+        if (input === 'JIM2026') {
+            sessionStorage.setItem('jim_ea_labo_auth', 'true');
+            if (authOverlay) {
+                authOverlay.classList.add('hidden');
+                // 少し遅らせてからDOMから削除してパフォーマンス向上
+                setTimeout(() => authOverlay.style.display = 'none', 500);
+            }
+            if (typeof showToast === 'function') {
+                showToast('認証に成功しました', 'success');
+            }
+        } else {
+            errorMsg.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    };
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', checkPassword);
+    }
 
     if (passwordInput) {
         passwordInput.addEventListener('keypress', (e) => {
@@ -4916,11 +4955,6 @@ function runMTTest() {
     downloadFile(`04_Start_Test_${eaState.eaName}.bat`, batContent);
 }
 
-
-
-/**
- * Generate .ini config for MT5 auto backtest
- */
 function generateIniFile(expertName) {
     const config = [
         '[Tester]',
@@ -4938,35 +4972,24 @@ function generateIniFile(expertName) {
     return config.join('\n');
 }
 
-/**
- * One-Click Runner: Bundles files into a single PowerShell script
- */
 function runOneClickMT5() {
     try {
         console.log('Starting runOneClickMT5...');
-        
-        // 驥崎ｦ・ 邨ｱ蜷育腸蠅・〒縺ｮ繝励Λ繝・ヨ繝輔か繝ｼ繝險ｭ螳壹ｒ蜷梧悄
         eaState.platform = eaState.mtPlatform || 'mt5';
-
         if (eaState.mtPlatform !== 'mt5') {
-            alert('縺薙・蜈ｨ閾ｪ蜍輔Ρ繝ｳ繧ｯ繝ｪ繝・け讖溯・縺ｯ MT5 蟆ら畑縺ｧ縺吶・T4 縺ｮ蝣ｴ蜷医・縲御ｸ諡ｬ繝繧ｦ繝ｳ繝ｭ繝ｼ繝峨阪°繧画焔蜍輔〒驟咲ｽｮ縺励※縺上□縺輔＞縲・);
+            alert('縺薙・蜈ｨ閾ｪ蜍輔Ρ繝ｳ繧ｯ繝ｪ繝・け讖溯・縺ｯ MT5 蟆ら畑縺ｧ縺吶・);
             return;
         }
+        const baseName = "01_Source_" + eaState.eaName;
+        const mqCode = EAGenerator.generate(eaState);
+        const setContent = generateSetFile();
+        const iniContent = generateIniFile(baseName + '.ex5');
+        const iniName = "AutoRun_" + eaState.eaName + ".ini";
+        const psScript = "# EA Labo - MT5 One-Click Auto Runner\n$ErrorActionPreference = 'Stop'\n\n$eaName = \"\"\n$mqlCode = @\"\n" + mqCode.replace('','`') + "\n\"@\n\n$setContent = @\"\n" + setContent + "\n\"@\n\n$iniContent = @\"\n" + iniContent + "\n\"@\n\n# Path Detection\n$mt5Path = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'\nif (-not (Test-Path $mt5Path)) {\n    $search = Get-Process 'terminal64' -ErrorAction SilentlyContinue\n    if ($search) { $mt5Path = $search.MainModule.FileName }\n}\n\n# Get Data Folder\n$dataDir = \"$env:APPDATA\\MetaQuotes\\Terminal\"\nif (Test-Path $dataDir) {\n    $instance = Get-ChildItem $dataDir | Where-Object { $_.PSIsContainer } | Sort-Object LastWriteTime -Descending | Select-Object -First 1\n    if ($instance) {\n        $expertDir = Join-Path $instance.FullName 'MQL5\\Experts'\n        if (Test-Path $expertDir) {\n            Set-Content -Path (Join-Path $expertDir \"01_Source_$(\).mq5\") -Value $mqlCode -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir \"Params_$(\).set\") -Value $setContent -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir \"AutoRun_$(\).ini\") -Value $iniContent -Encoding UTF8\n            Start-Process $mt5Path -ArgumentList \"/config:`\"$expertDir\\AutoRun_$(\).ini`\"\"\n            Exit\n        }\n    }\n}\nWrite-Host '笞 閾ｪ蜍墓､懷・縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ％縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ繧・MQL5\\Experts 繝輔か繝ｫ繝縺ｫ遘ｻ蜍輔＠縺ｦ螳溯｡後＠縺ｦ縺上□縺輔＞縲・ -ForegroundColor Red\nPause";
 
-    const baseName = `01_Source_${eaState.eaName}`;
-    const mqCode = EAGenerator.generate(eaState);
-    const setContent = generateSetFile();
-    const iniContent = generateIniFile(baseName + '.ex5');
-    const iniName = `AutoRun_${eaState.eaName}.ini`;
-
-    const psScript = `# EA Labo - MT5 One-Click Auto Runner\n$ErrorActionPreference = "Stop"\n\n$eaName = "${eaState.eaName}"\n$mqlCode = @"\n${mqCode}\n"@\n\n$setContent = @"\n${setContent}\n"@\n\n$iniContent = @"\n${iniContent}\n"@\n\n# 1. MT5 Path Detection\n$mt5Path = "C:\\\\Program Files\\\\MetaTrader 5\\\\terminal64.exe"\nif (-not (Test-Path $mt5Path)) {\n    Write-Host "MT5 terminal not found at $mt5Path. Searching..." -ForegroundColor Yellow\n    $search = Get-Process "terminal64" -ErrorAction SilentlyContinue\n    if ($search) { $mt5Path = $search.MainModule.FileName }\n    else {\n        $mt5Path = Read-Host "MT5 (terminal64.exe) 縺ｮ繝代せ縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ縲ゅヱ繧ｹ繧貞・蜉帙＠縺ｦ縺上□縺輔＞"\n    }\n}\n\n# 2. Get Data Folder\nWrite-Host "--- EA Labo Auto Setup ---" -ForegroundColor Cyan\n\n$dataDir = "$env:APPDATA\\\\MetaQuotes\\\\Terminal"\nif (Test-Path $dataDir) {\n    $instance = Get-ChildItem $dataDir | Where-Object { $_.PSIsContainer } | Sort-Object LastWriteTime -Descending | Select-Object -First 1\n    if ($instance) {\n        $expertDir = Join-Path $instance.FullName "MQL5\\\\Experts"\n        if (Test-Path $expertDir) {\n            Write-Host "Setting up in: $expertDir" -ForegroundColor Green\n            \n            # Write Files\n            Set-Content -Path (Join-Path $expertDir "${baseName}.mq5") -Value $mqlCode -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir "Params_${eaState.eaName}.set") -Value $setContent -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir "${iniName}") -Value $iniContent -Encoding UTF8\n            \n            # Start MT5\n            Write-Host "Starting MT5 Backtest..." -ForegroundColor Green\n            Start-Process $mt5Path -ArgumentList "/config:\`"$expertDir\\\\${iniName}\`""\n            Exit\n        }\n    }\n}\n\nWrite-Host "笞・・閾ｪ蜍墓､懷・縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ％縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ繧・MQL5\\\\Experts 繝輔か繝ｫ繝縺ｫ遘ｻ蜍輔＠縺ｦ螳溯｡後＠縺ｦ縺上□縺輔＞縲・ -ForegroundColor Red\nSet-Content -Path "${baseName}.mq5" -Value $mqlCode -Encoding UTF8\nSet-Content -Path "Params_${eaState.eaName}.set" -Value $setContent -Encoding UTF8\nSet-Content -Path "${iniName}" -Value $iniContent -Encoding UTF8\nPause`;
-
-    downloadFile(`噫Run_MT5_Test_${eaState.eaName}.ps1`, psScript);
-    console.log('One-Click PS1 script triggered.');
-    showToast('蜈ｨ閾ｪ蜍募ｮ溯｡檎畑繧ｹ繧ｯ繝ｪ繝励ヨ繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆', 'success');
-} catch (error) {
-    console.error('One-Click Runner Error:', error);
-    alert('繝ｯ繝ｳ繧ｯ繝ｪ繝・け螳溯｡御ｸｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆: ' + error.message + '\n險ｭ螳壼・螳ｹ繧堤｢ｺ隱阪＠縺ｦ縺上□縺輔＞縲・);
+        downloadFile("噫Run_MT5_Test_" + eaState.eaName + ".ps1", psScript);
+        showToast('蜈ｨ閾ｪ蜍募ｮ溯｡檎畑繧ｹ繧ｯ繝ｪ繝励ヨ繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆', 'success');
+    } catch (error) {
+        alert('繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆: ' + error.message);
+    }
 }
-}
-
