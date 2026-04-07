@@ -5008,3 +5008,180 @@ Pause
 }
 }
 
+
+function generateMTPackage() {
+    const statusEl = document.getElementById('mt-config-status');
+    if (statusEl) {
+        statusEl.innerHTML = '竚・Generating files...';
+        statusEl.className = 'form-hint';
+    }
+
+    try {
+        const ext = eaState.mtPlatform === 'mt4' ? 'mq4' : 'mq5';
+        const baseName = `01_Source_${eaState.eaName}`;
+        const sourceFile = baseName + '.' + ext;
+        const mqCode = EAGenerator.generate(eaState);
+        
+        // Download source
+        downloadFile(sourceFile, mqCode);
+
+        // Download .set file
+        const setContent = generateSetFile();
+        setTimeout(() => downloadFile(`02_Params_${eaState.eaName}.set`, setContent), 300);
+
+        // MT5 Configuration
+        if (eaState.mtPlatform === 'mt5') {
+            const iniContent = generateIniFile(baseName + '.ex5');
+            setTimeout(() => downloadFile(`03_AutoRun_${eaState.eaName}.ini`, iniContent), 600);
+            
+            const iniName = `03_AutoRun_${eaState.eaName}.ini`;
+            const batContent = `@echo off\nchcp 65001 >nul\necho =======================================================\necho EA Labo - MT5 繝舌ャ繧ｯ繝・せ繝郁・蜍募ｮ溯｡瑚ｵｷ蜍輔ヤ繝ｼ繝ｫ\necho =======================================================\necho.\necho 縲宣㍾隕√曾necho 繝繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺溷・縺ｦ縺ｮ險ｭ螳壹ヵ繧｡繧､繝ｫ・・mq5, .set, .ini, .bat・峨ｒ縲∝ｿ・★\necho 縺贋ｽｿ縺・・縲勲QL5\\Experts縲阪ヵ繧ｩ繝ｫ繝縺ｮ荳ｭ縺ｫ遘ｻ蜍輔＆縺帙※縺九ｉ\necho 縺薙・繝輔ぃ繧､繝ｫ繧偵ム繝悶Ν繧ｯ繝ｪ繝・け縺励※螳溯｡後＠縺ｦ縺上□縺輔＞縲・necho.\necho ・遺ｻ繝繧ｦ繝ｳ繝ｭ繝ｼ繝峨ヵ繧ｩ繝ｫ繝遲峨〒螳溯｡後＠縺ｦ繧・T5縺ｯ繝輔ぃ繧､繝ｫ繧定ｪ崎ｭ倥〒縺阪★菴輔ｂ襍ｷ縺阪∪縺帙ｓ・・ｼ噂necho.\npause\necho.\necho MT5繧定ｵｷ蜍輔＠縺ｦ閾ｪ蜍慕噪縺ｫ繝・せ繝医ｒ髢句ｧ九＠縺ｾ縺・..\n"C:\\Program Files\\MetaTrader 5\\terminal64.exe" /config:"%~dp0${iniName}"\npause`;
+            setTimeout(() => downloadFile(`04_Start_Test_${eaState.eaName}.bat`, batContent), 900);
+        }
+
+        const folder = (eaState.mtPlatform === 'mt4' ? 'MQL4' : 'MQL5') + '\\Experts';
+        if (statusEl) {
+            statusEl.innerHTML = `笨・繝繧ｦ繝ｳ繝ｭ繝ｼ繝峨′髢句ｧ九＆繧後∪縺励◆縲・br>繝繧ｦ繝ｳ繝ｭ繝ｼ繝画ｸ医∩縺ｮ繝輔ぃ繧､繝ｫ繧偵☆縺ｹ縺ｦ縲｀T4/MT5縺ｮ縲・{folder}縲阪ヵ繧ｩ繝ｫ繝蜀・∈遘ｻ蜍輔＆縺帙※縺上□縺輔＞縲Ａ;
+            statusEl.className = 'form-success mt-2';
+        }
+    } catch (err) {
+        if (statusEl) {
+            statusEl.innerHTML = '笶・Error: ' + err.message;
+            statusEl.className = 'form-error mt-2';
+        }
+    }
+}
+
+/**
+ * Generate .set file for parameter optimization
+ */
+function generateSetFile() {
+    let lines = [];
+    lines.push('MagicNumber=' + eaState.magicNumber);
+    lines.push('LotSize=' + eaState.lotSize);
+    // Add optimized parameters
+    Object.keys(eaState.optParams).forEach(p => {
+        const opt = eaState.optParams[p];
+        lines.push(p + '=' + opt.start);
+        lines.push(p + ',F=' + opt.start);
+        lines.push(p + ',1=' + opt.step);
+        lines.push(p + ',2=' + opt.stop);
+        lines.push(p + ',3=' + opt.start);
+        lines.push(p + ',4=1'); // Enable optimization
+    });
+    return lines.join('\n');
+}
+
+/**
+ * Generate .ini config for MT5 auto backtest
+ */
+function generateIniFile(expertName) {
+    const config = [
+        '[Tester]',
+        'Expert=' + expertName.replace('.ex5', ''),
+        'Symbol=' + eaState.mtSymbol,
+        'Period=' + (eaState.mtPeriod),
+        'Model=' + eaState.mtModel,
+        'FromDate=' + (eaState.mtFromDate || '2024.01.01').replace(/-/g, '.'),
+        'ToDate=' + (eaState.mtToDate || '2024.12.31').replace(/-/g, '.'),
+        'Optimization=' + (eaState.mtOptimization ? '1' : '0'),
+        'Report=' + eaState.eaName + '_Report',
+        'ReplaceReport=1',
+        'ShutdownTerminal=1'
+    ];
+    return config.join('\n');
+}
+
+/**
+ * One-Click Runner: Bundles files into a single PowerShell script
+ */
+function runOneClickMT5() {
+    try {
+        console.log('Starting runOneClickMT5...');
+        
+        // 驥崎ｦ・ 邨ｱ蜷育腸蠅・〒縺ｮ繝励Λ繝・ヨ繝輔か繝ｼ繝險ｭ螳壹ｒ蜷梧悄
+        eaState.platform = eaState.mtPlatform || 'mt5';
+
+        if (eaState.mtPlatform !== 'mt5') {
+            alert('縺薙・蜈ｨ閾ｪ蜍輔Ρ繝ｳ繧ｯ繝ｪ繝・け讖溯・縺ｯ MT5 蟆ら畑縺ｧ縺吶・T4 縺ｮ蝣ｴ蜷医・縲御ｸ諡ｬ繝繧ｦ繝ｳ繝ｭ繝ｼ繝峨阪°繧画焔蜍輔〒驟咲ｽｮ縺励※縺上□縺輔＞縲・);
+            return;
+        }
+
+        const baseName = `01_Source_${eaState.eaName}`;
+        const mqCode = EAGenerator.generate(eaState);
+        const setContent = generateSetFile();
+        const iniContent = generateIniFile(baseName + '.ex5');
+        const iniName = `AutoRun_${eaState.eaName}.ini`;
+
+        // Helper: Escape backslashes and quotes for PS
+        const escapePS = (str) => str.replace(/`/g, '``').replace(/\$/g, '`$').replace(/"/g, '`"');
+
+        const psScript = `
+# EA Labo - MT5 One-Click Auto Runner
+$ErrorActionPreference = "Stop"
+
+$eaName = "${eaState.eaName}"
+$mqlCode = @"
+${mqCode}
+"@
+
+$setContent = @"
+${setContent}
+"@
+
+$iniContent = @"
+${iniContent}
+"@
+
+# 1. MT5 Path Detection
+$mt5Path = "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+if (-not (Test-Path $mt5Path)) {
+    Write-Host "MT5 terminal not found at $mt5Path. Searching..." -ForegroundColor Yellow
+    $search = Get-Process "terminal64" -ErrorAction SilentlyContinue
+    if ($search) { $mt5Path = $search.MainModule.FileName }
+    else {
+        $mt5Path = Read-Host "MT5 (terminal64.exe) 縺ｮ繝代せ縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ縲ゅヱ繧ｹ繧貞・蜉帙＠縺ｦ縺上□縺輔＞"
+    }
+}
+
+# 2. Get Data Folder
+Write-Host "--- EA Labo Auto Setup ---" -ForegroundColor Cyan
+
+$dataDir = "$env:APPDATA\\MetaQuotes\\Terminal"
+if (Test-Path $dataDir) {
+    # Find the most recently modified subfolder (the instance)
+    $instance = Get-ChildItem $dataDir | Where-Object { $_.PSIsContainer } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($instance) {
+        $expertDir = Join-Path $instance.FullName "MQL5\\Experts"
+        if (Test-Path $expertDir) {
+            Write-Host "Setting up in: $expertDir" -ForegroundColor Green
+            
+            # Write Files
+            Set-Content -Path (Join-Path $expertDir "${baseName}.mq5") -Value $mqlCode -Encoding UTF8
+            Set-Content -Path (Join-Path $expertDir "Params_${eaState.eaName}.set") -Value $setContent -Encoding UTF8
+            Set-Content -Path (Join-Path $expertDir "${iniName}") -Value $iniContent -Encoding UTF8
+            
+            # Start MT5
+            Write-Host "Starting MT5 Backtest..." -ForegroundColor Green
+            Start-Process $mt5Path -ArgumentList "/config:``"$expertDir\\${iniName}``""
+            Exit
+        }
+    }
+}
+
+Write-Host "笞・・閾ｪ蜍墓､懷・縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ％縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ繧・MQL5\\Experts 繝輔か繝ｫ繝縺ｫ遘ｻ蜍輔＠縺ｦ螳溯｡後＠縺ｦ縺上□縺輔＞縲・ -ForegroundColor Red
+Set-Content -Path "${baseName}.mq5" -Value $mqlCode -Encoding UTF8
+Set-Content -Path "Params_${eaState.eaName}.set" -Value $setContent -Encoding UTF8
+Set-Content -Path "${iniName}" -Value $iniContent -Encoding UTF8
+Pause
+`;
+
+        downloadFile(`噫Run_MT5_Test_${eaState.eaName}.ps1`, psScript);
+        console.log('One-Click PS1 script triggered.');
+        showToast('蜈ｨ閾ｪ蜍募ｮ溯｡檎畑繧ｹ繧ｯ繝ｪ繝励ヨ繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆', 'success');
+    } catch (error) {
+        console.error('One-Click Runner Error:', error);
+        alert('繝ｯ繝ｳ繧ｯ繝ｪ繝・け螳溯｡御ｸｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆: ' + error.message + '\n險ｭ螳壼・螳ｹ繧堤｢ｺ隱阪＠縺ｦ縺上□縺輔＞縲・);
+    }
+}
+
