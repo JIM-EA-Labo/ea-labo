@@ -1,9 +1,12 @@
 // ============================================================
-// [A-001] eaState 窶・繧ｰ繝ｭ繝ｼ繝舌Ν迥ｶ諷九が繝悶ず繧ｧ繧ｯ繝茨ｼ亥ｮ梧・迚茨ｼ荏n// [FIX] REBUILT v4.2.5 - EMERGENCY RECOVERY SUCCESS
+// [A-001] eaState — グローバル状態オブジェクト（完成版）
+// [FIX] REBUILT v4.2.7 - FINAL EMERGENCY RECOVERY
 // ============================================================
-console.log('EA Labo App.js v4.2.5 - RECOVERY SUCCESS');
+console.log('EA Labo App.js v4.2.7 - RECOVERY SUCCESS');
+
 /**
- * 繝代せ繝ｯ繝ｼ繝芽ｪ崎ｨｼ縺ｮ蛻晄悄蛹・ */
+ * 認証機能の初期化
+ */
 function initAuth() {
     const authOverlay = document.getElementById('auth-overlay');
     const passwordInput = document.getElementById('auth-password');
@@ -22,24 +25,18 @@ function initAuth() {
     }
 
     const checkPassword = () => {
-        const input = passwordInput.value;
-        if (input === 'JIM2026') {
+        if (passwordInput.value === 'JIM2026') {
             sessionStorage.setItem('jim_ea_labo_auth', 'true');
             authOverlay.classList.add('hidden');
             setTimeout(() => authOverlay.style.display = 'none', 500);
-            if (typeof showToast === 'function') {
-                showToast('隱崎ｨｼ縺ｫ謌仙粥縺励∪縺励◆', 'success');
-            }
+            if (typeof showToast === 'function') showToast('認証に成功しました', 'success');
         } else {
             if (errorMsg) {
                 errorMsg.classList.remove('hidden');
                 setTimeout(() => errorMsg.classList.add('hidden'), 3000);
             }
             passwordInput.value = '';
-            passwordInput.focus();
-            if (typeof showToast === 'function') {
-                showToast('繝代せ繝ｯ繝ｼ繝峨′豁｣縺励￥縺ゅｊ縺ｾ縺帙ｓ', 'error');
-            }
+            showToast('パスワードが正しくありません', 'error');
         }
     };
 
@@ -4722,12 +4719,7 @@ setupEAFlow = function() {
 
 
 // ==================== [A-110] パスワード認証機能 ====================
-/**
- * パスワード認証の初期化
- */
-        });
-    }
-}
+// --- initAuth moved to top ---
 
 // ==================== [A-120] MetaTrader 4/5 Integration Logic ====================
 /**
@@ -4910,25 +4902,6 @@ function runMTTest() {
     downloadFile(`04_Start_Test_${eaState.eaName}.bat`, batContent);
 }
 
-/**
- * Generate .ini config for MT5 auto backtest
- */
-function generateIniFile(expertName) {
-    const config = [
-        '[Tester]',
-        'Expert=' + expertName.replace('.ex5', ''),
-        'Symbol=' + eaState.mtSymbol,
-        'Period=' + (eaState.mtPeriod),
-        'Model=' + eaState.mtModel,
-        'FromDate=' + (eaState.mtFromDate || '2024.01.01').replace(/-/g, '.'),
-        'ToDate=' + (eaState.mtToDate || '2024.12.31').replace(/-/g, '.'),
-        'Optimization=' + (eaState.mtOptimization ? '1' : '0'),
-        'Report=' + eaState.eaName + '_Report',
-        'ReplaceReport=1',
-        'ShutdownTerminal=1'
-    ];
-    return config.join('\n');
-}
 
 /**
  * One-Click Runner: Bundles files into a single PowerShell script
@@ -4949,7 +4922,7 @@ function runOneClickMT5() {
         const iniContent = generateIniFile(baseName + '.ex5');
         const iniName = "AutoRun_" + eaState.eaName + ".ini";
 
-        const psScript = '# EA Labo - MT5 One-Click Auto Runner\nContinue = "Stop"\n\n = "' + eaState.eaName + '"\n = @"\n' + mqCode + '\n"@\n\n = @"\n' + setContent + '\n"@\n\n = @"\n' + iniContent + '\n"@\n\n# 1. MT5 Path Detection\n = "C:\\\\Program Files\\\\MetaTrader 5\\\\terminal64.exe"\nif (-not (Test-Path )) {\n     = Get-Process "terminal64" -ErrorAction SilentlyContinue\n    if () {  = .MainModule.FileName }\n}\n\n# 2. Get Data Folder\n = "C:\Users\PC_User\AppData\Roaming\\\\MetaQuotes\\\\Terminal"\nif (Test-Path ) {\n     = Get-ChildItem  | Where-Object { .PSIsContainer } | Sort-Object LastWriteTime -Descending | Select-Object -First 1\n    if () {\n         = Join-Path .FullName "MQL5\\\\Experts"\n        if (Test-Path ) {\n            Set-Content -Path (Join-Path  "' + baseName + '.mq5") -Value  -Encoding UTF8\n            Set-Content -Path (Join-Path  "Params_' + eaState.eaName + '.set") -Value  -Encoding UTF8\n            Set-Content -Path (Join-Path  "' + iniName + '") -Value  -Encoding UTF8\n            Start-Process  -ArgumentList "/config:\"\\\\' + iniName + '\""\n            Exit\n        }\n    }\n}\nWrite-Host "笞・・閾ｪ蜍墓､懷・縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ％縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ繧・MQL5\\\\Experts 繝輔か繝ｫ繝縺ｫ遘ｻ蜍輔＠縺ｦ螳溯｡後＠縺ｦ縺上□縺輔＞縲・ -ForegroundColor Red\nPause';
+        const psScript = `# EA Labo - MT5 One-Click Auto Runner\n$ErrorActionPreference = "Stop"\n\n$eaName = "${eaState.eaName}"\n$mqlCode = @"\n${mqCode}\n"@\n\n$setContent = @"\n${setContent}\n"@\n\n$iniContent = @"\n${iniContent}\n"@\n\n# 1. MT5 Path Detection\n$mt5Path = "C:\\\\Program Files\\\\MetaTrader 5\\\\terminal64.exe"\nif (-not (Test-Path $mt5Path)) {\n    $search = Get-Process "terminal64" -ErrorAction SilentlyContinue\n    if ($search) { $mt5Path = $search.MainModule.FileName }\n}\n\n# 2. Get Data Folder\n$dataDir = "$env:APPDATA\\\\MetaQuotes\\\\Terminal"\nif (Test-Path $dataDir) {\n    $instance = Get-ChildItem $dataDir | Where-Object { $_.PSIsContainer } | Sort-Object LastWriteTime -Descending | Select-Object -First 1\n    if ($instance) {\n        $expertDir = Join-Path $instance.FullName "MQL5\\\\Experts"\n        if (Test-Path $expertDir) {\n            Set-Content -Path (Join-Path $expertDir "${baseName}.mq5") -Value $mqlCode -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir "Params_${eaState.eaName}.set") -Value $setContent -Encoding UTF8\n            Set-Content -Path (Join-Path $expertDir "${iniName}") -Value $iniContent -Encoding UTF8\n            Start-Process $mt5Path -ArgumentList "/config:\`"$expertDir\\\\${iniName}\`""\n            Exit\n        }\n    }\n}\nWrite-Host "笞・・閾ｪ蜍墓､懷・縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ％縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ繧・MQL5\\\\Experts 繝輔か繝ｫ繝縺ｫ遘ｻ蜍輔＠縺ｦ螳溯｡後＠縺ｦ縺上□縺輔＞縲・ -ForegroundColor Red\nPause`;
 
         downloadFile("噫Run_MT5_Test_" + eaState.eaName + ".ps1", psScript);
         showToast('蜈ｨ閾ｪ蜍募ｮ溯｡檎畑繧ｹ繧ｯ繝ｪ繝励ヨ繧偵ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨＠縺ｾ縺励◆', 'success');
@@ -4957,3 +4930,10 @@ function runOneClickMT5() {
         alert('繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆: ' + error.message);
     }
 }
+
+// Bind click event after a short delay to ensure DOM is ready (defensive)
+setTimeout(() => {
+    const btn = document.getElementById('run-one-click-mt5');
+    if (btn) btn.onclick = runOneClickMT5;
+}, 1000);
+
