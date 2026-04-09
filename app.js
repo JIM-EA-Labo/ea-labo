@@ -4945,20 +4945,27 @@ function generateSetFile() {
  * Generate .ini config for MT5 auto backtest
  */
 function generateIniFile(expertName) {
+    const eaBaseName = expertName.replace('.ex5', '');
+    const setFileName = 'Params_' + eaState.eaName + '.set';
     const config = [
         '[Tester]',
-        'Expert=' + expertName.replace('.ex5', ''),
-        'Symbol=' + eaState.mtSymbol,
-        'Period=' + (eaState.mtPeriod),
-        'Model=' + eaState.mtModel,
-        'FromDate=' + (eaState.mtFromDate || '2024.01.01').replace(/-/g, '.'),
-        'ToDate=' + (eaState.mtToDate || '2024.12.31').replace(/-/g, '.'),
-        'Optimization=' + (eaState.mtOptimization ? '1' : '0'),
-        'Report=' + eaState.eaName + '_Report',
+        'Expert='            + eaBaseName,
+        'ExpertParameters='  + setFileName,
+        'Symbol='            + (eaState.mtSymbol || 'USDJPY'),
+        'Period='            + (eaState.mtPeriod || 'H1'),
+        'Deposit=10000',
+        'Currency=USD',
+        'Leverage=100',
+        'Model='             + (eaState.mtModel || '0'),
+        'FromDate='          + (eaState.mtFromDate || '2024.01.01').replace(/-/g, '.'),
+        'ToDate='            + (eaState.mtToDate   || '2024.12.31').replace(/-/g, '.'),
+        'Optimization='      + (eaState.mtOptimization ? '1' : '0'),
+        'Visual=0',
+        'Report='            + eaState.eaName + '_Report',
         'ReplaceReport=1',
-        'ShutdownTerminal=1'
+        'ShutdownTerminal=0'
     ];
-    return config.join('\n');
+    return config.join('\r\n');
 }
 
 /**
@@ -5120,10 +5127,11 @@ Write-Host "  配置先: $expertDir" -ForegroundColor Gray
 [System.IO.File]::WriteAllText($mq5Path, $mqCode, [System.Text.Encoding]::UTF8)
 Write-Host "  .mq5 配置完了: $($baseName).mq5" -ForegroundColor Green
 
-$unicodeLE = New-Object System.Text.UnicodeEncoding $false, $true
-[System.IO.File]::WriteAllText($setPath, $setContent, $unicodeLE)
+$unicodeLE  = New-Object System.Text.UnicodeEncoding $false, $true
+$utf8NoBom  = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText($setPath, $setContent, $unicodeLE)   # .set = UTF-16LE (MT5要求)
 Write-Host "  .set 配置完了: Params_$($eaName).set" -ForegroundColor Green
-[System.IO.File]::WriteAllText($iniPath, $iniContent, $unicodeLE)
+[System.IO.File]::WriteAllText($iniPath, $iniContent, $utf8NoBom)   # .ini = UTF-8 BOMなし (MT5要求)
 Write-Host "  .ini 配置完了: $iniFileName" -ForegroundColor Green
 
 $editorPath = $mt5Path -replace 'terminal64\.exe$', 'metaeditor64.exe'
