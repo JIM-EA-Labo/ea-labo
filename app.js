@@ -5106,7 +5106,7 @@ Write-Host "  ✅ INI設定配置: $iniFileName" -ForegroundColor Green
 $editorPath = $mt5Path -replace 'terminal64\.exe$', 'metaeditor64.exe'
 if (Test-Path $editorPath) {
     Write-Host "  🔧 コンパイル中..." -ForegroundColor Yellow
-    $compProc = Start-Process -FilePath $editorPath -ArgumentList "/compile:`"$mq5Path`" /log" -PassThru
+    $compProc = Start-Process -FilePath $editorPath -ArgumentList "/compile:\`"$mq5Path\`" /log" -PassThru
     $compProc.WaitForExit(30000) | Out-Null  # 最大30秒待機
     if (Test-Path $ex5Path) {
         Write-Host "  ✅ コンパイル成功!" -ForegroundColor Green
@@ -5132,7 +5132,7 @@ if ($runningMT5) {
 # --- MT5をINI付きで新規起動 ---
 Write-Host "  🚀 MT5起動中... (バックテストが自動的に開始されます)" -ForegroundColor Green
 Write-Host "  使用INI: $iniPath" -ForegroundColor Gray
-Start-Process -FilePath $mt5Path -ArgumentList "/config:`"$iniPath`""
+Start-Process -FilePath $mt5Path -ArgumentList "/config:\`"$iniPath\`""
 Write-Host ''
 Write-Host '  MT5が起動し、バックテストが自動開始します。' -ForegroundColor Cyan
 Write-Host '  テスト完了後（MT5が自動終了後）、このウィンドウを閉じてください。' -ForegroundColor Cyan
