@@ -5009,77 +5009,91 @@ $setContent   = Decode-B64 '` + b64_set + `'
 $iniContent   = Decode-B64 '` + b64_ini + `'
 
 Write-Host ''
-Write-Host '[STEP 1/4] MT5パス検索中...' -ForegroundColor Cyan
+Write-Host '[STEP 1/4] MT5を検出中...' -ForegroundColor Cyan
 
-# --- MT5実行ファイルの検索 ---
+# --- origin.txt ベースで全MT5インストールを検出 ---
 $mt5Path = ''
-if ($manualExe -and (Test-Path $manualExe)) {
+$instancePath = ''
+
+if ($manualExe -and $manualData -and (Test-Path $manualExe) -and (Test-Path (Join-Path $manualData 'MQL5\Experts'))) {
+    # 手動指定がある場合はそのまま使用
     $mt5Path = $manualExe
+    $instancePath = $manualData
     Write-Host "  ✅ 指定パスを使用: $mt5Path" -ForegroundColor Green
 } else {
-    # よく使われるインストールパスを順番に試す
-    $candidates = @(
-        'C:\Program Files\MetaTrader 5\terminal64.exe',
-        'C:\Program Files (x86)\MetaTrader 5\terminal64.exe',
-        "$env:LOCALAPPDATA\Programs\MetaTrader 5\terminal64.exe"
-    )
-    foreach ($c in $candidates) {
-        if (Test-Path $c) { $mt5Path = $c; break }
-    }
-    # レジストリから検索
-    if (-not $mt5Path) {
-        $regKeys = @(
-            'HKLM:\SOFTWARE\MetaQuotes\MetaTrader 5',
-            'HKCU:\SOFTWARE\MetaQuotes\MetaTrader 5'
-        )
-        foreach ($rk in $regKeys) {
-            $reg = Get-ItemProperty -Path $rk -ErrorAction SilentlyContinue
-            if ($reg -and $reg.Path -and (Test-Path $reg.Path)) {
-                $mt5Path = Join-Path $reg.Path 'terminal64.exe'
-                if (Test-Path $mt5Path) { break }
-            }
+    $allMT5 = @()
+    $dataRoot = Join-Path $env:APPDATA 'MetaQuotes\Terminal'
+
+    if (Test-Path $dataRoot) {
+        foreach ($dir in Get-ChildItem $dataRoot -Directory) {
+            if ($dir.Name -notmatch '^[0-9A-F]{32}$') { continue }
+            $originFile = Join-Path $dir.FullName 'origin.txt'
+            $expertsDir = Join-Path $dir.FullName 'MQL5\Experts'
+            if (-not ((Test-Path $originFile) -and (Test-Path $expertsDir))) { continue }
+            try {
+                $installPath = [System.IO.File]::ReadAllText($originFile, [System.Text.Encoding]::Unicode).TrimStart([char]0xFEFF).Trim()
+                $termExe = Join-Path $installPath 'terminal64.exe'
+                if (-not (Test-Path $termExe)) { continue }
+                # ログフォルダの最終更新時刻でアクティブさを判定
+                $logsDir = Join-Path $dir.FullName 'MQL5\Logs'
+                $lastLog = if (Test-Path $logsDir) {
+                    $latest = Get-ChildItem $logsDir -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+                    if ($latest) { $latest.LastWriteTime } else { [datetime]::MinValue }
+                } else { [datetime]::MinValue }
+                # 起動中かどうか確認
+                $isRunning = ($null -ne (Get-Process terminal64 -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $termExe } | Select-Object -First 1))
+                $allMT5 += [PSCustomObject]@{
+                    Label      = Split-Path $installPath -Leaf
+                    TermExe    = $termExe
+                    EditorExe  = Join-Path $installPath 'MetaEditor64.exe'
+                    DataPath   = $dir.FullName
+                    IsRunning  = $isRunning
+                    LastLog    = $lastLog
+                }
+            } catch {}
         }
     }
-    if ($mt5Path) {
-        Write-Host "  ✅ 自動検出: $mt5Path" -ForegroundColor Green
-    } else {
-        Write-Host '' -ForegroundColor Red
-        Write-Host '  ❌ エラー: terminal64.exe が見つかりません。' -ForegroundColor Red
-        Write-Host '  👉 EA Laboの「MT5ターミナルパス」欄にフルパスを入力し、' -ForegroundColor Yellow
-        Write-Host '     再度「ONE-CLICKバックテスト起動」を押してください。' -ForegroundColor Yellow
-        Write-Host '  （例: C:\Program Files\MetaTrader 5\terminal64.exe）' -ForegroundColor Gray
+
+    if ($allMT5.Count -eq 0) {
+        Write-Host '  ❌ MT5が見つかりません。' -ForegroundColor Red
+        Write-Host '  👉 MT5を一度起動してから再実行してください。' -ForegroundColor Yellow
         Pause
         exit 1
     }
+
+    # アクティブ順にソート（最近使ったものが先頭）
+    $allMT5 = @($allMT5 | Sort-Object LastLog -Descending)
+
+    if ($allMT5.Count -eq 1) {
+        $sel = $allMT5[0]
+        Write-Host "  ✅ MT5を検出: $($sel.Label)" -ForegroundColor Green
+    } else {
+        Write-Host "  $($allMT5.Count) 個のMT5が見つかりました。使用するMT5を選んでください:" -ForegroundColor Yellow
+        Write-Host ''
+        for ($i = 0; $i -lt $allMT5.Count; $i++) {
+            $m = $allMT5[$i]
+            $status  = if ($m.IsRunning) { '[起動中]' } else { '[未起動]' }
+            $lastStr = if ($m.LastLog -ne [datetime]::MinValue) { $m.LastLog.ToString('MM/dd HH:mm') } else { '---' }
+            $color   = if ($m.IsRunning) { 'Green' } else { 'Gray' }
+            Write-Host ("  [{0}] {1}  {2}  最終: {3}" -f ($i + 1), $m.Label, $status, $lastStr) -ForegroundColor $color
+        }
+        Write-Host ''
+        $idx = -1
+        do {
+            $ans = Read-Host "  番号を入力してください (1-$($allMT5.Count))"
+            $idx = [int]$ans - 1
+        } while ($idx -lt 0 -or $idx -ge $allMT5.Count)
+        $sel = $allMT5[$idx]
+        Write-Host "  ✅ 選択: $($sel.Label)" -ForegroundColor Green
+    }
+
+    $mt5Path     = $sel.TermExe
+    $instancePath = $sel.DataPath
 }
 
 Write-Host ''
-Write-Host '[STEP 2/4] MT5データフォルダ検索中...' -ForegroundColor Cyan
-
-# --- データフォルダの検索 ---
-$instancePath = ''
-if ($manualData -and (Test-Path (Join-Path $manualData 'MQL5\Experts'))) {
-    $instancePath = $manualData
-    Write-Host "  ✅ 指定パスを使用: $instancePath" -ForegroundColor Green
-} else {
-    $dataRoot = "$env:APPDATA\MetaQuotes\Terminal"
-    if (Test-Path $dataRoot) {
-        $best = Get-ChildItem $dataRoot -Directory | Where-Object {
-            $_.Name -match '^[0-9A-F]{32}$' -and (Test-Path (Join-Path $_.FullName 'MQL5\Experts'))
-        } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($best) { $instancePath = $best.FullName }
-    }
-    if ($instancePath) {
-        Write-Host "  ✅ 自動検出: $instancePath" -ForegroundColor Green
-    } else {
-        Write-Host '' -ForegroundColor Red
-        Write-Host '  ❌ エラー: MT5データフォルダが見つかりません。' -ForegroundColor Red
-        Write-Host '  👉 MT5を一度起動し、「ファイル」→「データフォルダを開く」で' -ForegroundColor Yellow
-        Write-Host '     表示されるパスをEA Laboの「MT5データフォルダパス」に入力してください。' -ForegroundColor Yellow
-        Pause
-        exit 1
-    }
-}
+Write-Host '[STEP 2/4] データフォルダ確認...' -ForegroundColor Cyan
+Write-Host "  ✅ $instancePath" -ForegroundColor Green
 
 $expertDir = Join-Path $instancePath 'MQL5\Experts'
 $mq5Path   = Join-Path $expertDir ($baseName + '.mq5')

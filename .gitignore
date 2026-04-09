@@ -15,3 +15,37 @@ temp/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Claude memory
+.claude/
+
+# Local automation tools (not part of web app)
+server.js
+gen_and_backtest.js
+deploy_template_backtest.js
+run_real_backtest.js
+gen_bb.js
+gen_report.py
+header.js
+tail.js
+tail_safe.js
+temp_runner.js
+temp_runner_bb.js
+app_ps1_logic.txt
+
+# Local EA / backtest files
+*.mq5
+*.ex5
+*.ini
+*.set
+xauusd_*.csv
+backtest_results.json
+backtest_report.html
+test_oneclick.html
+
+# Media
+*.mp4
+
+# Notes
+note_article_draft.md
+note_assets/

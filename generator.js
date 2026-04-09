@@ -296,7 +296,7 @@ CTrade trade;
     code += '}\n\n';
 
     code += 'void OnDeinit(const int reason)\n{\n';
-    code += '   Print("EA removed: \' + (state.eaName || \'MyEA\') + \'");\n';
+    code += '   Print("EA removed: ' + (state.eaName || 'MyEA') + '");\n';
     code += '}\n\n';
     return code;
   },
@@ -317,8 +317,6 @@ CTrade trade;
       const ind = c.indicator || c.id || 'ma';
       const params = c.params || {};
       const handleName = `hInd_${idx}`;
-      
-      code += `int ${handleName} = INVALID_HANDLE;\n`;
 
       switch(ind) {
         case 'ma':
@@ -399,7 +397,23 @@ CTrade trade;
       conditions.forEach((c, idx) => {
         if (c.category !== 'indicator') return;
         const ind = c.indicator || c.id || 'ma';
-        const indAlias = (ind === 'stochastic' ? 'Stoch' : this._capitalize(ind));
+        const _indAliasMap = {
+          'ma': 'MACross', 'moving_average': 'MACross',
+          'ma_cross': 'MACross',
+          'ma_perfect': 'MAPerfect',
+          'ma_deviation': 'MADeviation',
+          'rsi': 'RSI',
+          'macd': 'MACD',
+          'bollinger': 'BB',
+          'stochastic': 'Stoch',
+          'cci': 'CCI',
+          'adx': 'ADX',
+          'atr': 'ATR',
+          'ichimoku': 'Ichimoku',
+          'heiken_ashi': 'HeikenAshi',
+          'round_numbers': 'RoundNumbers',
+        };
+        const indAlias = _indAliasMap[ind] || this._capitalize(ind);
         const params = c.params || (c.detail && typeof c.detail === 'object' ? c.detail : {});
         const type = c.conditionType || c.type || '';
         const shift = parseInt(c.shift) || 1;
@@ -2039,40 +2053,44 @@ CTrade trade;
     code += '   return lastPrice;\n';
     code += '}\n\n';
     
-    // Helper: Month Filter MT5
-    code += '//+------------------------------------------------------------------+\n';
-    code += '//| Month-end/Month-start Filter                                     |\n';
-    code += '//+------------------------------------------------------------------+\n';
-    code += 'bool IsMonthFilterActive()\n{\n';
-    code += '   if(!UseMonthFilter) return false;\n';
-    code += '   MqlDateTime dt;\n';
-    code += '   TimeCurrent(dt);\n';
-    code += '   if(dt.day <= MonthStartDays) return true;\n';
-    code += '   MqlDateTime future_dt;\n';
-    code += '   for(int i = 1; i <= MonthEndDays; i++) {\n';
-    code += '      datetime future = TimeCurrent() + 86400 * i;\n';
-    code += '      TimeToStruct(future, future_dt);\n';
-    code += '      if(future_dt.mon != dt.mon) return true;\n';
-    code += '   }\n';
-    code += '   return false;\n';
-    code += '}\n\n';
+    // Helper: Month Filter MT5 (useMonthFilter が有効な場合のみ出力)
+    if (state.useMonthFilter) {
+      code += '//+------------------------------------------------------------------+\n';
+      code += '//| Month-end/Month-start Filter                                     |\n';
+      code += '//+------------------------------------------------------------------+\n';
+      code += 'bool IsMonthFilterActive()\n{\n';
+      code += '   if(!UseMonthFilter) return false;\n';
+      code += '   MqlDateTime dt;\n';
+      code += '   TimeCurrent(dt);\n';
+      code += '   if(dt.day <= MonthStartDays) return true;\n';
+      code += '   MqlDateTime future_dt;\n';
+      code += '   for(int i = 1; i <= MonthEndDays; i++) {\n';
+      code += '      datetime future = TimeCurrent() + 86400 * i;\n';
+      code += '      TimeToStruct(future, future_dt);\n';
+      code += '      if(future_dt.mon != dt.mon) return true;\n';
+      code += '   }\n';
+      code += '   return false;\n';
+      code += '}\n\n';
+    }
 
-    // Helper: Nanpin Profit MT5
-    code += 'void CheckNanpinProfit()\n{\n';
-    code += '   if(NanpinTargetProfit <= 0) return;\n';
-    code += '   double totalProfit = 0;\n';
-    code += '   int count = 0;\n';
-    code += '   for(int i = PositionsTotal() - 1; i >= 0; i--) {\n';
-    code += '      ulong ticket = PositionGetTicket(i);\n';
-    code += '      if(PositionGetString(POSITION_SYMBOL) == Symbol() && PositionGetInteger(POSITION_MAGIC) == MagicNumber) {\n';
-    code += '         totalProfit += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);\n';
-    code += '         count++;\n';
-    code += '      }\n';
-    code += '   }\n';
-    code += '   if(count > 0 && totalProfit >= NanpinTargetProfit) {\n';
-    code += '      CloseAllPositions();\n';
-    code += '   }\n';
-    code += '}\n\n';
+    // Helper: Nanpin Profit MT5 (nanpin 戦略が有効な場合のみ出力)
+    if (state.strategies && state.strategies.includes('nanpin')) {
+      code += 'void CheckNanpinProfit()\n{\n';
+      code += '   if(NanpinTargetProfit <= 0) return;\n';
+      code += '   double totalProfit = 0;\n';
+      code += '   int count = 0;\n';
+      code += '   for(int i = PositionsTotal() - 1; i >= 0; i--) {\n';
+      code += '      ulong ticket = PositionGetTicket(i);\n';
+      code += '      if(PositionGetString(POSITION_SYMBOL) == Symbol() && PositionGetInteger(POSITION_MAGIC) == MagicNumber) {\n';
+      code += '         totalProfit += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);\n';
+      code += '         count++;\n';
+      code += '      }\n';
+      code += '   }\n';
+      code += '   if(count > 0 && totalProfit >= NanpinTargetProfit) {\n';
+      code += '      CloseAllPositions();\n';
+      code += '   }\n';
+      code += '}\n\n';
+    }
 
 
     // Nanpin MT5
