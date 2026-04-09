@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA Labo - MT4/MT5 EA & Indicator Generator</title>
-    <link rel="stylesheet" href="style.css?v=202604081154">
+    <link rel="stylesheet" href="style.css?v=202604091200">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -14,7 +14,7 @@
 
         <!-- ==================== H-010: Header + Home Screen ==================== -->
         <header class="header">
-            <div class="header-title-row"><h1>EA Labo</h1><span id="app-version" class="version-tag">Build: 2026.04.08.1154</span></div>
+            <div class="header-title-row"><h1>EA Labo</h1><span id="app-version" class="version-tag">Build: 2026.04.09.1200</span></div>
             <p>ノーコードでMT4/MT5のEA・インジケーターを作成</p>
         </header>
 
@@ -559,6 +559,18 @@
                     </div>
                 </div>
 
+                <!-- ポジション管理オプション -->
+                <div class="form-card" style="margin-bottom: 16px;">
+                    <h3>⚙️ エントリー制御</h3>
+                    <label class="checkbox-label" style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                        <input type="checkbox" id="chk-entry-no-position">
+                        <span>
+                            <strong>ポジションが無ければエントリー</strong>
+                            <span class="form-hint" style="display:block; margin-top:2px;">既にポジションを保有している場合は新規エントリーしない（常時ポジション保有型に使用）</span>
+                        </span>
+                    </label>
+                </div>
+
                 <div class="conditions-section">
                     <div class="condition-panel">
                         <h3 class="panel-title">🟢 Buy条件</h3>
@@ -666,20 +678,17 @@
         <div class="toggle-card-title">マジックストップオーダー</div>
         <div class="toggle-card-status">✓</div>
       </div>
-      <div class="toggle-card-desc">指定金額の指値に達したら以降の新規注文を停止</div>
+      <div class="toggle-card-desc">指定した価格の指値が入っている状態では新規オーダーを停止</div>
       <div class="toggle-card-settings" id="magic-stop-panel">
         <div class="form-group">
-          <label for="magic-stop-amount">停止金額 (口座通貨)</label>
-          <input type="number" id="magic-stop-amount" class="form-input" value="10000" min="0" step="100">
-          <p class="form-hint">含み損益がこの金額に達したら新規注文を停止</p>
+          <label for="magic-stop-price">停止トリガー価格 (0 = 無効)</label>
+          <input type="number" id="magic-stop-price" class="form-input" value="0" min="0" step="0.001">
+          <p class="form-hint">この価格付近に未決済の指値注文が存在する場合、新規エントリーを停止します</p>
         </div>
         <div class="form-group">
-          <label for="magic-stop-type">対象タイプ</label>
-          <select id="magic-stop-type" class="form-select">
-            <option value="both">売買両方</option>
-            <option value="buy">買いのみ</option>
-            <option value="sell">売りのみ</option>
-          </select>
+          <label for="magic-stop-pips">許容誤差幅 (pips)</label>
+          <input type="number" id="magic-stop-pips" class="form-input" value="5" min="0" step="1">
+          <p class="form-hint">指定価格 ± この幅以内に指値があれば停止</p>
         </div>
       </div>
     </div>
@@ -979,12 +988,26 @@
         <label class="form-label">スリッページ (pips)</label>
         <input type="number" id="input-slippage" class="form-input" value="3" min="0">
       </div>
-      <div class="form-group">
-        <label class="form-label">プラットフォーム</label>
-        <select id="select-platform" class="form-select">
-          <option value="mt4" selected>MetaTrader 4 (.mq4)</option>
-          <option value="mt5">MetaTrader 5 (.mq5)</option>
-        </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">プラットフォーム</label>
+      <div class="position-mode-grid">
+        <label class="mode-option">
+          <input type="radio" name="platform-select" id="platform-mt4" value="mt4">
+          <div class="mode-card">
+            <span class="mode-icon">4️⃣</span>
+            <span class="mode-title">MetaTrader 4</span>
+            <span class="mode-desc">.mq4 形式で出力</span>
+          </div>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="platform-select" id="platform-mt5" value="mt5" checked>
+          <div class="mode-card">
+            <span class="mode-icon">5️⃣</span>
+            <span class="mode-title">MetaTrader 5</span>
+            <span class="mode-desc">.mq5 形式で出力（推奨）</span>
+          </div>
+        </label>
       </div>
     </div>
   </div>
@@ -1207,7 +1230,37 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>通貨ペア</label>
-                                <input type="text" id="mt-symbol" class="form-input" value="USDJPY">
+                                <select id="mt-symbol" class="form-select">
+                                    <optgroup label="メジャー通貨ペア">
+                                        <option value="USDJPY" selected>USD/JPY</option>
+                                        <option value="EURUSD">EUR/USD</option>
+                                        <option value="GBPUSD">GBP/USD</option>
+                                        <option value="AUDUSD">AUD/USD</option>
+                                        <option value="NZDUSD">NZD/USD</option>
+                                        <option value="USDCHF">USD/CHF</option>
+                                        <option value="USDCAD">USD/CAD</option>
+                                    </optgroup>
+                                    <optgroup label="クロス円">
+                                        <option value="EURJPY">EUR/JPY</option>
+                                        <option value="GBPJPY">GBP/JPY</option>
+                                        <option value="AUDJPY">AUD/JPY</option>
+                                        <option value="NZDJPY">NZD/JPY</option>
+                                        <option value="CHFJPY">CHF/JPY</option>
+                                        <option value="CADJPY">CAD/JPY</option>
+                                    </optgroup>
+                                    <optgroup label="クロス通貨">
+                                        <option value="EURGBP">EUR/GBP</option>
+                                        <option value="EURCAD">EUR/CAD</option>
+                                        <option value="EURCHF">EUR/CHF</option>
+                                        <option value="GBPCHF">GBP/CHF</option>
+                                        <option value="GBPCAD">GBP/CAD</option>
+                                        <option value="AUDCAD">AUD/CAD</option>
+                                        <option value="AUDNZD">AUD/NZD</option>
+                                    </optgroup>
+                                    <optgroup label="貴金属">
+                                        <option value="XAUUSD">XAU/USD (Gold)</option>
+                                    </optgroup>
+                                </select>
                             </div>
                         </div>
                         <div class="form-row">

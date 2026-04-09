@@ -108,8 +108,8 @@ CTrade trade;
       code += `extern int    EntryCooldown  = ${state.entryCooldown || 0};\n`;
     }
     if (state.useMagicStopOrder) {
-      code += `extern double MagicStopAmount = ${state.magicStopAmount || 10000};\n`;
-      code += `extern int    MagicStopType   = ${state.magicStopType === 'buy' ? 1 : (state.magicStopType === 'sell' ? 2 : 0)}; // 0:Both, 1:Buy, 2:Sell\n`;
+      code += `extern double MagicStopPrice = ${state.magicStopPrice || 0}; // 0=任意の指値で停止\n`;
+      code += `extern double MagicStopPips  = ${state.magicStopPips !== undefined ? state.magicStopPips : 5}; // 価格許容誤差(pips)\n`;
     }
 
     // Strategy parameters
@@ -182,8 +182,8 @@ CTrade trade;
       code += `input int    EntryCooldown  = ${state.entryCooldown || 0};\n`;
     }
     if (state.useMagicStopOrder) {
-      code += `input double MagicStopAmount = ${state.magicStopAmount || 10000};\n`;
-      code += `input int    MagicStopType   = ${state.magicStopType === 'buy' ? 1 : (state.magicStopType === 'sell' ? 2 : 0)}; // 0:Both, 1:Buy, 2:Sell\n`;
+      code += `input double MagicStopPrice = ${state.magicStopPrice || 0}; // 0=任意の指値で停止\n`;
+      code += `input double MagicStopPips  = ${state.magicStopPips !== undefined ? state.magicStopPips : 5}; // 価格許容誤差(pips)\n`;
     }
 
     if (state.strategies && state.strategies.includes('nanpin')) {
@@ -644,21 +644,40 @@ CTrade trade;
     }
     code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt4') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poFilter + adxFilter + ';\n\n';
 
-    // Magic Stop Order Check MT4
+    // Magic Stop Order Check MT4 — 指定価格付近に指値注文が存在する場合、新規エントリーを停止
     if (state.useMagicStopOrder) {
-      code += '   //--- マジックストップ（指定金額で新規注文停止） ---\n';
-      code += '   double totalFloatingPL = 0;\n';
-      code += '   for(int ms = 0; ms < OrdersTotal(); ms++) {\n';
-      code += '      if(OrderSelect(ms, SELECT_BY_POS, MODE_TRADES)) {\n';
-      code += '         if(OrderSymbol() == Symbol() && OrderMagicNumber() == MagicNumber) {\n';
-      code += '            totalFloatingPL += OrderProfit() + OrderSwap() + OrderCommission();\n';
-      code += '         }\n';
-      code += '      }\n';
-      code += '   }\n';
-      code += '   if(totalFloatingPL <= -MagicStopAmount || totalFloatingPL >= MagicStopAmount) {\n';
-      code += '      if(MagicStopType == 0 || MagicStopType == 1) buySignal = false;\n';
-      code += '      if(MagicStopType == 0 || MagicStopType == 2) sellSignal = false;\n';
-      code += '   }\n\n';
+      const stopPrice = state.magicStopPrice || 0;
+      const stopPips  = state.magicStopPips  !== undefined ? state.magicStopPips : 5;
+      code += '   //--- マジックストップ（指値注文の存在で新規オーダー停止） ---\n';
+      if (stopPrice > 0) {
+        code += `   double _msPrice = ${stopPrice};\n`;
+        code += `   double _msTol   = ${stopPips} * Point * (_Digits == 3 || _Digits == 5 ? 10 : 1);\n`;
+        code += '   bool _magicStopActive = false;\n';
+        code += '   for(int ms = OrdersTotal() - 1; ms >= 0; ms--) {\n';
+        code += '      if(OrderSelect(ms, SELECT_BY_POS, MODE_PENDING)) {\n';
+        code += '         if(OrderSymbol() == Symbol() && OrderMagicNumber() == MagicNumber) {\n';
+        code += '            if(MathAbs(OrderOpenPrice() - _msPrice) <= _msTol) { _magicStopActive = true; break; }\n';
+        code += '         }\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(_magicStopActive) { buySignal = false; sellSignal = false; }\n\n';
+      } else {
+        code += '   bool _magicStopActive = false;\n';
+        code += '   for(int ms = OrdersTotal() - 1; ms >= 0; ms--) {\n';
+        code += '      if(OrderSelect(ms, SELECT_BY_POS, MODE_PENDING)) {\n';
+        code += '         if(OrderSymbol() == Symbol() && OrderMagicNumber() == MagicNumber) {\n';
+        code += '            _magicStopActive = true; break;\n';
+        code += '         }\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(_magicStopActive) { buySignal = false; sellSignal = false; }\n\n';
+      }
+    }
+
+    // entryNoPosition: ポジションが無ければエントリー
+    if (state.entryNoPosition) {
+      code += '   //--- ポジション無し確認（entryNoPosition） ---\n';
+      code += '   if((buyCount + sellCount) > 0) { buySignal = false; sellSignal = false; }\n\n';
     }
 
     // Position mode logic
@@ -906,20 +925,40 @@ CTrade trade;
     }
     code += '   bool sellSignal = ' + this.generateConditionBlock(state.sellConditions, state.sellCombine, 'sell', 'mt5') + (state.useMonthFilter ? ' && !IsMonthFilterActive()' : '') + poFilter + adxFilter + ';\n\n';
 
-    // Magic Stop Order Check MT5
+    // Magic Stop Order Check MT5 — 指定価格付近に指値注文が存在する場合、新規エントリーを停止
     if (state.useMagicStopOrder) {
-      code += '   //--- マジックストップ（指定金額で新規注文停止） ---\n';
-      code += '   double totalFloatingPL = 0;\n';
-      code += '   for(int ms = 0; ms < PositionsTotal(); ms++) {\n';
-      code += '      ulong msTicket = PositionGetTicket(ms);\n';
-      code += '      if(PositionGetString(POSITION_SYMBOL) == Symbol() && PositionGetInteger(POSITION_MAGIC) == MagicNumber) {\n';
-      code += '         totalFloatingPL += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);\n';
-      code += '      }\n';
-      code += '   }\n';
-      code += '   if(totalFloatingPL <= -MagicStopAmount || totalFloatingPL >= MagicStopAmount) {\n';
-      code += '      if(MagicStopType == 0 || MagicStopType == 1) buySignal = false;\n';
-      code += '      if(MagicStopType == 0 || MagicStopType == 2) sellSignal = false;\n';
-      code += '   }\n\n';
+      const stopPrice = state.magicStopPrice || 0;
+      const stopPips  = state.magicStopPips  !== undefined ? state.magicStopPips : 5;
+      code += '   //--- マジックストップ（指値注文の存在で新規オーダー停止） ---\n';
+      if (stopPrice > 0) {
+        code += `   double _msPrice = ${stopPrice};\n`;
+        code += `   double _msTol   = ${stopPips} * SymbolInfoDouble(Symbol(), SYMBOL_POINT) * (_Digits == 3 || _Digits == 5 ? 10 : 1);\n`;
+        code += '   bool _magicStopActive = false;\n';
+        code += '   for(int ms = OrdersTotal() - 1; ms >= 0; ms--) {\n';
+        code += '      ulong msTicket = OrderGetTicket(ms);\n';
+        code += '      if(OrderGetString(ORDER_SYMBOL) == Symbol() && OrderGetInteger(ORDER_MAGIC) == MagicNumber) {\n';
+        code += '         double oPrice = OrderGetDouble(ORDER_PRICE_OPEN);\n';
+        code += '         if(MathAbs(oPrice - _msPrice) <= _msTol) { _magicStopActive = true; break; }\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(_magicStopActive) { buySignal = false; sellSignal = false; }\n\n';
+      } else {
+        // MagicStopPrice = 0: 任意の指値注文が存在すれば停止
+        code += '   bool _magicStopActive = false;\n';
+        code += '   for(int ms = OrdersTotal() - 1; ms >= 0; ms--) {\n';
+        code += '      ulong msTicket = OrderGetTicket(ms);\n';
+        code += '      if(OrderGetString(ORDER_SYMBOL) == Symbol() && OrderGetInteger(ORDER_MAGIC) == MagicNumber) {\n';
+        code += '         _magicStopActive = true; break;\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(_magicStopActive) { buySignal = false; sellSignal = false; }\n\n';
+      }
+    }
+
+    // entryNoPosition: ポジションが無ければエントリー（常時ポジション保有型）
+    if (state.entryNoPosition) {
+      code += '   //--- ポジション無し確認（entryNoPosition） ---\n';
+      code += '   if((buyCount + sellCount) > 0) { buySignal = false; sellSignal = false; }\n\n';
     }
 
     const mode = state.positionMode || 'one_direction';

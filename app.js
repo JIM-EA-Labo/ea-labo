@@ -57,6 +57,7 @@ const eaState = {
   maxPositions: 1,
   entryCooldown: 0,
   timeframe: 'PERIOD_H1',
+  entryNoPosition: false,
 
   // --- MT4/MT5 Integration ---
   mtPlatform: 'mt5',
@@ -125,8 +126,8 @@ const eaState = {
   autoCloseLossYen: 0,
   useManualCloseButton: false,
   useMagicStopOrder: false,
-  magicStopAmount: 10000,
-  magicStopType: 'both',
+  magicStopPrice: 0,
+  magicStopPips: 5,
 
   // --- エグジット条件 (P2-C) ---
   exitConditions: [],
@@ -396,8 +397,8 @@ function getEATemplate(id) {
         autoCloseLossYen: 0,
         useManualCloseButton: false,
         useMagicStopOrder: false,
-        magicStopAmount: 10000,
-        magicStopType: 'both',
+        magicStopPrice: 0,
+        magicStopPips: 5,
         useTimeFilter: false,
         timeStartHour: 8,
         timeStartMin: 0,
@@ -453,7 +454,7 @@ function getEATemplate(id) {
         base.positionParams = { gridStep: 20, gridLots: 0.1, gridMax: 10 };
         base.buyConditions = [ { id: '4_1', category: 'price', indicator: 'price', detail: '常に許可', type: 'always_true', params: {}, shift: 1 } ];
         base.sellConditions = [ { id: '4_2', category: 'price', indicator: 'price', detail: '常に許可', type: 'always_true', params: {}, shift: 1 } ];
-        base.useMagicStopOrder = true; base.magicStopAmount = 50000;
+        base.useMagicStopOrder = true; base.magicStopPrice = 0; base.magicStopPips = 5;
         base.useSpreadFilter = true; base.maxSpread = 15;
     }
     // T-5: News Scalp
@@ -781,6 +782,12 @@ function setupStep2() {
   if (sellCombineSelect) {
     sellCombineSelect.value = eaState.sellCombine.toLowerCase();
     sellCombineSelect.onchange = (e) => eaState.sellCombine = e.target.value.toUpperCase();
+  }
+
+  const noPositionChk = document.getElementById('chk-entry-no-position');
+  if (noPositionChk) {
+    noPositionChk.checked = eaState.entryNoPosition || false;
+    noPositionChk.addEventListener('change', (e) => { eaState.entryNoPosition = e.target.checked; });
   }
 
   const addBuyBtn = document.getElementById('add-buy-condition');
@@ -1114,19 +1121,19 @@ function setupStep3() {
     });
   }
 
-  const magicStopAmountInput = document.getElementById('magic-stop-amount');
-  if (magicStopAmountInput) {
-    magicStopAmountInput.value = eaState.magicStopAmount !== undefined ? eaState.magicStopAmount : 10000;
-    magicStopAmountInput.addEventListener('change', (e) => {
-      eaState.magicStopAmount = parseFloat(e.target.value) || 10000;
+  const magicStopPriceInput = document.getElementById('magic-stop-price');
+  if (magicStopPriceInput) {
+    magicStopPriceInput.value = eaState.magicStopPrice !== undefined ? eaState.magicStopPrice : 0;
+    magicStopPriceInput.addEventListener('change', (e) => {
+      eaState.magicStopPrice = parseFloat(e.target.value) || 0;
     });
   }
 
-  const magicStopTypeSelect = document.getElementById('magic-stop-type');
-  if (magicStopTypeSelect) {
-    magicStopTypeSelect.value = eaState.magicStopType;
-    magicStopTypeSelect.addEventListener('change', (e) => {
-      eaState.magicStopType = e.target.value;
+  const magicStopPipsInput = document.getElementById('magic-stop-pips');
+  if (magicStopPipsInput) {
+    magicStopPipsInput.value = eaState.magicStopPips !== undefined ? eaState.magicStopPips : 5;
+    magicStopPipsInput.addEventListener('change', (e) => {
+      eaState.magicStopPips = parseFloat(e.target.value) || 5;
     });
   }
 
@@ -1310,14 +1317,15 @@ function setupStep5() {
       slippageInput.value = eaState.slippage;
       slippageInput.addEventListener('change', (e) => { eaState.slippage = parseInt(e.target.value) || 3; });
     }
-    const platformSelect = document.getElementById('select-platform');
-    if (platformSelect) {
-      platformSelect.value = eaState.platform;
-      platformSelect.addEventListener('change', (e) => {
-        eaState.platform = e.target.value;
-        console.log('Platform changed to:', eaState.platform);
+    document.querySelectorAll('input[name="platform-select"]').forEach(radio => {
+      radio.checked = (radio.value === (eaState.platform || 'mt5'));
+      radio.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          eaState.platform = e.target.value;
+          console.log('Platform changed to:', eaState.platform);
+        }
       });
-    }
+    });
 
     // --- Discord Webhook ---
     const discordCheck = document.getElementById('chk-discord-webhook');
@@ -1650,7 +1658,7 @@ function applyStateToUI() {
   setVal('input-lot-size', eaState.lotSize);
   setVal('input-risk-percent', eaState.riskPercent);
   setVal('input-slippage', eaState.slippage);
-  setVal('select-platform', eaState.platform);
+  document.querySelectorAll('input[name="platform-select"]').forEach(r => { r.checked = (r.value === (eaState.platform || 'mt5')); });
 
   setChk('chk-discord-webhook', eaState.useDiscordWebhook);
   togglePanel('discord-panel', eaState.useDiscordWebhook);
@@ -1976,8 +1984,6 @@ function renderWizardStep2() {
   if (wizardState.category === 'indicator') {
     items = [
       { id: 'ma',             label: '移動平均線(MA)', desc: 'トレンドの方向確認' },
-      { id: 'ma_cross',       label: 'MAクロス専用', desc: '短期と長期のクロスを判定' },
-      { id: 'ma_perfect',     label: 'MAパーフェクトオーダー', desc: '3〜4本の並びを判定' },
       { id: 'ma_deviation',   label: 'MA乖離率', desc: '価格とMAの乖離を測定' },
       { id: 'heiken_ashi',    label: '平均足', desc: 'トレンド変遷を判定' },
       { id: 'bollinger',      label: 'ボリンジャーバンド', desc: 'ボラティリティと反発確認' },
@@ -1987,8 +1993,7 @@ function renderWizardStep2() {
       { id: 'adx',            label: 'ADX', desc: 'トレンドの強さを測定' },
       { id: 'ichimoku',       label: '一目均衡表', desc: '複合的な相場環境を分析' },
       { id: 'atr',            label: 'ATR', desc: 'ボラティリティの変動を測定' },
-      { id: 'round_numbers',  label: 'キリバン取得', desc: '100pips等の節目を判定' },
-      { id: 'holiday_filter', label: '祝日制御', desc: '主要国の祝日にトレード停止' }
+      { id: 'round_numbers',  label: 'キリバン取得', desc: '100pips等の節目を判定' }
     ];
   } else if (wizardState.category === 'candle') {
     items = [
@@ -3020,7 +3025,8 @@ function saveWizardCondition() {
 
   // MA Deviation
   if (rawDetail.ma_period !== undefined) detail.period = rawDetail.ma_period;
-  if (rawDetail.deviation_pips !== undefined) detail.threshold = rawDetail.deviation_pips;
+  if (rawDetail.deviation_pips !== undefined) { detail.threshold = rawDetail.deviation_pips; detail.limit = rawDetail.deviation_pips; }
+  if (rawDetail.ma_method !== undefined) detail.method = rawDetail.ma_method;
 
   // Round Numbers
   if (rawDetail.round_dist !== undefined) detail.distance = rawDetail.round_dist;
@@ -3250,6 +3256,21 @@ function getConditionTypesForDetail(category, detail) {
             case 'atr': return [
                 { id: 'above', name: '閾値以上', desc: 'ATRが閾値以上' },
                 { id: 'below', name: '閾値以下', desc: 'ATRが閾値以下' }
+            ];
+            case 'ma_deviation': return [
+                { id: 'above', name: '上方乖離（Buy）', desc: '価格がMAより指定pips以上上にある' },
+                { id: 'below', name: '下方乖離（Sell）', desc: '価格がMAより指定pips以上下にある' }
+            ];
+            case 'heiken_ashi': return [
+                { id: 'is_bullish',  name: '陽線（上昇）', desc: '平均足が陽線' },
+                { id: 'is_bearish',  name: '陰線（下落）', desc: '平均足が陰線' },
+                { id: 'turn_up',     name: '上転換', desc: '平均足が陰線→陽線に転換' },
+                { id: 'turn_down',   name: '下転換', desc: '平均足が陽線→陰線に転換' }
+            ];
+            case 'round_numbers': return [
+                { id: 'near',        name: '節目に接近', desc: '価格が指定pips以内に節目がある' },
+                { id: 'price_above', name: '節目より上', desc: '価格が直近節目より上にある' },
+                { id: 'price_below', name: '節目より下', desc: '価格が直近節目より下にある' }
             ];
         }
     } else if (category === 'candle') {
