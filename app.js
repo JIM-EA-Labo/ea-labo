@@ -4979,11 +4979,10 @@ function runOneClickMT5() {
         const iniName = "AutoRun_" + eaState.eaName + ".ini";
 
         // ============================================================
-        // Polyglot BAT/PS1 Hybrid Script — v6.0.0 Fresh Launch Edition
+        // ONE-CLICK Runner v6.1 (CertUtil Edition)
         // アプローチ:
-        //   1. 既存MT5プロセスを終了
-        //   2. MetaEditorでEAをコンパイル
-        //   3. MT5をINI付きで新規起動（バックテスト自動開始）
+        //   BATヘッダーは純粋なASCII CMDコマンドのみ（BOM/ポリグロット問題なし）
+        //   PSスクリプトをBase64でBATに埋め込み → certutilでPS1に展開 → 実行
         // ============================================================
         const b64_exePath  = btoa(unescape(encodeURIComponent(manualExePath  || '')));
         const b64_dataPath = btoa(unescape(encodeURIComponent(manualDataPath || '')));
@@ -4992,29 +4991,11 @@ function runOneClickMT5() {
         const b64_ini      = btoa(unescape(encodeURIComponent(iniContent)));
         const targetUrl    = window.location.href.split('?')[0];
 
-        const batScript = `<# :
-@echo off
-chcp 65001 >nul
-setlocal EnableDelayedExpansion
-echo ============================================================
-echo   EA Labo MT5 Auto Backtest Runner v6.0.0
-echo ============================================================
-echo.
-echo MT5バックテストを自動で準備・起動します...
-echo.
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Content -LiteralPath '%~f0' -Encoding UTF8 | Out-String | Invoke-Expression"
-echo.
-echo ============================================================
-echo   完了しました。このウィンドウを閉じてください。
-echo ============================================================
-pause
-goto :EOF
-#>
-
-# ===============================================
-# PowerShell Section (v6.0.0)
-# ===============================================
-$ErrorActionPreference = 'Continue'
+        // -------------------------------------------------------
+        // PowerShell script (pure PS — no BAT wrapper)
+        // UTF-8 BOM が付くので PS5.x でも日本語が正しく表示される
+        // -------------------------------------------------------
+        const psScript = `$ErrorActionPreference = 'Continue'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 function Decode-B64 { param([string]$b64) [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($b64)) }
@@ -5030,57 +5011,51 @@ $setContent   = Decode-B64 '` + b64_set + `'
 $iniContent   = Decode-B64 '` + b64_ini + `'
 
 Write-Host ''
-Write-Host '[STEP 0/5] EA Labo サーバー確認・自動起動...' -ForegroundColor Cyan
+Write-Host '[STEP 0/5] EA Labo server.js 確認・起動...' -ForegroundColor Cyan
 
-# --- port 3747 が使用中か確認 ---
 $_port = 3747
 $_srvOk = $false
 $_tc = New-Object System.Net.Sockets.TcpClient
 try { $_tc.Connect('127.0.0.1', $_port); $_srvOk = $true } catch {} finally { $_tc.Close() }
 
 if ($_srvOk) {
-    Write-Host "  ✅ server.js 起動済み (port $_port)" -ForegroundColor Green
+    Write-Host "  server.js running (port $_port)" -ForegroundColor Green
 } else {
-    # server.js を探す（よくある場所）
     $_searchDirs = @(
         "$env:USERPROFILE\Desktop\EA-Labo",
         "$env:USERPROFILE\Documents\EA-Labo",
         "$env:USERPROFILE\Downloads\EA-Labo",
         "$env:USERPROFILE\OneDrive\Desktop\EA-Labo",
-        "$env:USERPROFILE\OneDrive\ドキュメント\EA-Labo"
+        "$env:USERPROFILE\OneDrive\Documents\EA-Labo"
     )
     $_srvDir = $null
     foreach ($_d in $_searchDirs) {
         if (Test-Path (Join-Path $_d 'server.js')) { $_srvDir = $_d; break }
     }
-
     if ($_srvDir) {
-        Write-Host "  🔄 server.js を起動中: $_srvDir" -ForegroundColor Yellow
+        Write-Host "  Starting server.js from: $_srvDir" -ForegroundColor Yellow
         Start-Process -FilePath 'node' -ArgumentList 'server.js' -WorkingDirectory $_srvDir -WindowStyle Minimized
-        # 最大10秒待機
         $__w = 0
         while ($__w -lt 10) {
             Start-Sleep -Seconds 1; $__w++
             $_tc2 = New-Object System.Net.Sockets.TcpClient
             try { $_tc2.Connect('127.0.0.1', $_port); $_srvOk = $true; $_tc2.Close(); break } catch { $_tc2.Close() }
         }
-        if ($_srvOk) { Write-Host "  ✅ サーバー起動完了" -ForegroundColor Green }
-        else          { Write-Host "  ⚠️ サーバー起動確認タイムアウト（続行します）" -ForegroundColor Yellow }
+        if ($_srvOk) { Write-Host "  server.js ready" -ForegroundColor Green }
+        else          { Write-Host "  server.js timeout (continuing)" -ForegroundColor Yellow }
     } else {
-        Write-Host "  ℹ️ server.js が見つかりません（スタンドアロンで続行）" -ForegroundColor Gray
+        Write-Host "  server.js not found (standalone mode)" -ForegroundColor Gray
     }
 }
 
 Write-Host ''
-Write-Host '[STEP 1/5] MT5パス検索中...' -ForegroundColor Cyan
+Write-Host '[STEP 1/5] MT5 検索中...' -ForegroundColor Cyan
 
-# --- MT5実行ファイルの検索 ---
 $mt5Path = ''
 if ($manualExe -and (Test-Path $manualExe)) {
     $mt5Path = $manualExe
-    Write-Host "  ✅ 指定パスを使用: $mt5Path" -ForegroundColor Green
+    Write-Host "  指定パス使用: $mt5Path" -ForegroundColor Green
 } else {
-    # よく使われるインストールパスを順番に試す
     $candidates = @(
         'C:\Program Files\MetaTrader 5\terminal64.exe',
         'C:\Program Files (x86)\MetaTrader 5\terminal64.exe',
@@ -5089,12 +5064,8 @@ if ($manualExe -and (Test-Path $manualExe)) {
     foreach ($c in $candidates) {
         if (Test-Path $c) { $mt5Path = $c; break }
     }
-    # レジストリから検索
     if (-not $mt5Path) {
-        $regKeys = @(
-            'HKLM:\SOFTWARE\MetaQuotes\MetaTrader 5',
-            'HKCU:\SOFTWARE\MetaQuotes\MetaTrader 5'
-        )
+        $regKeys = @('HKLM:\SOFTWARE\MetaQuotes\MetaTrader 5','HKCU:\SOFTWARE\MetaQuotes\MetaTrader 5')
         foreach ($rk in $regKeys) {
             $reg = Get-ItemProperty -Path $rk -ErrorAction SilentlyContinue
             if ($reg -and $reg.Path -and (Test-Path $reg.Path)) {
@@ -5104,43 +5075,35 @@ if ($manualExe -and (Test-Path $manualExe)) {
         }
     }
     if ($mt5Path) {
-        Write-Host "  ✅ 自動検出: $mt5Path" -ForegroundColor Green
+        Write-Host "  自動検出: $mt5Path" -ForegroundColor Green
     } else {
-        Write-Host '' -ForegroundColor Red
-        Write-Host '  ❌ エラー: terminal64.exe が見つかりません。' -ForegroundColor Red
-        Write-Host '  👉 EA Laboの「MT5ターミナルパス」欄にフルパスを入力し、' -ForegroundColor Yellow
-        Write-Host '     再度「ONE-CLICKバックテスト起動」を押してください。' -ForegroundColor Yellow
-        Write-Host '  （例: C:\Program Files\MetaTrader 5\terminal64.exe）' -ForegroundColor Gray
-        Pause
-        exit 1
+        Write-Host '  ERROR: terminal64.exe が見つかりません。' -ForegroundColor Red
+        Write-Host '  EA Labo の MT5 パス欄にフルパスを入力して再実行してください。' -ForegroundColor Yellow
+        Pause; exit 1
     }
 }
 
 Write-Host ''
-Write-Host '[STEP 2/5] MT5データフォルダ検索中...' -ForegroundColor Cyan
+Write-Host '[STEP 2/5] MT5 データフォルダ検索中...' -ForegroundColor Cyan
 
-# --- データフォルダの検索 ---
 $instancePath = ''
 if ($manualData -and (Test-Path (Join-Path $manualData 'MQL5\Experts'))) {
     $instancePath = $manualData
-    Write-Host "  ✅ 指定パスを使用: $instancePath" -ForegroundColor Green
+    Write-Host "  指定パス使用: $instancePath" -ForegroundColor Green
 } else {
     $dataRoot = "$env:APPDATA\MetaQuotes\Terminal"
     if (Test-Path $dataRoot) {
-        $best = Get-ChildItem $dataRoot -Directory | Where-Object {
-            $_.Name -match '^[0-9A-F]{32}$' -and (Test-Path (Join-Path $_.FullName 'MQL5\Experts'))
-        } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        $best = Get-ChildItem $dataRoot -Directory |
+            Where-Object { $_.Name -match '^[0-9A-F]{32}$' -and (Test-Path (Join-Path $_.FullName 'MQL5\Experts')) } |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
         if ($best) { $instancePath = $best.FullName }
     }
     if ($instancePath) {
-        Write-Host "  ✅ 自動検出: $instancePath" -ForegroundColor Green
+        Write-Host "  自動検出: $instancePath" -ForegroundColor Green
     } else {
-        Write-Host '' -ForegroundColor Red
-        Write-Host '  ❌ エラー: MT5データフォルダが見つかりません。' -ForegroundColor Red
-        Write-Host '  👉 MT5を一度起動し、「ファイル」→「データフォルダを開く」で' -ForegroundColor Yellow
-        Write-Host '     表示されるパスをEA Laboの「MT5データフォルダパス」に入力してください。' -ForegroundColor Yellow
-        Pause
-        exit 1
+        Write-Host '  ERROR: MT5 データフォルダが見つかりません。' -ForegroundColor Red
+        Write-Host '  MT5 を起動して [ファイル > データフォルダを開く] のパスを EA Labo に入力してください。' -ForegroundColor Yellow
+        Pause; exit 1
     }
 }
 
@@ -5151,59 +5114,128 @@ $setPath   = Join-Path $expertDir ('Params_' + $eaName + '.set')
 $iniPath   = Join-Path $expertDir $iniFileName
 
 Write-Host ''
-Write-Host '[STEP 3/5] ファイル配置＆コンパイル...' -ForegroundColor Cyan
+Write-Host '[STEP 3/5] ファイル配置 & コンパイル...' -ForegroundColor Cyan
 Write-Host "  配置先: $expertDir" -ForegroundColor Gray
 
-# --- ファイル書き込み (.mq5, .set, .ini) ---
 [System.IO.File]::WriteAllText($mq5Path, $mqCode, [System.Text.Encoding]::UTF8)
-Write-Host "  ✅ EAソース配置: $($baseName).mq5" -ForegroundColor Green
+Write-Host "  .mq5 配置完了: $($baseName).mq5" -ForegroundColor Green
 
-# UnicodeLE (MT5用) で .set と .ini を書き込む
 $unicodeLE = New-Object System.Text.UnicodeEncoding $false, $true
 [System.IO.File]::WriteAllText($setPath, $setContent, $unicodeLE)
-Write-Host "  ✅ パラメータ配置: Params_$($eaName).set" -ForegroundColor Green
+Write-Host "  .set 配置完了: Params_$($eaName).set" -ForegroundColor Green
 [System.IO.File]::WriteAllText($iniPath, $iniContent, $unicodeLE)
-Write-Host "  ✅ INI設定配置: $iniFileName" -ForegroundColor Green
+Write-Host "  .ini 配置完了: $iniFileName" -ForegroundColor Green
 
-# --- MetaEditorでコンパイル ---
 $editorPath = $mt5Path -replace 'terminal64\.exe$', 'metaeditor64.exe'
 if (Test-Path $editorPath) {
-    Write-Host "  🔧 コンパイル中..." -ForegroundColor Yellow
+    Write-Host "  コンパイル中..." -ForegroundColor Yellow
     $compProc = Start-Process -FilePath $editorPath -ArgumentList "/compile:\`"$mq5Path\`" /log" -PassThru
-    $compProc.WaitForExit(30000) | Out-Null  # 最大30秒待機
+    $compProc.WaitForExit(30000) | Out-Null
     if (Test-Path $ex5Path) {
-        Write-Host "  ✅ コンパイル成功!" -ForegroundColor Green
+        Write-Host "  コンパイル成功!" -ForegroundColor Green
     } else {
-        Write-Host "  ⚠️ .ex5ファイルが見つかりません。MetaEditorで手動コンパイルが必要かもしれません。" -ForegroundColor Yellow
+        Write-Host "  .ex5 が見つかりません。MetaEditor で手動コンパイルしてください。" -ForegroundColor Yellow
     }
 } else {
-    Write-Host "  ⚠️ MetaEditor64.exeが見つかりません。スキップします。" -ForegroundColor Yellow
+    Write-Host "  MetaEditor64.exe が見つかりません。スキップします。" -ForegroundColor Yellow
 }
 
 Write-Host ''
-Write-Host '[STEP 4/5] MT5起動＆バックテスト開始...' -ForegroundColor Cyan
+Write-Host '[STEP 4/5] MT5 起動 & バックテスト開始...' -ForegroundColor Cyan
 
-# --- 既存のMT5を終了（必要に応じて） ---
 $runningMT5 = Get-Process -Name 'terminal64' -ErrorAction SilentlyContinue
 if ($runningMT5) {
-    Write-Host "  🔄 実行中のMT5を終了中..." -ForegroundColor Yellow
+    Write-Host "  既存 MT5 を終了中..." -ForegroundColor Yellow
     $runningMT5 | Stop-Process -Force
     Start-Sleep -Seconds 3
-    Write-Host "  ✅ MT5終了しました。" -ForegroundColor Green
+    Write-Host "  MT5 終了完了。" -ForegroundColor Green
 }
 
-# --- MT5をINI付きで新規起動 ---
-Write-Host "  🚀 MT5起動中... (バックテストが自動的に開始されます)" -ForegroundColor Green
+Write-Host "  MT5 起動中... (バックテストが自動開始されます)" -ForegroundColor Green
 Write-Host "  使用INI: $iniPath" -ForegroundColor Gray
 Start-Process -FilePath $mt5Path -ArgumentList "/config:\`"$iniPath\`""
+
 Write-Host ''
-Write-Host '[STEP 5/5] 完了！' -ForegroundColor Green
-Write-Host '  MT5が起動し、バックテストが自動開始します。' -ForegroundColor Cyan
+Write-Host '[STEP 5/5] 完了!' -ForegroundColor Green
+Write-Host '  MT5 が起動し、バックテストが自動開始します。' -ForegroundColor Cyan
 Write-Host '  テスト完了後、このウィンドウを閉じてください。' -ForegroundColor Cyan
 Write-Host ''
 `;
 
-        downloadFile("🚀OneClick_Test_" + eaState.eaName + ".bat", batScript);
+        // -------------------------------------------------------
+        // CertUtil Base64 decode — PSスクリプトをBATに埋め込む
+        // UTF-8 BOM付きでエンコードし PS5.x でも日本語が正常表示
+        // -------------------------------------------------------
+        const _enc = new TextEncoder();
+        const _bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+        const _psRaw = _enc.encode(psScript);
+        const _psBytes = new Uint8Array(_bom.length + _psRaw.length);
+        _psBytes.set(_bom, 0);
+        _psBytes.set(_psRaw, _bom.length);
+
+        // Base64エンコード（チャンク分割でスタックオーバーフロー防止）
+        let _b64 = '';
+        const _CHUNK = 3072;
+        for (let _i = 0; _i < _psBytes.length; _i += _CHUNK) {
+            const _sl = _psBytes.slice(_i, Math.min(_i + _CHUNK, _psBytes.length));
+            _b64 += btoa(String.fromCharCode.apply(null, _sl));
+        }
+        // 64文字/行に分割（certutil MIME形式）
+        const _echoLines = [];
+        for (let _i = 0; _i < _b64.length; _i += 64) {
+            _echoLines.push('echo ' + _b64.slice(_i, _i + 64));
+        }
+
+        // -------------------------------------------------------
+        // BATファイル本体（純粋ASCII — BOMなし・ポリグロットなし）
+        // -------------------------------------------------------
+        const batScript = '@echo off\r\n'
+            + 'chcp 65001 >nul\r\n'
+            + 'setlocal EnableDelayedExpansion\r\n'
+            + 'echo ============================================================\r\n'
+            + 'echo   EA Labo MT5 Auto Backtest Runner v6.1\r\n'
+            + 'echo ============================================================\r\n'
+            + 'echo.\r\n'
+            + 'echo Preparing, please wait...\r\n'
+            + 'echo.\r\n'
+            + '\r\n'
+            + 'set "TMP_PS=%TEMP%\\ea_labo_%RANDOM%.ps1"\r\n'
+            + 'set "TMP_B64=%TEMP%\\ea_labo_b64_%RANDOM%.txt"\r\n'
+            + '\r\n'
+            + '(\r\n'
+            + 'echo -----BEGIN CERTIFICATE-----\r\n'
+            + _echoLines.join('\r\n') + '\r\n'
+            + 'echo -----END CERTIFICATE-----\r\n'
+            + ') > "%TMP_B64%"\r\n'
+            + '\r\n'
+            + 'certutil -f -decode "%TMP_B64%" "%TMP_PS%" >nul 2>&1\r\n'
+            + 'del "%TMP_B64%" 2>nul\r\n'
+            + '\r\n'
+            + 'if not exist "%TMP_PS%" (\r\n'
+            + '    echo [ERROR] Script extraction failed.\r\n'
+            + '    echo         Try running as Administrator, or check %%TEMP%% folder.\r\n'
+            + '    pause\r\n'
+            + '    exit /b 1\r\n'
+            + ')\r\n'
+            + '\r\n'
+            + 'powershell -NoProfile -ExecutionPolicy Bypass -File "%TMP_PS%"\r\n'
+            + '\r\n'
+            + 'del "%TMP_PS%" 2>nul\r\n'
+            + 'pause\r\n'
+            + 'exit /b 0\r\n';
+
+        // BOMなしのバイナリBlobとしてダウンロード（CMDはBOMを誤認識する）
+        const _batBytes = new TextEncoder().encode(batScript);
+        const _blob = new Blob([_batBytes], { type: 'application/octet-stream' });
+        const _url = URL.createObjectURL(_blob);
+        const _a = document.createElement('a');
+        _a.href = _url;
+        _a.download = '🚀OneClick_Test_' + eaState.eaName + '.bat';
+        document.body.appendChild(_a);
+        _a.click();
+        document.body.removeChild(_a);
+        URL.revokeObjectURL(_url);
+
         showToast('バッチファイルをダウンロードしました！ダブルクリックで実行してください。', 'success');
     } catch (error) {
         alert('エラーが発生しました: ' + error.message);
