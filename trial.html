@@ -1,0 +1,1813 @@
+﻿<!-- ==================== H-001: DOCTYPE〜head ==================== -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA Labo - 体験版 (Trial)</title>
+    <link rel="stylesheet" href="style.css?v=202604091200">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body><!-- 体験版: auth-overlay は trial_override.js が即時非表示にする -->
+<div id="auth-overlay" class="auth-overlay" style="display:none;"></div>
+    <div class="container">
+
+        <!-- ==================== H-010: Header + Home Screen ==================== -->
+        <header class="header">
+            <div class="header-title-row"><h1>EA Labo</h1><span id="app-version" class="version-tag">体験版 (Trial)</span></div>
+            <p>ノーコードでMT4/MT5のEA・インジケーターを作成</p>
+        </header>
+
+        <div id="home-screen">
+            <div class="home-grid">
+                <div class="home-card" id="start-ea">
+                    <div class="card-icon">🤖</div>
+                    <h2>EA作成</h2>
+                    <p>自動売買システムを作成</p>
+                </div>
+                <div class="home-card" id="start-indicator">
+                    <div class="card-icon">📊</div>
+                    <h2>インジケーター作成</h2>
+                    <p>カスタムインジケーターを作成</p>
+                </div>
+            </div>
+            <button class="btn btn-secondary" id="help-btn">❓ 使い方</button>
+        </div>
+        <!-- //END H-010 -->
+
+        <!-- ==================== H-020: EA Flow - Progress Bar ==================== -->
+        <div id="ea-flow" class="hidden">
+            <button class="back-home-btn" id="ea-back-home">← ホームに戻る</button>
+            
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">ポジション</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">エントリー</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">決済</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">フィルター</div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">出力設定</div>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-label">生成</div>
+                </div>
+                <div class="progress-step" data-step="7">
+                    <div class="step-number">7</div>
+                    <div class="step-label">テスト</div>
+                </div>
+            </div>
+            <!-- //END H-020 -->
+
+            <!-- ==================== H-025: EA Step 0 (テンプレート選択) ==================== -->
+            <div class="step-section" id="ea-step-0">
+                <div class="template-header">
+                    <h2 class="stage-title">Step 0: 王道テンプレートの選択</h2>
+                    <p class="template-desc">プロが使う鉄板ロジックをベースにして、自分のオリジナルEAを手軽に作成できます。</p>
+                </div>
+                
+                <div class="template-grid">
+                    <!-- Scratch Build (Top Priority) -->
+                    <div class="template-card theme-scratch" id="btn-scratch-build" data-template="0">
+                        <div class="template-icon">🎨</div>
+                        <div class="template-difficulty">難易度: ♾️</div>
+                        <h3 class="template-name">夢は自分の力でつかむ！</h3>
+                        <p class="template-detail">テンプレートに頼らず、すべてのロジックをゼロから自由に組み立てる究極の自由。あなたの理想を形にします。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-custom">Full Custom</span>
+                            <span class="t-tag t-advanced">Expert Mode</span>
+                        </div>
+                        <button class="btn btn-outline btn-select-template">ゼロから作成を開始</button>
+                    </div>
+
+                    <!-- Template 1 -->
+                    <div class="template-card theme-trend" data-template="1">
+                        <div class="template-icon">📈</div>
+                        <div class="template-difficulty">難易度: ★☆☆</div>
+                        <h3 class="template-name">パーフェクトオーダー戦略</h3>
+                        <p class="template-detail">3本の移動平均線で強いトレンドの波に乗り、トレーリングで利益を伸ばす安定型。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-ma">MA</span>
+                            <span class="t-tag t-adx">ADX</span>
+                            <span class="t-tag t-trail">Trailing</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 2 -->
+                    <div class="template-card theme-range" data-template="2">
+                        <div class="template-icon">🔁</div>
+                        <div class="template-difficulty">難易度: ★★☆</div>
+                        <h3 class="template-name">ボリンジャーパニック回避型</h3>
+                        <p class="template-detail">行き過ぎを狙う逆張り。危険な経済指標発表時は自動で回避する安全設計。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-bb">Bollinger</span>
+                            <span class="t-tag t-rsi">RSI</span>
+                            <span class="t-tag t-news">NewsFilter</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 3 -->
+                    <div class="template-card theme-breakout" data-template="3">
+                        <div class="template-icon">⚡</div>
+                        <div class="template-difficulty">難易度: ★★☆</div>
+                        <h3 class="template-name">市場オープン・レンジ突破型</h3>
+                        <p class="template-detail">指定時間帯のブレイクアウトを狙う。初動キャッチに特化した短期スタイル。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-price">Price</span>
+                            <span class="t-tag t-time">TimeFilter</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 4 -->
+                    <div class="template-card theme-grid" data-template="4">
+                        <div class="template-icon">🕸️</div>
+                        <div class="template-difficulty">難易度: ★★★</div>
+                        <h3 class="template-name">高利回りトラップリピート式</h3>
+                        <p class="template-detail">一定間隔で網を張りコツコツ利益を拾う。マジックストップの安全装置付き。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-grid">Grid</span>
+                            <span class="t-tag t-spread">Spread</span>
+                            <span class="t-tag t-magic">MagicStop</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 5 -->
+                    <div class="template-card theme-news" data-template="5">
+                        <div class="template-icon">💥</div>
+                        <div class="template-difficulty">難易度: ★★★</div>
+                        <h3 class="template-name">ニュース特化スパイク狙い</h3>
+                        <p class="template-detail">重要指標発表直後のボラティリティ爆発を狙い撃ちする超短期スキャルピング。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-news">NewsFilter</span>
+                            <span class="t-tag t-pips">AutoClose</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 6 -->
+                    <div class="template-card theme-ichimoku" data-template="6">
+                        <div class="template-icon">☁️</div>
+                        <div class="template-difficulty">難易度: ★★☆</div>
+                        <h3 class="template-name">一目均衡表 × ストキャス</h3>
+                        <p class="template-detail">雲で大きなトレンド方向を掴み、オシレーターで絶好の押し目買いを狙う。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-ichi">Ichimoku</span>
+                            <span class="t-tag t-stoch">Stoch</span>
+                            <span class="t-tag t-adx">ADX</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 7 -->
+                    <div class="template-card theme-momentum" data-template="7">
+                        <div class="template-icon">🌊</div>
+                        <div class="template-difficulty">難易度: ★★☆</div>
+                        <h3 class="template-name">MACDゼロライン・クロス</h3>
+                        <p class="template-detail">相場の勢いが変わった瞬間の「初動」を捉えるスキャルロジック。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-macd">MACD</span>
+                            <span class="t-tag t-day">DayFilter</span>
+                            <span class="t-tag t-pips">AutoClose</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 8 -->
+                    <div class="template-card theme-martingale" data-template="8">
+                        <div class="template-icon">🛡️</div>
+                        <div class="template-difficulty">難易度: ★★★</div>
+                        <h3 class="template-name">ナンピン × マーチンゲール</h3>
+                        <p class="template-detail">多少の逆行でもロットをコントロールし、全体の合計損益でプラス逃げする不沈艦。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-rsi">RSI</span>
+                            <span class="t-tag t-nanpin">Nanpin</span>
+                            <span class="t-tag t-yen">AutoClose</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 9 -->
+                    <div class="template-card theme-value" data-template="9">
+                        <div class="template-icon">💰</div>
+                        <div class="template-difficulty">難易度: ★☆☆</div>
+                        <h3 class="template-name">安値圏・指値待ち伏せ型</h3>
+                        <p class="template-detail">チャートに張り付かず、指定した価格より安くなった時だけ買い集める長期投資。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-price">Price</span>
+                            <span class="t-tag t-spread">Spread</span>
+                            <span class="t-tag t-tp">TP</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+
+                    <!-- Template 10 -->
+                    <div class="template-card theme-parabolic" data-template="10">
+                        <div class="template-icon">🎯</div>
+                        <div class="template-difficulty">難易度: ★★☆</div>
+                        <h3 class="template-name">SAR トレンド転換ドテン型</h3>
+                        <p class="template-detail">トレンドの端から端まで狙う。ドット反転でポジションをひっくり返すドテン手法。</p>
+                        <div class="template-tags">
+                            <span class="t-tag t-sar">Parabolic SAR</span>
+                            <span class="t-tag t-news">NewsFilter</span>
+                            <span class="t-tag t-trail">Trailing</span>
+                        </div>
+                        <button class="btn btn-secondary btn-select-template">このテンプレートで作成</button>
+                    </div>
+                </div>
+
+                <!-- Gallery Templates Section -->
+                <div id="step0-gallery-section" style="display:none; margin-top:24px;">
+                    <h3 style="margin-bottom:12px; color:var(--text-secondary);">📚 マイライブラリから読み込む</h3>
+                    <div id="step0-gallery-grid" class="template-grid"></div>
+                </div>
+            </div>
+
+            <!-- ==================== H-030: EA Step 1 (ポジション管理) ==================== -->
+            <div class="step-section" id="ea-step-1">
+                <h2 class="stage-title">Step 1: ポジション管理</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">ポジションモード</label>
+                    <div class="position-mode-grid">
+                        <label class="mode-option">
+                            <input type="radio" name="position-mode" value="single" checked>
+                            <div class="mode-card">
+                                <span class="mode-icon">1️⃣</span>
+                                <span class="mode-title">単一ポジション</span>
+                                <span class="mode-desc">1つのポジションのみ保有</span>
+                            </div>
+                        </label>
+                        <label class="mode-option">
+                            <input type="radio" name="position-mode" value="multiple">
+                            <div class="mode-card">
+                                <span class="mode-icon">📊</span>
+                                <span class="mode-title">複数ポジション</span>
+                                <span class="mode-desc">複数ポジションを管理</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">決済後エントリー禁止時間（分）</label>
+                    <input type="number" id="entry-cooldown" class="form-input" value="0" min="0">
+                    <small class="form-hint">0 = 制限なし</small>
+                </div>
+
+                <div id="multiple-position-settings" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">最大ポジション数</label>
+                        <input type="number" id="max-positions" class="form-input" value="5" min="1" max="100">
+                    </div>
+                </div>
+
+                <div id="strategy-section" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">ポジション戦略（複数選択可）</label>
+                        <div class="strategy-grid">
+                            <div class="strategy-card" data-strategy="nanpin">
+                                <span class="strategy-icon">📉</span>
+                                <span class="strategy-name">ナンピン</span>
+                            </div>
+                            <div class="strategy-card" data-strategy="martingale">
+                                <span class="strategy-icon">🎰</span>
+                                <span class="strategy-name">マーチン</span>
+                            </div>
+                            <div class="strategy-card" data-strategy="pyramid">
+                                <span class="strategy-icon">🔺</span>
+                                <span class="strategy-name">ピラミッド</span>
+                            </div>
+                            <div class="strategy-card" data-strategy="grid">
+                                <span class="strategy-icon">📏</span>
+                                <span class="strategy-name">グリッド</span>
+                            </div>
+                            <div class="strategy-card" data-strategy="reverse_grid">
+                                <span class="strategy-icon">🔄</span>
+                                <span class="strategy-name">逆グリッド</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="strategy-warning" class="warning-box hidden">
+                        <span class="warning-icon">⚠️</span>
+                        <span class="warning-text"></span>
+                    </div>
+
+                    <!-- Nanpin Settings -->
+                    <div id="nanpin-settings" class="strategy-panel hidden">
+                        <h3 class="panel-title">📉 ナンピン設定</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">ナンピン間隔 (pips)</label>
+                                <input type="number" id="nanpin-interval" class="form-input" value="20" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">最大ナンピン回数</label>
+                                <input type="number" id="nanpin-max" class="form-input" value="5" min="1" max="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">時間間隔（分）</label>
+                                <input type="number" id="nanpin-time-interval" class="form-input" value="0" min="0">
+                                <small class="form-hint">0 = 制限なし</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">スキップ回数</label>
+                                <input type="number" id="nanpin-skip-count" class="form-input" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">スキップタイプ</label>
+                            <select id="nanpin-skip-type" class="form-select">
+                                <option value="none">なし</option>
+                                <option value="count">回数スキップ</option>
+                                <option value="atr">ATR条件</option>
+                            </select>
+                        </div>
+                        <div id="nanpin-atr-settings" class="hidden">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">ATR倍率</label>
+                                    <input type="number" id="nanpin-skip-atr-multiplier" class="form-input" value="1.5" min="0.1" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">ATR期間</label>
+                                    <input type="number" id="nanpin-skip-atr-period" class="form-input" value="14" min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">一括利確目標 (金額: 円)</label>
+                                <input type="number" id="nanpin-target-profit" class="form-input" value="1000" min="0">
+                                <small class="form-hint">合計含み益がこの金額に達したら全決済 (0=無効)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Martingale Settings -->
+                    <div id="martingale-settings" class="strategy-panel hidden">
+                        <h3 class="panel-title">🎰 マーチンゲール設定</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">ロット倍率</label>
+                                <input type="number" id="martingale-multiplier" class="form-input" value="2.0" min="1.1" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">最大マーチン回数</label>
+                                <input type="number" id="martingale-max" class="form-input" value="5" min="1" max="20">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pyramid Settings -->
+                    <div id="pyramid-settings" class="strategy-panel hidden">
+                        <h3 class="panel-title">🔺 ピラミッディング設定</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">ピラミッド間隔 (pips)</label>
+                                <input type="number" id="pyramid-interval" class="form-input" value="30" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">最大ピラミッド回数</label>
+                                <input type="number" id="pyramid-max" class="form-input" value="3" min="1" max="20">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="pyramid-use-entry-condition">
+                                <span>エントリー条件を再確認</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Grid Settings -->
+                    <div id="grid-settings" class="strategy-panel hidden">
+                        <h3 class="panel-title">📏 グリッド設定</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">グリッド間隔 (pips)</label>
+                                <input type="number" id="grid-interval" class="form-input" value="20" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">グリッド本数</label>
+                                <input type="number" id="grid-count" class="form-input" value="5" min="1" max="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">トリガータイプ</label>
+                                <select id="grid-trigger-type" class="form-select">
+                                    <option value="immediate">即時開始</option>
+                                    <option value="price">価格到達</option>
+                                    <option value="indicator">インジケーター</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">方向</label>
+                                <select id="grid-direction" class="form-select">
+                                    <option value="both">両方向</option>
+                                    <option value="buy_only">Buyのみ</option>
+                                    <option value="sell_only">Sellのみ</option>
+                                    <option value="conditional">条件付き</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="grid-trigger-price-settings" class="hidden">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">トリガー価格</label>
+                                    <input type="number" id="grid-trigger-price" class="form-input" value="0" step="0.00001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">条件</label>
+                                    <select id="grid-trigger-condition" class="form-select">
+                                        <option value="above">以上</option>
+                                        <option value="below">以下</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">リセット距離 (pips)</label>
+                                <input type="number" id="grid-reset-pips" class="form-input" value="100" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">リセットATR倍率</label>
+                                <input type="number" id="grid-reset-atr-multiplier" class="form-input" value="3.0" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">リセットATR期間</label>
+                            <input type="number" id="grid-reset-atr-period" class="form-input" value="14" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="grid-reset-one-side">
+                                <span>片側完了でリセット</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Reverse Grid Settings -->
+                    <div id="reverse-grid-settings" class="strategy-panel hidden">
+                        <h3 class="panel-title">🔄 リバースグリッド設定</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">グリッド間隔 (pips)</label>
+                                <input type="number" id="reverse-grid-interval" class="form-input" value="20" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">グリッド本数</label>
+                                <input type="number" id="reverse-grid-count" class="form-input" value="5" min="1" max="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">トリガータイプ</label>
+                                <select id="reverse-grid-trigger-type" class="form-select">
+                                    <option value="immediate">即時開始</option>
+                                    <option value="price">価格到達</option>
+                                    <option value="indicator">インジケーター</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">方向</label>
+                                <select id="reverse-grid-direction" class="form-select">
+                                    <option value="both">両方向</option>
+                                    <option value="buy_only">Buyのみ</option>
+                                    <option value="sell_only">Sellのみ</option>
+                                    <option value="conditional">条件付き</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="reverse-grid-trigger-price-settings" class="hidden">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">トリガー価格</label>
+                                    <input type="number" id="reverse-grid-trigger-price" class="form-input" value="0" step="0.00001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">条件</label>
+                                    <select id="reverse-grid-trigger-condition" class="form-select">
+                                        <option value="above">以上</option>
+                                        <option value="below">以下</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">リセット距離 (pips)</label>
+                                <input type="number" id="reverse-grid-reset-pips" class="form-input" value="100" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">リセットATR倍率</label>
+                                <input type="number" id="reverse-grid-reset-atr-multiplier" class="form-input" value="3.0" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">リセットATR期間</label>
+                            <input type="number" id="reverse-grid-reset-atr-period" class="form-input" value="14" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="reverse-grid-reset-one-side">
+                                <span>片側完了でリセット</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <div></div>
+                    <button class="btn btn-primary" id="ea-step1-next">次へ →</button>
+                </div>
+            </div>
+            <!-- //END H-030 -->
+
+            <!-- ==================== H-040: EA Step 2 (エントリー条件) ==================== -->
+            <div class="step-section hidden" id="ea-step-2">
+                <h2 class="stage-title">Step 2: エントリー条件</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Buy条件の組み合わせ</label>
+                        <select id="buy-combine" class="form-select">
+                            <option value="and">AND（すべて満たす）</option>
+                            <option value="or">OR（いずれか満たす）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sell条件の組み合わせ</label>
+                        <select id="sell-combine" class="form-select">
+                            <option value="and">AND（すべて満たす）</option>
+                            <option value="or">OR（いずれか満たす）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ポジション管理オプション -->
+                <div class="toggle-card" id="card-entry-no-position" data-target="chk-entry-no-position" style="margin-bottom: 16px;">
+                    <input type="checkbox" id="chk-entry-no-position" style="display:none">
+                    <div class="toggle-card-header">
+                        <div class="toggle-card-icon">🚫</div>
+                        <div class="toggle-card-title">ポジションが無ければエントリー</div>
+                        <div class="toggle-card-status">✓</div>
+                    </div>
+                    <div class="toggle-card-desc">既にポジションを保有している場合は新規エントリーしない（常時ポジション保有型に使用）</div>
+                </div>
+
+                <div class="conditions-section">
+                    <div class="condition-panel">
+                        <h3 class="panel-title">🟢 Buy条件</h3>
+                        <div id="buy-conditions-list" class="conditions-list"></div>
+                        <button class="btn btn-secondary add-condition-btn" id="add-buy-condition">+ 条件を追加</button>
+                    </div>
+                    <div class="condition-panel">
+                        <h3 class="panel-title">🔴 Sell条件</h3>
+                        <div id="sell-conditions-list" class="conditions-list"></div>
+                        <button class="btn btn-secondary add-condition-btn" id="add-sell-condition">+ 条件を追加</button>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="ea-step2-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="ea-step2-next">次へ →</button>
+                </div>
+            </div>
+            <!-- //END H-040 -->
+
+<!-- ============================================================ -->
+<!-- [H-050] EA Step 3 – Exit Rules                               -->
+<!-- ============================================================ -->
+<div class="step-section hidden" id="ea-step-3">
+  <h2 class="stage-title">Step 3: エグジットルール</h2>
+
+  <!-- 簡易TP/SLは自動決済パネルで代替するため削除されました -->
+
+  <!-- Toggle Cards -->
+  <div class="toggle-card-grid">
+
+    <!-- Trailing Stop -->
+    <div class="toggle-card" id="card-trailing" data-target="use-trailing">
+      <input type="checkbox" id="use-trailing" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">📈</div>
+        <div class="toggle-card-title">トレーリングストップ</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">利益方向に自動でSLを追従</div>
+      <div class="toggle-card-settings" id="trailing-panel">
+        <div class="form-group">
+          <label for="trailing-start">開始距離 (pips)</label>
+          <input type="number" id="trailing-start" class="form-input" value="20" min="0" step="0.1">
+          <p class="form-hint">利益がこのpips以上になったらトレーリング開始</p>
+        </div>
+        <div class="form-group">
+          <label for="trailing-width">開始幅 (pips)</label>
+          <input type="number" id="trailing-width" class="form-input" value="15" min="0" step="0.1">
+          <p class="form-hint">トレーリング開始時のSL距離</p>
+        </div>
+        <div class="form-group">
+          <label for="trailing-step">ステップ幅 (pips)</label>
+          <input type="number" id="trailing-step" class="form-input" value="10" min="0" step="0.1">
+          <p class="form-hint">SLを動かす最小単位</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto Close -->
+    <div class="toggle-card" id="card-autoclose" data-target="use-autoclose">
+      <input type="checkbox" id="use-autoclose" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">⏱️</div>
+        <div class="toggle-card-title">自動決済</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">pips/金額で自動的にポジション決済</div>
+      <div class="toggle-card-settings" id="autoclose-panel">
+        <div class="form-group">
+          <label for="autoclose-profit-pips">利益pipsで決済 (0=無効)</label>
+          <input type="number" id="autoclose-profit-pips" class="form-input" value="0" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label for="autoclose-loss-pips">損失pipsで決済 (0=無効)</label>
+          <input type="number" id="autoclose-loss-pips" class="form-input" value="0" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label for="autoclose-profit-yen">利益金額で決済 (0=無効)</label>
+          <input type="number" id="autoclose-profit-yen" class="form-input" value="0" min="0">
+        </div>
+        <div class="form-group">
+          <label for="autoclose-loss-yen">損失金額で決済 (0=無効)</label>
+          <input type="number" id="autoclose-loss-yen" class="form-input" value="0" min="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Close Button -->
+    <div class="toggle-card" id="card-manual-close" data-target="use-manual-close">
+      <input type="checkbox" id="use-manual-close" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">🖱️</div>
+        <div class="toggle-card-title">手動決済ボタン</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">チャート上に全決済ボタンを表示</div>
+    </div>
+
+    <!-- Magic Stop Order -->
+    <div class="toggle-card" id="card-magic-stop" data-target="use-magic-stop">
+      <input type="checkbox" id="use-magic-stop" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">🔮</div>
+        <div class="toggle-card-title">マジックストップオーダー</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">指定した価格の指値が入っている状態では新規オーダーを停止</div>
+      <div class="toggle-card-settings" id="magic-stop-panel">
+        <div class="form-group">
+          <label for="magic-stop-price">停止トリガー価格 (0 = 無効)</label>
+          <input type="number" id="magic-stop-price" class="form-input" value="0" min="0" step="0.001">
+          <p class="form-hint">この価格付近に未決済の指値注文が存在する場合、新規エントリーを停止します</p>
+        </div>
+        <div class="form-group">
+          <label for="magic-stop-pips">許容誤差幅 (pips)</label>
+          <input type="number" id="magic-stop-pips" class="form-input" value="5" min="0" step="1">
+          <p class="form-hint">指定価格 ± この幅以内に指値があれば停止</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Exit Conditions (remains as form card - has dynamic list) -->
+  <div class="form-card">
+    <h3>🎯 インジケーター決済条件</h3>
+    <div class="form-group">
+      <label for="exit-combine">条件の組み合わせ</label>
+      <select id="exit-combine" class="form-select">
+        <option value="AND">AND（すべて満たす）</option>
+        <option value="OR">OR（いずれか満たす）</option>
+      </select>
+    </div>
+    <div id="exit-condition-list">
+      <p class="empty-list">エグジット条件が設定されていません</p>
+    </div>
+    <button id="add-exit-condition-btn" class="btn btn-secondary">＋ エグジット条件を追加</button>
+  </div>
+
+  <!-- Exit Priority -->
+  <div class="form-card">
+    <h3>⚡ エグジット優先順位</h3>
+    <p class="form-hint">上にある方法ほど優先的に処理されます。↑↓ボタンで並べ替えてください。</p>
+    <div id="exit-priority-list">
+      <p class="empty-list">有効なエグジット方法がありません</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" id="ea-step3-prev">← 戻る</button>
+    <button class="btn btn-primary" id="ea-step3-next">次へ →</button>
+  </div>
+</div>
+<!-- [END H-050] -->
+
+
+            <!-- ==================== H-060: EA Step 4 (フィルター) ==================== -->
+            <div class="step-section hidden" id="ea-step-4">
+                <h2 class="stage-title">Step 4: フィルター</h2>
+                
+                <div class="toggle-card-grid">
+
+                    <!-- パーフェクトオーダー -->
+                    <div class="toggle-card" id="card-perfect-order" data-target="use-perfect-order">
+                      <input type="checkbox" id="use-perfect-order" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">📐</div>
+                        <div class="toggle-card-title">パーフェクトオーダー</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">3本のMAが順序通りに並んでいる時のみエントリー</div>
+                      <div class="toggle-card-settings" id="perfect-order-settings">
+                        <div class="form-group">
+                          <label class="form-label">短期MA期間</label>
+                          <input type="number" id="perfect-order-ma1" class="form-input" value="20" min="1">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">中期MA期間</label>
+                          <input type="number" id="perfect-order-ma2" class="form-input" value="50" min="1">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">長期MA期間</label>
+                          <input type="number" id="perfect-order-ma3" class="form-input" value="100" min="1">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ADXフィルター -->
+                    <div class="toggle-card" id="card-adx-filter" data-target="use-adx-filter">
+                      <input type="checkbox" id="use-adx-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">📊</div>
+                        <div class="toggle-card-title">ADXフィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">トレンドの強さがADX閾値以上の時のみエントリー</div>
+                      <div class="toggle-card-settings" id="adx-filter-settings">
+                        <div class="form-group">
+                          <label class="form-label">ADX期間</label>
+                          <input type="number" id="adx-period" class="form-input" value="14" min="1">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">ADX閾値</label>
+                          <input type="number" id="adx-threshold" class="form-input" value="25" min="1" max="100">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 時間フィルター -->
+                    <div class="toggle-card" id="card-time-filter" data-target="use-time-filter">
+                      <input type="checkbox" id="use-time-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">🕐</div>
+                        <div class="toggle-card-title">時間フィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">指定時間帯のみエントリーを許可</div>
+                      <div class="toggle-card-settings" id="time-filter-settings">
+                        <div class="form-group">
+                          <label class="form-label">開始時間</label>
+                          <input type="number" id="time-start" class="form-input" value="9" min="0" max="23">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">終了時間</label>
+                          <input type="number" id="time-end" class="form-input" value="21" min="0" max="23">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- スプレッドフィルター -->
+                    <div class="toggle-card" id="card-spread-filter" data-target="use-spread-filter">
+                      <input type="checkbox" id="use-spread-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">💹</div>
+                        <div class="toggle-card-title">スプレッドフィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">スプレッドが閾値以下の時のみ取引</div>
+                      <div class="toggle-card-settings" id="spread-filter-settings">
+                        <div class="form-group">
+                          <label class="form-label">最大スプレッド (points)</label>
+                          <input type="number" id="max-spread" class="form-input" value="30" min="1">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ゴトー日フィルター -->
+                    <div class="toggle-card" id="card-goto-filter" data-target="use-goto-filter">
+                      <input type="checkbox" id="use-goto-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">📅</div>
+                        <div class="toggle-card-title">ゴトー日フィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">5の倍数日＋月末の仲値タイムを回避</div>
+                      <div class="toggle-card-settings" id="goto-filter-settings">
+                        <p class="form-hint">5日・10日・15日・20日・25日（＋月末）のエントリー停止時間帯</p>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label class="form-label">停止開始 時</label>
+                            <input type="number" id="goto-stop-start-hour" class="form-input" value="8" min="0" max="23">
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label">停止開始 分</label>
+                            <input type="number" id="goto-stop-start-min" class="form-input" value="30" min="0" max="59">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label class="form-label">停止終了 時</label>
+                            <input type="number" id="goto-stop-end-hour" class="form-input" value="10" min="0" max="23">
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label">停止終了 分</label>
+                            <input type="number" id="goto-stop-end-min" class="form-input" value="0" min="0" max="59">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="checkbox-label"><input type="checkbox" id="goto-include-month-end" checked><span>月末日も含める</span></label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 月末月初フィルター -->
+                    <div class="toggle-card" id="card-month-filter" data-target="use-month-filter">
+                      <input type="checkbox" id="use-month-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">🗓️</div>
+                        <div class="toggle-card-title">月末月初フィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">月末・月初のエントリーを一時停止</div>
+                      <div class="toggle-card-settings" id="month-filter-settings">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label class="form-label">月初停止日数</label>
+                            <input type="number" id="month-start-days" class="form-input" value="0" min="0" max="10">
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label">月末停止日数</label>
+                            <input type="number" id="month-end-days" class="form-input" value="0" min="0" max="10">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 経済指標フィルター -->
+                    <div class="toggle-card" id="card-news-filter" data-target="use-news-filter" style="grid-column: 1 / -1;">
+                      <input type="checkbox" id="use-news-filter" style="display:none">
+                      <div class="toggle-card-header">
+                        <div class="toggle-card-icon">📰</div>
+                        <div class="toggle-card-title">経済指標フィルター</div>
+                        <div class="toggle-card-status">✓</div>
+                      </div>
+                      <div class="toggle-card-desc">経済指標の発表前後はエントリーを停止（羊飼いのFXブログ連携）</div>
+                      <div class="toggle-card-settings" id="news-filter-settings">
+                        <p class="form-hint">指定した指標発表時刻の前後はエントリーを停止します</p>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label class="form-label">発表前（分）</label>
+                            <input type="number" id="news-stop-before" class="form-input" value="30" min="0" max="120">
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label">発表後（分）</label>
+                            <input type="number" id="news-stop-after" class="form-input" value="30" min="0" max="120">
+                          </div>
+                        </div>
+
+                        <!-- ランク別フィルター -->
+                        <div class="form-group">
+                          <label class="form-label">フィルター対象ランク（選択されたランク以上を回避）</label>
+                          <div class="rank-filter-chips">
+                            <div class="rank-chip active" data-rank="SS">🔴 SS</div>
+                            <div class="rank-chip active" data-rank="S">🟠 S</div>
+                            <div class="rank-chip active" data-rank="A">🟣 A</div>
+                            <div class="rank-chip" data-rank="B">🟢 B</div>
+                            <div class="rank-chip" data-rank="C">⚪ C</div>
+                          </div>
+                        </div>
+
+                        <!-- 羊飼いデータ取得 -->
+                        <div class="form-group">
+                          <label class="form-label">📡 経済指標の自動取得（今日分）</label>
+                          <div class="form-row" style="align-items:flex-end;">
+                            <button class="btn btn-primary" id="fetch-news-btn" style="white-space:nowrap;">📡 今日の指標を取得</button>
+                          </div>
+                          <div id="news-fetch-status" class="form-hint" style="margin-top:6px;"></div>
+                        </div>
+
+                        <!-- 指標リスト -->
+                        <div id="news-indicator-container">
+                          <div id="news-event-list" class="news-indicator-list">
+                            <p class="form-hint">指標イベント未登録。上の「指標を取得」か、下から手動登録してください。</p>
+                          </div>
+                        </div>
+
+                        <!-- 手動追加 -->
+                        <div class="form-group" style="margin-top:12px;">
+                          <label class="form-label">手動で指標を追加</label>
+                          <div class="form-row">
+                            <input type="number" id="news-event-hour" class="form-input" placeholder="時" min="0" max="23" style="width:60px">
+                            <span>:</span>
+                            <input type="number" id="news-event-min" class="form-input" placeholder="分" min="0" max="59" style="width:60px">
+                            <input type="text" id="news-event-label" class="form-input" placeholder="例: 雇用統計" style="flex:1">
+                            <button class="btn btn-secondary" id="add-news-event">追加</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="ea-step4-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="ea-step4-next">次へ →</button>
+                </div>
+            </div>
+            <!-- //END H-060 -->
+<!-- ============================================================ -->
+<!-- [H-070] Step 5: 通知・出力設定                                -->
+<!-- ============================================================ -->
+<div class="step-section hidden" id="ea-step-5">
+  <h2 class="stage-title">Step 5: 出力・通知設定</h2>
+
+  <!-- EA基本パラメータ (form-card) -->
+  <div class="form-card">
+    <h3>⚙️ EA基本設定</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">EA名</label>
+        <input type="text" id="input-ea-name" class="form-input" value="MyEA" placeholder="EA名を入力">
+      </div>
+      <div class="form-group">
+        <label class="form-label">マジックナンバー</label>
+        <input type="number" id="input-magic-number" class="form-input" value="12345" min="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ロットサイズ</label>
+        <input type="number" id="input-lot-size" class="form-input" value="0.01" min="0.01" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">リスク (%) <span class="form-hint-inline">0 = 固定ロット</span></label>
+        <input type="number" id="input-risk-percent" class="form-input" value="0" min="0" step="0.1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">スリッページ (pips)</label>
+        <input type="number" id="input-slippage" class="form-input" value="3" min="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">プラットフォーム</label>
+      <div class="position-mode-grid">
+        <label class="mode-option">
+          <input type="radio" name="platform-select" id="platform-mt4" value="mt4">
+          <div class="mode-card">
+            <span class="mode-icon">4️⃣</span>
+            <span class="mode-title">MetaTrader 4</span>
+            <span class="mode-desc">.mq4 形式で出力</span>
+          </div>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="platform-select" id="platform-mt5" value="mt5" checked>
+          <div class="mode-card">
+            <span class="mode-icon">5️⃣</span>
+            <span class="mode-title">MetaTrader 5</span>
+            <span class="mode-desc">.mq5 形式で出力（推奨）</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 通知トグルカード -->
+  <div class="toggle-card-grid">
+
+    <!-- Discord Webhook -->
+    <div class="toggle-card" id="card-discord" data-target="chk-discord-webhook" style="grid-column: 1 / -1;">
+      <input type="checkbox" id="chk-discord-webhook" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">📡</div>
+        <div class="toggle-card-title">Discord Webhook通知</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">取引結果をDiscordチャンネルに自動通知</div>
+      <div class="toggle-card-settings" id="discord-panel">
+        <div class="form-group">
+          <label>Webhook URL</label>
+          <input type="text" id="input-discord-url" class="form-input"
+                 placeholder="https://discord.com/api/webhooks/...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">通知タイミング:</label>
+          <div class="alert-options">
+            <label class="checkbox-label"><input type="checkbox" id="chk-discord-entry" checked><span>エントリー時</span></label>
+            <label class="checkbox-label"><input type="checkbox" id="chk-discord-close" checked><span>決済時</span></label>
+            <label class="checkbox-label"><input type="checkbox" id="chk-discord-error"><span>エラー時</span></label>
+            <label class="checkbox-label"><input type="checkbox" id="chk-discord-daily"><span>日次サマリー</span></label>
+          </div>
+        </div>
+        <p class="form-hint">
+          ※ MT4/MT5の「ツール→オプション→エキスパートアドバイザ」で
+          「WebRequestを許可するURL」に <code>https://discord.com</code> を追加してください。
+        </p>
+      </div>
+    </div>
+
+    <!-- アラート: ポップアップ -->
+    <div class="toggle-card" id="card-alert-popup" data-target="chk-alert-popup">
+      <input type="checkbox" id="chk-alert-popup" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">💬</div>
+        <div class="toggle-card-title">ポップアップ</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">MT4/MT5のAlert()で画面に通知</div>
+    </div>
+
+    <!-- アラート: サウンド -->
+    <div class="toggle-card" id="card-alert-sound" data-target="chk-alert-sound">
+      <input type="checkbox" id="chk-alert-sound" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">🔊</div>
+        <div class="toggle-card-title">サウンド</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">音声ファイルを再生して通知</div>
+      <div class="toggle-card-settings" id="alert-sound-panel">
+        <div class="form-group">
+          <label>サウンドファイル</label>
+          <input type="text" id="input-alert-sound-file" class="form-input" value="alert.wav">
+        </div>
+      </div>
+    </div>
+
+    <!-- アラート: メール -->
+    <div class="toggle-card" id="card-alert-email" data-target="chk-alert-email">
+      <input type="checkbox" id="chk-alert-email" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">📧</div>
+        <div class="toggle-card-title">メール通知</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">SendMail()でメール送信</div>
+    </div>
+
+    <!-- アラート: プッシュ -->
+    <div class="toggle-card" id="card-alert-push" data-target="chk-alert-push">
+      <input type="checkbox" id="chk-alert-push" style="display:none">
+      <div class="toggle-card-header">
+        <div class="toggle-card-icon">📱</div>
+        <div class="toggle-card-title">プッシュ通知</div>
+        <div class="toggle-card-status">✓</div>
+      </div>
+      <div class="toggle-card-desc">スマートフォンにプッシュ通知</div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" id="ea-step5-prev">← 戻る</button>
+    <button class="btn btn-primary" id="ea-step5-next">次へ →</button>
+  </div>
+</div>
+<!-- [END H-070] -->
+
+            <!-- ==================== H-080: EA Step 6 (コード生成) ==================== -->
+            <div class="step-section hidden" id="ea-step-6">
+                <h2 class="stage-title">Step 6: コード生成</h2>
+                
+                <div class="code-actions">
+                    <button class="btn btn-primary" id="generate-code">🔧 コード生成</button>
+                    <button class="btn btn-secondary" id="check-code">✅ エラーチェック</button>
+                    <button class="btn btn-secondary" id="copy-code">📋 コピー</button>
+                    <button class="btn btn-secondary" id="download-code">💾 ダウンロード</button>
+                </div>
+
+                <div class="code-actions">
+                    <button class="btn btn-secondary" id="save-settings">💾 設定を保存</button>
+                    <button class="btn btn-secondary" id="load-settings">📂 設定を読込</button>
+                    <button class="btn btn-accent" id="add-to-gallery" style="background: var(--accent-primary); border-color: var(--accent-primary); color: white;">✨ ギャラリーに保存</button>
+                </div>
+
+                <div id="error-check-section" class="error-check-section hidden">
+                    <h4>⚠️ エラー・警告</h4>
+                    <div id="error-list" class="error-list"></div>
+                </div>
+
+                <div id="success-check-section" class="success-check-section hidden">
+                    <h4>✅ チェック完了</h4>
+                    <p>エラーは見つかりませんでした。</p>
+                </div>
+
+                <div class="form-card" id="security-settings">
+                    <h3>🛡️ 配布用セキュリティ設定</h3>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="use-account-lock">
+                                <span class="slider"></span>
+                                <span class="label-text">口座番号認証</span>
+                            </label>
+                            <input type="text" id="lock-account-id" class="form-input mt-2" placeholder="認証する口座番号" style="display:none">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="use-expiry-lock">
+                                <span class="slider"></span>
+                                <span class="label-text">有効期限制限</span>
+                            </label>
+                            <input type="date" id="lock-expiry-date" class="form-input mt-2" style="display:none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-preview">
+                    <pre><code id="generated-code">// ここにコードが生成されます
+// Step 1〜5 を設定してから「コード生成」をクリックしてください</code></pre>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="ea-step6-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="ea-step6-next">次へ（テスト） →</button>
+                </div>
+            </div>
+            <!-- //END H-080 -->
+
+            <!-- ==================== H-085: EA Step 7 (バックテスト) ==================== -->
+            <div class="step-section hidden" id="ea-step-7">
+                <h2 class="stage-title">Step 7: バックテスト・MT連携</h2>
+                
+                <div class="tabs-header mb-4">
+                    <button class="tab-btn active" data-tab="mt-tab" id="mt-integration-tab-btn">🔄 MT4/MT5 連携</button>
+                    <button class="tab-btn" data-tab="internal-backtest">📊 内蔵バックテスト (CSV)</button>
+                </div>
+
+                <!-- MT4/MT5 連携（メイン） -->
+                <!-- ※ mt-tab は下に定義、先にHTML上に登場するinternal-backtestをhiddenにする -->
+
+                <!-- 内蔵バックテスト（サブ） -->
+                <div id="internal-backtest" class="tab-content hidden">
+                    <div class="history-section mb-4" id="backtest-history-area" style="display:none">
+                        <h4>🕒 最近のバックテスト履歴 (直近5件)</h4>
+                        <div id="backtest-history-list" class="history-list"></div>
+                    </div>
+                    
+                    <div class="form-card">
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="csv-tab">📁 CSVアップロード</button>
+                            <button class="tab-btn" data-tab="web-tab">🌐 Webから取得</button>
+                        </div>
+                        <div id="csv-tab" class="tab-content">
+                            <h3>📊 ヒストリカルデータの読込</h3>
+                            <div class="form-group">
+                                <div class="file-upload-area">
+                                    <label for="backtest-csv-upload" class="btn btn-secondary">CSVファイルをアップロード</label>
+                                    <input type="file" id="backtest-csv-upload" accept=".csv" style="display:none">
+                                    <p class="form-hint" id="csv-status">ファイルが選択されていません (形式: Time, Open, High, Low, Close, Volume)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ... web-tab ... -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>初期証拠金 (円)</label>
+                                <input type="number" id="backtest-deposit" class="form-input" value="1000000">
+                            </div>
+                            <div class="form-group">
+                                <label>スプレッド (pips)</label>
+                                <input type="number" id="backtest-spread" class="form-input" value="1.0" step="0.1">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-large" id="run-backtest">▶ バックテスト実行</button>
+                    </div>
+                </div>
+
+                <!-- MT4/MT5 連携（メイン・デフォルト表示） -->
+                <div id="mt-tab" class="tab-content">
+                    <div class="form-card">
+                        <h3>⚙️ MetaTrader 連携設定</h3>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>プラットフォーム</label>
+                                <select id="mt-platform" class="form-select">
+                                    <option value="mt5" selected>MetaTrader 5 (推奨)</option>
+                                    <option value="mt4">MetaTrader 4</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>通貨ペア</label>
+                                <select id="mt-symbol" class="form-select">
+                                    <optgroup label="メジャー通貨ペア">
+                                        <option value="USDJPY" selected>USD/JPY</option>
+                                        <option value="EURUSD">EUR/USD</option>
+                                        <option value="GBPUSD">GBP/USD</option>
+                                        <option value="AUDUSD">AUD/USD</option>
+                                        <option value="NZDUSD">NZD/USD</option>
+                                        <option value="USDCHF">USD/CHF</option>
+                                        <option value="USDCAD">USD/CAD</option>
+                                    </optgroup>
+                                    <optgroup label="クロス円">
+                                        <option value="EURJPY">EUR/JPY</option>
+                                        <option value="GBPJPY">GBP/JPY</option>
+                                        <option value="AUDJPY">AUD/JPY</option>
+                                        <option value="NZDJPY">NZD/JPY</option>
+                                        <option value="CHFJPY">CHF/JPY</option>
+                                        <option value="CADJPY">CAD/JPY</option>
+                                    </optgroup>
+                                    <optgroup label="クロス通貨">
+                                        <option value="EURGBP">EUR/GBP</option>
+                                        <option value="EURCAD">EUR/CAD</option>
+                                        <option value="EURCHF">EUR/CHF</option>
+                                        <option value="GBPCHF">GBP/CHF</option>
+                                        <option value="GBPCAD">GBP/CAD</option>
+                                        <option value="AUDCAD">AUD/CAD</option>
+                                        <option value="AUDNZD">AUD/NZD</option>
+                                    </optgroup>
+                                    <optgroup label="貴金属">
+                                        <option value="XAUUSD">XAU/USD (Gold)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>時間足</label>
+                                <select id="mt-period" class="form-select">
+                                    <option value="M1">1分足</option>
+                                    <option value="M5">5分足</option>
+                                    <option value="M15">15分足</option>
+                                    <option value="H1" selected>1時間足</option>
+                                    <option value="H4">4時間足</option>
+                                    <option value="D1">日足</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>モデル</label>
+                                <select id="mt-model" class="form-select">
+                                    <option value="0">全ティック</option>
+                                    <option value="1">コントローラポイント</option>
+                                    <option value="2">始値のみ</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>最適化を表示</label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="mt-optimization"> 有効
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>開始日</label>
+                                <input type="date" id="mt-from-date" class="form-input" value="2024-01-01">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>終了日</label>
+                                <input type="date" id="mt-to-date" class="form-input" value="2024-12-31">
+                            </div>
+                        </div>
+                        <!-- MT5セレクター（server.js起動時: 自動検出ドロップダウン） -->
+                        <div class="form-group mt-3" id="mt5-selector-container"></div>
+
+                        <!-- 従来の手動入力（server.js未起動時のフォールバック） -->
+                        <div id="mt5-manual-paths">
+                            <div class="form-group mt-3">
+                                <label class="form-label" style="color: var(--accent-primary); font-weight: bold;">MT5 データフォルダパス (任意)</label>
+                                <input type="text" id="mt-data-path" class="form-input" placeholder="例: C:\Users\User\AppData\Roaming\MetaQuotes\Terminal\B6A1...">
+                                <p class="form-hint">MQL5フォルダが含まれるフォルダを指定してください。</p>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label class="form-label" style="color: var(--accent-primary); font-weight: bold;">MT5 ターミナルパス (任意)</label>
+                                <input type="text" id="mt-terminal-path" class="form-input" placeholder="例: C:\Program Files\MetaTrader 5\terminal64.exe">
+                                <p class="form-hint">自動検知に失敗する場合、ターミナル実行ファイル (.exe) のフルパスを入力してください。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-actions mt-4 text-center">
+                            <h4 class="mb-3" style="color: var(--accent-success);">🚀 ワンボタン全自動テスト</h4>
+                            <p class="form-hint mb-3" style="font-size: 0.9em;">移動作業不要！これ1つでファイルの配置からMT5起動まで完了します。</p>
+                            <button id="run-one-click-mt5" class="btn btn-accent btn-lg" style="width:100%; font-size: 1.2em; padding: 20px; background: linear-gradient(135deg, #00b894, #00cec9); border: none; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);">⚡ ONE-CLICK バックテスト起動</button>
+                            
+                            <hr style="margin: 24px 0; border: 0; border-top: 1px dashed #2a3050;">
+                            
+                            <p class="form-hint mb-3" style="font-size: 0.9em;">（手動で配置したい場合）</p>
+                            <button id="generate-mt-package" class="btn btn-outline-secondary" style="width:100%;">📦 テスト用パッケージ一括ダウンロード</button>
+                        </div>
+                        <div id="mt-config-status" class="mt-2 text-center" style="font-weight: bold;"></div>
+                    </div>
+
+                    <!-- 使い方ガイド -->
+                    <div id="mt-guide-mt4" class="mt-guide-section mt-4 hidden">
+                        <div class="guide-card">
+                            <h4>📖 MT4 バックテスト手順</h4>
+                            <div class="guide-steps">
+                                <div class="guide-step">
+                                    <span class="step-num">1</span>
+                                    <p>生成された <strong>.mq4</strong> ファイルを MT4 の <code>MQL4/Experts</code> フォルダに保存します。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">2</span>
+                                    <p>メタエディターで開き、「コンパイル」を実行します。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num">3</span>
+                                    <p>ストラテジーテスターで EA を選択し、「エキスパート設定」→「読み込み」から <strong>.set</strong> ファイルを選択して開始します。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mt-guide-mt5" class="mt-guide-section mt-4">
+                        <div class="guide-card" style="border: 2px solid var(--accent-primary); background: rgba(108, 92, 231, 0.05);">
+                            <h4 style="color: var(--accent-primary);">⚠️ ダウンロード後の必須作業 (全自動テストの準備)</h4>
+                            <div class="guide-steps" style="margin-top: 15px;">
+                                <div class="guide-step">
+                                    <span class="step-num" style="background: var(--accent-primary);">1</span>
+                                    <p>ダウンロードされた4つのファイル（<strong>01～04で始まるファイル</strong>）をすべて選択します。</p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num" style="background: var(--accent-primary);">2</span>
+                                    <p><strong>ご自身のPCのMT5を開き、左上のメニューから「ファイル」＞「データフォルダを開く」をクリックします。</strong><br>
+                                    <span style="font-size: 0.85em; color: var(--text-muted);">開いたフォルダの中から <code>MQL5</code> → <code>Experts</code> フォルダへ進みます。</span></p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num" style="background: var(--accent-primary);">3</span>
+                                    <p><strong>開いた「Experts」フォルダの中に、先ほどの4つのファイルをドラッグ＆ドロップして移動（コピー）します。</strong></p>
+                                </div>
+                                <div class="guide-step">
+                                    <span class="step-num" style="background: var(--accent-success); color: white;">4</span>
+                                    <p>最後に、<strong>移動先（Expertsフォルダ内）にある <code>04_Start_Test_...bat</code> ファイルをダブルクリック</strong>してください。<br>自動でテストが開始されます！🚀</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons mt-4">
+                    <button class="btn btn-secondary" id="ea-step7-prev">← 戻る</button>
+                    <div></div>
+                </div>
+            </div>
+
+            <!-- ==================== H-090: EA Step 8 (ギャラリー) ==================== -->
+            <div class="step-section hidden" id="ea-step-8">
+                <h2 class="stage-title">Step 8: EAギャラリー</h2>
+                
+                <div class="gallery-info mb-4">
+                    <p>保存された戦略や公開されているコミュニティ戦略を閲覧できます。</p>
+                </div>
+
+                <div class="tabs-header mb-4">
+                    <button class="tab-btn active" data-tab="my-gallery-tab">🏠 マイライブラリ</button>
+                    <button class="tab-btn" data-tab="public-gallery-tab">🌍 パブリック共有</button>
+                </div>
+
+                <div id="my-gallery-tab" class="tab-content">
+                    <div id="my-ea-grid" class="gallery-grid">
+                        <p class="form-hint">保存された戦略がありません。「保存」ボタンからEAをギャラリーに追加してください。</p>
+                    </div>
+                </div>
+
+                <div id="public-gallery-tab" class="tab-content hidden">
+                    <div id="public-ea-grid" class="gallery-grid">
+                        <!-- Mock public EAs -->
+                        <div class="gallery-card">
+                            <div class="gallery-card-badge">TREND</div>
+                            <h4>Gold Scalper 2026</h4>
+                            <p class="gallery-meta">Author: EA-Master-X</p>
+                            <div class="gallery-stats">Win Rate: 72% / Profit: +120%</div>
+                            <button class="btn btn-accent btn-sm" onclick="loadPublicEA('gold_scalper')">設定をコピー</button>
+                        </div>
+                        <div class="gallery-card">
+                            <div class="gallery-card-badge">SCALP</div>
+                            <h4>USDJPY Night-Owl</h4>
+                            <p class="gallery-meta">Author: AlgoTrading_JP</p>
+                            <div class="gallery-stats">Win Rate: 85% / Profit: +45%</div>
+                            <button class="btn btn-accent btn-sm" onclick="loadPublicEA('night_owl')">設定をコピー</button>
+                        </div>
+                        <div class="gallery-card">
+                            <div class="gallery-card-badge">REVERSAL</div>
+                            <h4>RSI Divergence Pro</h4>
+                            <p class="gallery-meta">Author: CryptoQuant</p>
+                            <div class="gallery-stats">Win Rate: 64% / Profit: +210%</div>
+                            <button class="btn btn-accent btn-sm" onclick="loadPublicEA('rsi_div')">設定をコピー</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="ea-step8-prev">← 戻る</button>
+                </div>
+            </div>
+            <!-- //END H-090 -->
+        </div>
+        <!-- ==================== H-090: Indicator Flow (全Step) ==================== -->
+        <div id="indicator-flow" class="hidden">
+            <button class="back-home-btn" id="indi-back-home">← ホームに戻る</button>
+            
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">タイプ</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">条件</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">表示</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">アラート</div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">出力</div>
+                </div>
+            </div>
+
+            <div class="step-section" id="indi-step-1">
+                <h2 class="stage-title">Step 1: インジケータータイプ</h2>
+                <div class="form-group">
+                    <label class="form-label">タイプを選択</label>
+                    <div class="indicator-type-grid">
+                        <label class="type-option">
+                            <input type="radio" name="indicator-type" value="signal" checked>
+                            <div class="type-card">
+                                <span class="type-icon">🎯</span>
+                                <span class="type-title">シグナル</span>
+                                <span class="type-desc">矢印で売買サイン表示</span>
+                            </div>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="indicator-type" value="oscillator">
+                            <div class="type-card">
+                                <span class="type-icon">📈</span>
+                                <span class="type-title">オシレーター</span>
+                                <span class="type-desc">サブウィンドウに表示</span>
+                            </div>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="indicator-type" value="overlay">
+                            <div class="type-card">
+                                <span class="type-icon">📊</span>
+                                <span class="type-title">オーバーレイ</span>
+                                <span class="type-desc">チャート上に重ねて表示</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <div></div>
+                    <button class="btn btn-primary" id="indi-step1-next">次へ →</button>
+                </div>
+            </div>
+
+            <div class="step-section hidden" id="indi-step-2">
+                <h2 class="stage-title">Step 2: 表示条件</h2>
+                <div class="form-group">
+                    <label class="form-label">条件の組み合わせ</label>
+                    <select id="indi-condition-combine" class="form-select">
+                        <option value="and">AND（すべて満たす）</option>
+                        <option value="or">OR（いずれか満たす）</option>
+                    </select>
+                </div>
+                <div class="conditions-section">
+                    <div class="condition-panel">
+                        <h3 class="panel-title">🟢 Buyシグナル条件</h3>
+                        <div id="indi-buy-conditions-list" class="conditions-list"></div>
+                        <button class="btn btn-secondary add-condition-btn" id="indi-add-buy-condition">+ 条件を追加</button>
+                    </div>
+                    <div class="condition-panel">
+                        <h3 class="panel-title">🔴 Sellシグナル条件</h3>
+                        <div id="indi-sell-conditions-list" class="conditions-list"></div>
+                        <button class="btn btn-secondary add-condition-btn" id="indi-add-sell-condition">+ 条件を追加</button>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="indi-step2-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="indi-step2-next">次へ →</button>
+                </div>
+            </div>
+
+            <div class="step-section hidden" id="indi-step-3">
+                <h2 class="stage-title">Step 3: 表示設定</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">カラー1（Buy/上昇）</label>
+                        <input type="color" id="display-color1" class="form-input" value="#00FF00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">カラー2（Sell/下降）</label>
+                        <input type="color" id="display-color2" class="form-input" value="#FF0000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">線の太さ</label>
+                        <input type="number" id="display-width" class="form-input" value="2" min="1" max="5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">線のスタイル</label>
+                        <select id="display-style" class="form-select">
+                            <option value="solid">実線</option>
+                            <option value="dash">破線</option>
+                            <option value="dot">点線</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="indi-step3-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="indi-step3-next">次へ →</button>
+                </div>
+            </div>
+
+            <div class="step-section hidden" id="indi-step-4">
+                <h2 class="stage-title">Step 4: アラート設定</h2>
+                <div class="form-group">
+                    <label class="form-label">アラート方法</label>
+                    <div class="alert-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="indi-alert-popup" checked>
+                            <span>ポップアップ</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="indi-alert-sound">
+                            <span>サウンド</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="indi-alert-push">
+                            <span>プッシュ通知</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="indi-alert-email">
+                            <span>メール</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="indi-step4-prev">← 戻る</button>
+                    <button class="btn btn-primary" id="indi-step4-next">次へ →</button>
+                </div>
+            </div>
+
+            <div class="step-section hidden" id="indi-step-5">
+                <h2 class="stage-title">Step 5: 出力</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">インジケーター名</label>
+                        <input type="text" id="indicator-name" class="form-input" value="MyIndicator">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">プラットフォーム</label>
+                        <select id="indi-platform" class="form-select">
+                            <option value="mt4">MT4</option>
+                            <option value="mt5">MT5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="code-actions">
+                    <button class="btn btn-primary" id="indi-generate-code">🔧 コード生成</button>
+                    <button class="btn btn-secondary" id="indi-copy-code">📋 コピー</button>
+                    <button class="btn btn-secondary" id="indi-download-code">💾 ダウンロード</button>
+                </div>
+                <div class="code-preview">
+                    <pre><code id="indi-generated-code">// ここにコードが生成されます</code></pre>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="indi-step5-prev">← 戻る</button>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <!-- //END H-090 -->
+
+        <!-- ==================== H-100: Condition Wizard Modal ==================== -->
+        <div id="wizard-modal" class="modal hidden">
+            <div class="modal-content wizard-modal">
+                <div class="wizard-header">
+                    <h3 id="wizard-title">条件を追加</h3>
+                    <button class="modal-close" id="wizard-close">&times;</button>
+                </div>
+                
+                <div class="wizard-progress">
+                    <div class="wizard-step active" data-step="1">カテゴリ</div>
+                    <div class="wizard-step" data-step="2">詳細</div>
+                    <div class="wizard-step" data-step="3">条件</div>
+                    <div class="wizard-step" data-step="4">値</div>
+                    <div class="wizard-step" data-step="5">確認</div>
+                </div>
+
+                <div id="wizard-body" class="wizard-content">
+                    <!-- app.js の renderWizardStep1〜5 がここに動的描画 -->
+                </div>
+
+                <div class="wizard-nav">
+                    <button class="btn btn-secondary" id="wizard-back-btn" style="display:none;">← 戻る</button>
+                    <button class="btn btn-primary" id="wizard-next-btn" style="display:none;">次へ →</button>
+                    <button class="btn btn-primary" id="wizard-confirm-btn" style="display:none;">✓ 確定</button>
+                </div>
+            </div>
+        </div>
+        <!-- //END H-100 -->
+  
+
+        <!-- ==================== H-110: Help Modal + Toast + Footer ==================== -->
+        <div id="help-modal" class="modal">
+            <div class="modal-content help-modal">
+                <div class="modal-header">
+                    <h3>❓ 使い方</h3>
+                    <button class="modal-close" id="help-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <h4>🤖 EA作成の流れ</h4>
+                        <p><strong>Step 1:</strong> ポジション管理 - 単一/複数ポジション、戦略選択</p>
+                        <p><strong>Step 2:</strong> エントリー条件 - Buy/Sellの条件を設定</p>
+                        <p><strong>Step 3:</strong> 決済ルール - TP/SL、トレーリング等</p>
+                        <p><strong>Step 4:</strong> フィルター - パーフェクトオーダー、ADX等</p>
+                        <p><strong>Step 5:</strong> 出力設定 - EA名、ロット、プラットフォーム</p>
+                        <p><strong>Step 6:</strong> コード生成 - 生成してダウンロード</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>📊 エントリー条件のカテゴリ</h4>
+                        <p><strong>インジケーター:</strong> MA、RSI、MACD、ボリンジャーバンド等</p>
+                        <p><strong>ローソク足:</strong> 陽線、陰線、十字線、包み足等</p>
+                        <p><strong>パターン:</strong> ダブルトップ、ヘッドアンドショルダー等</p>
+                        <p><strong>価格:</strong> 特定価格のブレイク、MA比較等</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>📈 ポジション戦略</h4>
+                        <p><strong>ナンピン:</strong> 逆行時に追加エントリー（平均取得単価を下げる）</p>
+                        <p><strong>マーチンゲール:</strong> 損失時にロットを倍増</p>
+                        <p><strong>ピラミッディング:</strong> 順行時に追加エントリー（利益拡大）</p>
+                        <p><strong>グリッド:</strong> 一定間隔で逆張りエントリー</p>
+                        <p><strong>逆グリッド:</strong> 一定間隔で順張りエントリー</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>🔄 グリッドリセット条件</h4>
+                        <p><strong>pips距離:</strong> 基準価格から指定pips離れたらリセット</p>
+                        <p><strong>ATR倍率:</strong> ATR×倍率の距離でリセット</p>
+                        <p><strong>片側完了:</strong> Buy/Sellどちらかが上限に達したらリセット</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>🛑 マジック指値停止</h4>
+                        <p>特定の価格（例: 123456789）で指値注文を入れておくと、その注文が存在する間EAが停止します。外出先からスマホで指値を入れることでEAを緊急停止できます。</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>💡 インストール方法</h4>
+                        <p><strong>MT4:</strong> ダウンロードした.mq4ファイルをMQL4/Expertsフォルダに配置し、コンパイル</p>
+                        <p><strong>MT5:</strong> ダウンロードした.mq5ファイルをMQL5/Expertsフォルダに配置し、コンパイル</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>⚠️ 注意事項</h4>
+                        <p>・生成されたコードは必ずデモ口座でテストしてください</p>
+                        <p>・マーチンゲール・ナンピンは大きなリスクを伴います</p>
+                        <p>・バックテスト・フォワードテストを十分に行ってください</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== H-120: Backtest Report Modal ==================== -->
+        <div id="backtest-report-modal" class="modal">
+            <div class="modal-content report-modal">
+                <div class="modal-header">
+                    <h3>📊 バックテスト詳細レポート</h3>
+                    <button class="modal-close" id="report-close" onclick="window.hideBacktestReport()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="report-summary-grid">
+                        <div class="report-stat-card">
+                            <span class="stat-label">純利益</span>
+                            <span id="report-profit" class="stat-value">0</span>
+                        </div>
+                        <div class="report-stat-card">
+                            <span class="stat-label">勝率</span>
+                            <span id="report-winrate" class="stat-value">0%</span>
+                        </div>
+                        <div class="report-stat-card">
+                            <span class="stat-label">プロフィットファクター</span>
+                            <span id="report-pf" class="stat-value">0.00</span>
+                        </div>
+                        <div class="report-stat-card">
+                            <span class="stat-label">ドローダウン</span>
+                            <span id="report-drawdown" class="stat-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="report-chart-container">
+                        <canvas id="balance-chart"></canvas>
+                    </div>
+
+                    <div class="report-history-container">
+                        <h4>📜 トレード履歴</h4>
+                        <div class="table-scroll">
+                            <table class="trade-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>日時</th>
+                                        <th>タイプ</th>
+                                        <th>価格</th>
+                                        <th>ロット</th>
+                                        <th>損益</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-history-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast-container" class="toast-container"></div>
+        <input type="file" id="settings-file-input" accept=".json" class="hidden">
+        <!-- ==================== H-130: Logic Map Sidebar ==================== -->
+        <button id="logic-sidebar-toggle" class="logic-sidebar-toggle">
+            <span class="toggle-icon">🗺️</span>
+            <span class="toggle-text">Logic Map</span>
+        </button>
+
+        <div id="logic-sidebar" class="logic-sidebar">
+            <div class="sidebar-header">
+                <h3>🗺️ ロジックマップ</h3>
+                <button id="logic-sidebar-close" class="sidebar-close">&times;</button>
+            </div>
+            <div class="sidebar-content">
+                <div id="logic-map-container" class="logic-map-container">
+                    <p class="empty-msg">条件を設定するとマップが生成されます</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //END H-110 -->
+
+    <script src="generator.js?v=202604081154"></script>
+    <script src="app.js?v=202604081154"></script>
+    <script src="mt5-selector.js?v=202604091905"></script>
+    <!-- 体験版制限オーバーライド（必ず app.js の後に読み込む） -->
+    <script src="trial_override.js?v=202604110001"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
