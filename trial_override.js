@@ -273,8 +273,6 @@
     banner.innerHTML = `
       🎯 体験版モード &nbsp;|&nbsp;
       <span>テンプレート1種・一部ステップは閲覧のみ</span>
-      &nbsp;|&nbsp;
-      <a href="#" onclick="sessionStorage.removeItem('jim_ea_labo_auth'); location.href='index.html'; return false;" style="color:#ff9d6f; text-decoration:underline; font-size:0.8rem;">製品版はこちら →</a>
     `;
     header.appendChild(banner);
   }
