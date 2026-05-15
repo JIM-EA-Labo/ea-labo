@@ -115,6 +115,9 @@ const eaState = {
   // --- 決済基本 ---
   takeProfit: 0,
   stopLoss: 0,
+  takeProfitPct: 0,
+  stopLossPct: 0,
+  multiPositionCloseMode: 'individual',
   useTrailing: false,
   trailingStart: 20,
   trailingWidth: 15,
@@ -1023,6 +1026,32 @@ function setupStep3() {
     });
   }
 
+  const tpPctInput = document.getElementById('take-profit-pct');
+  if (tpPctInput) {
+    tpPctInput.value = eaState.takeProfitPct;
+    tpPctInput.addEventListener('change', (e) => {
+      eaState.takeProfitPct = parseFloat(e.target.value) || 0;
+      updateExitPriorityList();
+    });
+  }
+
+  const slPctInput = document.getElementById('stop-loss-pct');
+  if (slPctInput) {
+    slPctInput.value = eaState.stopLossPct;
+    slPctInput.addEventListener('change', (e) => {
+      eaState.stopLossPct = parseFloat(e.target.value) || 0;
+      updateExitPriorityList();
+    });
+  }
+
+  const closeModeSelect = document.getElementById('multi-position-close-mode');
+  if (closeModeSelect) {
+    closeModeSelect.value = eaState.multiPositionCloseMode;
+    closeModeSelect.addEventListener('change', (e) => {
+      eaState.multiPositionCloseMode = e.target.value;
+    });
+  }
+
   // --- Trailing Stop ---
   const trailingCheck = document.getElementById('use-trailing');
   if (trailingCheck) {
@@ -1586,6 +1615,9 @@ function applyStateToUI() {
   // --- Step 3: 決済設定 ---
   setVal('take-profit', eaState.takeProfit);
   setVal('stop-loss', eaState.stopLoss);
+  setVal('take-profit-pct', eaState.takeProfitPct || 0);
+  setVal('stop-loss-pct', eaState.stopLossPct || 0);
+  setVal('multi-position-close-mode', eaState.multiPositionCloseMode || 'individual');
 
   setChk('use-trailing', eaState.useTrailing);
   togglePanel('trailing-panel', eaState.useTrailing);
@@ -2287,6 +2319,7 @@ function getIndicatorConditions(indicator) {
       return [
         { id: 'deviation_above', label: '価格がMAより上に乖離している（上乖離）' },
         { id: 'deviation_below', label: '価格がMAより下に乖離している（下乖離）' },
+        { id: 'within_range',    label: '価格がMAから±指定値以内（近接フィルター）' },
         { id: 'deviation_cross_up', label: '上乖離が発生した（乖離率を上抜け）' },
         { id: 'deviation_cross_down', label: '下乖離が発生した（乖離率を下抜け）' },
         { id: 'deviation_return', label: '乖離から戻った（乖離率が縮小）' }
@@ -2544,7 +2577,14 @@ function getRequiredParams(category, indicator, conditionType) {
         break;
       case 'ma_deviation':
         params.push({ id: 'ma_period', label: 'MA期間', type: 'number', default: 20 });
-        params.push({ id: 'deviation_pips', label: '乖離pips', type: 'number', default: 30 });
+        params.push({
+          id: 'deviation_unit', label: '単位', type: 'select', default: 'pips',
+          options: [
+            { value: 'pips', label: 'pips' },
+            { value: 'percent', label: '% (価格比)' }
+          ]
+        });
+        params.push({ id: 'deviation_pips', label: '乖離値 (pipsまたは%)', type: 'number', default: 30, step: '0.01', min: 0 });
         params.push({
           id: 'ma_method', label: 'MA種別', type: 'select', default: '0',
           options: [
@@ -3049,6 +3089,7 @@ function saveWizardCondition() {
   if (rawDetail.ma_period !== undefined) detail.period = rawDetail.ma_period;
   if (rawDetail.deviation_pips !== undefined) { detail.threshold = rawDetail.deviation_pips; detail.limit = rawDetail.deviation_pips; }
   if (rawDetail.ma_method !== undefined) detail.method = rawDetail.ma_method;
+  if (rawDetail.deviation_unit !== undefined) detail.unit = rawDetail.deviation_unit;
 
   // Round Numbers
   if (rawDetail.round_dist !== undefined) detail.distance = rawDetail.round_dist;

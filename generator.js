@@ -94,6 +94,8 @@ CTrade trade;
     code += `extern double LotSize        = ${state.lotSize || 0.01};\n`;
     code += `extern int    TakeProfit     = ${state.takeProfit || 0};\n`;
     code += `extern int    StopLoss       = ${state.stopLoss || 0};\n`;
+    if (state.takeProfitPct > 0) code += `extern double TakeProfitPct  = ${state.takeProfitPct}; // 利確% (0=無効、pipsより優先)\n`;
+    if (state.stopLossPct > 0)   code += `extern double StopLossPct    = ${state.stopLossPct}; // 損切り% (0=無効、pipsより優先)\n`;
     code += `extern int    Slippage       = ${state.slippage || 3};\n`;
 
         if (state.useTrailing) {
@@ -133,6 +135,7 @@ CTrade trade;
       const p = state.positionParams || {};
       code += `extern int    GridInterval   = ${p.gridInterval || 20};\n`;
       code += `extern int    GridCount      = ${p.gridCount || 5};\n`;
+      if ((p.gridResetPips || 0) > 0) code += `extern int    GridResetPips  = ${p.gridResetPips}; // グリッドリセット距離(pips)\n`;
     }
 
     if (state.riskPercent > 0) {
@@ -174,6 +177,8 @@ CTrade trade;
     code += `input double LotSize        = ${state.lotSize || 0.01};\n`;
     code += `input int    TakeProfit     = ${state.takeProfit || 0};\n`;
     code += `input int    StopLoss       = ${state.stopLoss || 0};\n`;
+    if (state.takeProfitPct > 0) code += `input double TakeProfitPct  = ${state.takeProfitPct}; // 利確% (0=無効、pipsより優先)\n`;
+    if (state.stopLossPct > 0)   code += `input double StopLossPct    = ${state.stopLossPct}; // 損切り% (0=無効、pipsより優先)\n`;
     code += `input int    Slippage       = ${state.slippage || 3};\n`;
 
         if (state.useTrailing) {
@@ -212,6 +217,7 @@ CTrade trade;
       const p = state.positionParams || {};
       code += `input int    GridInterval   = ${p.gridInterval || 20};\n`;
       code += `input int    GridCount      = ${p.gridCount || 5};\n`;
+      if ((p.gridResetPips || 0) > 0) code += `input int    GridResetPips  = ${p.gridResetPips}; // グリッドリセット距離(pips)\n`;
     }
 
     if (state.riskPercent > 0) {
@@ -475,12 +481,27 @@ CTrade trade;
             if (isBuy) code += `   return (m1[0] > m2[0] && m2[0] > m3[0] && m3[0] > m4[0]);\n`;
             else       code += `   return (m1[0] < m2[0] && m2[0] < m3[0] && m3[0] < m4[0]);\n`;
             break;
-          case 'ma_deviation':
+          case 'ma_deviation': {
+            const maDevUnit = params.unit || 'pips';
+            const maDevThresh = params.threshold || params.limit || 10;
+            const maDevCond = type || c.conditionType || params.conditionType || '';
             code += `   if(CopyBuffer(${handleName}, 0, ${shift}, 1, buffer0) < 1) return false;\n`;
             code += `   double closeV = iClose(Symbol(), (ENUM_TIMEFRAMES)${c.condTimeframe || 0}, ${shift});\n`;
-            if (isBuy) code += `   return ((closeV - buffer0[0]) / _Point >= ${params.limit || 10} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
-            else       code += `   return ((buffer0[0] - closeV) / _Point >= ${params.limit || 10} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
+            if (maDevCond === 'within_range') {
+              if (maDevUnit === 'percent') {
+                code += `   return (MathAbs(closeV - buffer0[0]) / buffer0[0] * 100.0 <= ${maDevThresh});\n`;
+              } else {
+                code += `   return (MathAbs(closeV - buffer0[0]) / _Point * (_Digits == 3 || _Digits == 5 ? 0.1 : 1) <= ${maDevThresh});\n`;
+              }
+            } else if (maDevUnit === 'percent') {
+              if (isBuy) code += `   return ((closeV - buffer0[0]) / buffer0[0] * 100.0 >= ${maDevThresh});\n`;
+              else       code += `   return ((buffer0[0] - closeV) / buffer0[0] * 100.0 >= ${maDevThresh});\n`;
+            } else {
+              if (isBuy) code += `   return ((closeV - buffer0[0]) / _Point >= ${maDevThresh} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
+              else       code += `   return ((buffer0[0] - closeV) / _Point >= ${maDevThresh} * (_Digits == 3 || _Digits == 5 ? 10 : 1));\n`;
+            }
             break;
+          }
           case 'heiken_ashi':
             code += `   if(CopyBuffer(${handleName}, 0, ${shift}, 2, buffer0) < 2) return false;\n`;
             code += `   if(CopyBuffer(${handleName}, 3, ${shift}, 2, buffer1) < 2) return false;\n`;
@@ -720,9 +741,14 @@ CTrade trade;
     }
 
     // Open Buy
+    const avgCloseMode4 = (state.multiPositionCloseMode === 'average');
     code += '      double sl = 0, tp = 0;\n';
-    code += '      if(StopLoss > 0)   sl = Ask - StopLoss * PipPoint;\n';
-    code += '      if(TakeProfit > 0)  tp = Ask + TakeProfit * PipPoint;\n';
+    if (!avgCloseMode4) {
+      code += '      if(StopLoss > 0)   sl = Ask - StopLoss * PipPoint;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)  sl = Ask * (1.0 - StopLossPct / 100.0);\n';
+      code += '      if(TakeProfit > 0)  tp = Ask + TakeProfit * PipPoint;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) tp = Ask * (1.0 + TakeProfitPct / 100.0);\n';
+    }
     code += '      int ticket = OrderSend(Symbol(), OP_BUY, lot, Ask, Slippage, sl, tp, "' + (state.eaName || 'MyEA') + '", MagicNumber, 0, clrBlue);\n';
     code += '      if(ticket < 0) Print("Buy OrderSend error: ", GetLastError());\n';
 
@@ -750,8 +776,12 @@ CTrade trade;
     }
 
     code += '      double sl2 = 0, tp2 = 0;\n';
-    code += '      if(StopLoss > 0)   sl2 = Bid + StopLoss * PipPoint;\n';
-    code += '      if(TakeProfit > 0)  tp2 = Bid - TakeProfit * PipPoint;\n';
+    if (!avgCloseMode4) {
+      code += '      if(StopLoss > 0)   sl2 = Bid + StopLoss * PipPoint;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)  sl2 = Bid * (1.0 + StopLossPct / 100.0);\n';
+      code += '      if(TakeProfit > 0)  tp2 = Bid - TakeProfit * PipPoint;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) tp2 = Bid * (1.0 - TakeProfitPct / 100.0);\n';
+    }
     code += '      int ticket2 = OrderSend(Symbol(), OP_SELL, lot2, Bid, Slippage, sl2, tp2, "' + (state.eaName || 'MyEA') + '", MagicNumber, 0, clrRed);\n';
     code += '      if(ticket2 < 0) Print("Sell OrderSend error: ", GetLastError());\n';
 
@@ -774,6 +804,10 @@ CTrade trade;
     if (state.strategies && state.strategies.includes('grid')) {
       code += '\n   //--- グリッドチェック ---\n';
       code += '   CheckGrid();\n';
+    }
+    if (state.multiPositionCloseMode === 'average' && (state.takeProfit > 0 || state.takeProfitPct > 0 || state.stopLoss > 0 || state.stopLossPct > 0)) {
+      code += '\n   //--- 平均建値決済チェック ---\n';
+      code += '   CheckAverageClose();\n';
     }
 
     code += '}\n\n';
@@ -937,12 +971,17 @@ CTrade trade;
       code += '   if(buySignal && buyCount == 0) {\n';
     }
 
+    const avgCloseMode5 = (state.multiPositionCloseMode === 'average');
     code += '      double lot = LotSize;\n';
     code += '      double ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);\n';
     code += '      double sl = 0, tp = 0;\n';
     code += '      double pipPt = SymbolInfoDouble(Symbol(), SYMBOL_POINT) * (_Digits == 3 || _Digits == 5 ? 10 : 1);\n';
-    code += '      if(StopLoss > 0)   sl = ask - StopLoss * pipPt;\n';
-    code += '      if(TakeProfit > 0)  tp = ask + TakeProfit * pipPt;\n';
+    if (!avgCloseMode5) {
+      code += '      if(StopLoss > 0)   sl = ask - StopLoss * pipPt;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)  sl = ask * (1.0 - StopLossPct / 100.0);\n';
+      code += '      if(TakeProfit > 0)  tp = ask + TakeProfit * pipPt;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) tp = ask * (1.0 + TakeProfitPct / 100.0);\n';
+    }
     code += '      trade.Buy(lot, Symbol(), ask, sl, tp, "' + (state.eaName || 'MyEA') + '");\n';
     code += '   }\n\n';
 
@@ -956,8 +995,12 @@ CTrade trade;
     code += '      double bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);\n';
     code += '      double sl2 = 0, tp2 = 0;\n';
     code += '      double pipPt2 = SymbolInfoDouble(Symbol(), SYMBOL_POINT) * (_Digits == 3 || _Digits == 5 ? 10 : 1);\n';
-    code += '      if(StopLoss > 0)   sl2 = bid + StopLoss * pipPt2;\n';
-    code += '      if(TakeProfit > 0)  tp2 = bid - TakeProfit * pipPt2;\n';
+    if (!avgCloseMode5) {
+      code += '      if(StopLoss > 0)   sl2 = bid + StopLoss * pipPt2;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)  sl2 = bid * (1.0 + StopLossPct / 100.0);\n';
+      code += '      if(TakeProfit > 0)  tp2 = bid - TakeProfit * pipPt2;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) tp2 = bid * (1.0 - TakeProfitPct / 100.0);\n';
+    }
     code += '      trade.Sell(lot2, Symbol(), bid, sl2, tp2, "' + (state.eaName || 'MyEA') + '");\n';
     code += '   }\n';
 
@@ -974,6 +1017,10 @@ CTrade trade;
     if (state.strategies && state.strategies.includes('grid')) {
       code += '\n   //--- Grid check\n';
       code += '   CheckGrid();\n';
+    }
+    if (state.multiPositionCloseMode === 'average' && (state.takeProfit > 0 || state.takeProfitPct > 0 || state.stopLoss > 0 || state.stopLossPct > 0)) {
+      code += '\n   //--- Average price close check\n';
+      code += '   CheckAverageClose();\n';
     }
 
     // Auto close by profit/loss
@@ -1217,12 +1264,22 @@ CTrade trade;
 
       case 'ma_deviation': {
         const period = detail.period || 20;
-        const limit = detail.limitPips || 10;
+        const limit = detail.limitPips || detail.threshold || 10;
         const method = detail.method || 'MODE_SMA';
+        const unit = detail.unit || 'pips';
+        const condType = detail.conditionType || detail.type || '';
         if (platform === 'mt4') {
           const ma = `iMA(Symbol(),Period(),${period},0,${method},PRICE_CLOSE,${shift})`;
           const close = this._close(shift);
-          if (detail.conditionType === 'above_limit' || isBuy) return `((${close} - ${ma}) / Point >= ${limit})`;
+          if (condType === 'within_range') {
+            if (unit === 'percent') return `(MathAbs(${close} - ${ma}) / ${ma} * 100.0 <= ${limit})`;
+            else return `(MathAbs(${close} - ${ma}) / Point / 10.0 <= ${limit})`;
+          }
+          if (unit === 'percent') {
+            if (condType === 'above_limit' || isBuy) return `((${close} - ${ma}) / ${ma} * 100.0 >= ${limit})`;
+            else return `((${ma} - ${close}) / ${ma} * 100.0 >= ${limit})`;
+          }
+          if (condType === 'above_limit' || isBuy) return `((${close} - ${ma}) / Point >= ${limit})`;
           else return `((${ma} - ${close}) / Point >= ${limit})`;
         } else {
           return isBuy ? `CheckMADeviation_Buy_${idx}()` : `CheckMADeviation_Sell_${idx}()`;
@@ -1518,12 +1575,23 @@ CTrade trade;
         const thresh = detail.threshold || 30;
         const m = detail.method || 0;
         const cond = detail.type || detail.conditionType;
+        const unit2 = detail.unit || 'pips';
         if (platform === 'mt4') {
           const ma = `iMA(Symbol(),Period(),${period},0,${m},PRICE_CLOSE,${shift})`;
           const close = this._close(shift);
+          if (cond === 'within_range') {
+            if (unit2 === 'percent') return `(MathAbs(${close} - ${ma}) / ${ma} * 100.0 <= ${thresh})`;
+            return `(MathAbs(${close} - ${ma}) / Point / 10.0 <= ${thresh})`;
+          }
+          if (unit2 === 'percent') {
+            if (cond === 'deviation_above' || cond === 'above_pips') return `((${close} - ${ma}) / ${ma} * 100.0 >= ${thresh})`;
+            if (cond === 'deviation_below' || cond === 'below_pips') return `((${ma} - ${close}) / ${ma} * 100.0 >= ${thresh})`;
+            return isBuy ? `((${close} - ${ma}) / ${ma} * 100.0 >= ${thresh})` : `((${ma} - ${close}) / ${ma} * 100.0 >= ${thresh})`;
+          }
           const dev = `((${close} - ${ma}) / Point / 10.0)`;
-          if (cond === 'above_pips') return `(${dev} > ${thresh})`;
-          if (cond === 'below_pips') return `(${dev} < -${thresh})`;
+          if (cond === 'above_pips' || cond === 'deviation_above') return `(${dev} > ${thresh})`;
+          if (cond === 'below_pips' || cond === 'deviation_below') return `(${dev} < -${thresh})`;
+          return isBuy ? `(${dev} > ${thresh})` : `(${dev} < -${thresh})`;
         } else {
           return isBuy ? `CheckMADev_Buy_${idx}()` : `CheckMADev_Sell_${idx}()`;
         }
@@ -1887,19 +1955,61 @@ CTrade trade;
     // Grid
     if (state.strategies && state.strategies.includes('grid')) {
       const p = state.positionParams || {};
+      const gridResetPips4 = p.gridResetPips || 0;
+      const avgClose4 = (state.multiPositionCloseMode === 'average');
       code += '//+------------------------------------------------------------------+\n';
       code += '//| Grid Trading                                                      |\n';
       code += '//+------------------------------------------------------------------+\n';
       code += 'void CheckGrid()\n{\n';
       code += '   int buyCount = CountOrders(OP_BUY);\n';
       code += '   int sellCount = CountOrders(OP_SELL);\n';
+      // Grid reset logic
+      if (gridResetPips4 > 0) {
+        code += '   //--- グリッドリセット判定 ---\n';
+        code += '   if(GridResetPips > 0 && buyCount > 0) {\n';
+        code += '      double firstBuyPrice = 999999;\n';
+        code += '      for(int ri = OrdersTotal()-1; ri >= 0; ri--) {\n';
+        code += '         if(!OrderSelect(ri,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+        code += '         if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_BUY) continue;\n';
+        code += '         if(OrderOpenPrice() < firstBuyPrice) firstBuyPrice = OrderOpenPrice();\n';
+        code += '      }\n';
+        code += '      if(Ask < firstBuyPrice - GridResetPips * PipPoint) {\n';
+        code += '         for(int rj = OrdersTotal()-1; rj >= 0; rj--) {\n';
+        code += '            if(!OrderSelect(rj,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+        code += '            if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_BUY) continue;\n';
+        code += '            OrderClose(OrderTicket(),OrderLots(),Bid,Slippage,clrBlue);\n';
+        code += '         }\n';
+        code += '         return;\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(GridResetPips > 0 && sellCount > 0) {\n';
+        code += '      double firstSellPrice = 0;\n';
+        code += '      for(int ri2 = OrdersTotal()-1; ri2 >= 0; ri2--) {\n';
+        code += '         if(!OrderSelect(ri2,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+        code += '         if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_SELL) continue;\n';
+        code += '         if(OrderOpenPrice() > firstSellPrice) firstSellPrice = OrderOpenPrice();\n';
+        code += '      }\n';
+        code += '      if(Bid > firstSellPrice + GridResetPips * PipPoint) {\n';
+        code += '         for(int rj2 = OrdersTotal()-1; rj2 >= 0; rj2--) {\n';
+        code += '            if(!OrderSelect(rj2,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+        code += '            if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_SELL) continue;\n';
+        code += '            OrderClose(OrderTicket(),OrderLots(),Ask,Slippage,clrRed);\n';
+        code += '         }\n';
+        code += '         return;\n';
+        code += '      }\n';
+        code += '   }\n';
+      }
       code += '   \n';
       code += '   if(buyCount > 0 && buyCount < GridCount) {\n';
       code += '      double lastBuyPrice = LastOrderPrice(OP_BUY);\n';
       code += '      if(Ask <= lastBuyPrice - GridInterval * PipPoint) {\n';
       code += '         double sl = 0, tp = 0;\n';
-      code += '         if(StopLoss > 0) sl = Ask - StopLoss * PipPoint;\n';
-      code += '         if(TakeProfit > 0) tp = Ask + TakeProfit * PipPoint;\n';
+      if (!avgClose4) {
+        code += '         if(StopLoss > 0) sl = Ask - StopLoss * PipPoint;\n';
+        if ((state.stopLossPct || 0) > 0)   code += '         if(StopLossPct > 0)  sl = Ask * (1.0 - StopLossPct / 100.0);\n';
+        code += '         if(TakeProfit > 0) tp = Ask + TakeProfit * PipPoint;\n';
+        if ((state.takeProfitPct || 0) > 0) code += '         if(TakeProfitPct > 0) tp = Ask * (1.0 + TakeProfitPct / 100.0);\n';
+      }
       code += '         OrderSend(Symbol(), OP_BUY, LotSize, Ask, Slippage, sl, tp, "Grid", MagicNumber, 0, clrBlue);\n';
       code += '      }\n';
       code += '   }\n';
@@ -1908,10 +2018,57 @@ CTrade trade;
       code += '      double lastSellPrice = LastOrderPrice(OP_SELL);\n';
       code += '      if(Bid >= lastSellPrice + GridInterval * PipPoint) {\n';
       code += '         double sl2 = 0, tp2 = 0;\n';
-      code += '         if(StopLoss > 0) sl2 = Bid + StopLoss * PipPoint;\n';
-      code += '         if(TakeProfit > 0) tp2 = Bid - TakeProfit * PipPoint;\n';
+      if (!avgClose4) {
+        code += '         if(StopLoss > 0) sl2 = Bid + StopLoss * PipPoint;\n';
+        if ((state.stopLossPct || 0) > 0)   code += '         if(StopLossPct > 0)  sl2 = Bid * (1.0 + StopLossPct / 100.0);\n';
+        code += '         if(TakeProfit > 0) tp2 = Bid - TakeProfit * PipPoint;\n';
+        if ((state.takeProfitPct || 0) > 0) code += '         if(TakeProfitPct > 0) tp2 = Bid * (1.0 - TakeProfitPct / 100.0);\n';
+      }
       code += '         OrderSend(Symbol(), OP_SELL, LotSize, Bid, Slippage, sl2, tp2, "Grid", MagicNumber, 0, clrRed);\n';
       code += '      }\n';
+      code += '   }\n';
+      code += '}\n\n';
+    }
+
+    // Average Close MT4
+    if (state.multiPositionCloseMode === 'average' && (state.takeProfit > 0 || state.takeProfitPct > 0 || state.stopLoss > 0 || state.stopLossPct > 0)) {
+      code += '//+------------------------------------------------------------------+\n';
+      code += '//| Average Price Close (MT4)                                         |\n';
+      code += '//+------------------------------------------------------------------+\n';
+      code += 'void CheckAverageClose()\n{\n';
+      code += '   //--- Buy side\n';
+      code += '   double totalBuyLots = 0, weightedBuy = 0;\n';
+      code += '   for(int i = OrdersTotal()-1; i >= 0; i--) {\n';
+      code += '      if(!OrderSelect(i,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+      code += '      if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_BUY) continue;\n';
+      code += '      weightedBuy += OrderOpenPrice() * OrderLots();\n';
+      code += '      totalBuyLots += OrderLots();\n';
+      code += '   }\n';
+      code += '   if(totalBuyLots > 0) {\n';
+      code += '      double avgBuy = weightedBuy / totalBuyLots;\n';
+      code += '      double buyTP = 0, buySL = 0;\n';
+      if (state.takeProfit > 0)    code += '      if(TakeProfit > 0)    buyTP = avgBuy + TakeProfit * PipPoint;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) buyTP = avgBuy * (1.0 + TakeProfitPct / 100.0);\n';
+      if (state.stopLoss > 0)      code += '      if(StopLoss > 0)      buySL = avgBuy - StopLoss * PipPoint;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)   buySL = avgBuy * (1.0 - StopLossPct / 100.0);\n';
+      code += '      if((buyTP > 0 && Bid >= buyTP) || (buySL > 0 && Bid <= buySL)) CloseAllOrders();\n';
+      code += '   }\n';
+      code += '   //--- Sell side\n';
+      code += '   double totalSellLots = 0, weightedSell = 0;\n';
+      code += '   for(int j = OrdersTotal()-1; j >= 0; j--) {\n';
+      code += '      if(!OrderSelect(j,SELECT_BY_POS,MODE_TRADES)) continue;\n';
+      code += '      if(OrderSymbol()!=Symbol()||OrderMagicNumber()!=MagicNumber||OrderType()!=OP_SELL) continue;\n';
+      code += '      weightedSell += OrderOpenPrice() * OrderLots();\n';
+      code += '      totalSellLots += OrderLots();\n';
+      code += '   }\n';
+      code += '   if(totalSellLots > 0) {\n';
+      code += '      double avgSell = weightedSell / totalSellLots;\n';
+      code += '      double sellTP = 0, sellSL = 0;\n';
+      if (state.takeProfit > 0)    code += '      if(TakeProfit > 0)    sellTP = avgSell - TakeProfit * PipPoint;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) sellTP = avgSell * (1.0 - TakeProfitPct / 100.0);\n';
+      if (state.stopLoss > 0)      code += '      if(StopLoss > 0)      sellSL = avgSell + StopLoss * PipPoint;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)   sellSL = avgSell * (1.0 + StopLossPct / 100.0);\n';
+      code += '      if((sellTP > 0 && Ask <= sellTP) || (sellSL > 0 && Ask >= sellSL)) CloseAllOrders();\n';
       code += '   }\n';
       code += '}\n\n';
     }
@@ -2180,6 +2337,8 @@ CTrade trade;
     // Grid MT5
     if (state.strategies && state.strategies.includes('grid')) {
       const p = state.positionParams || {};
+      const gridResetPips5 = p.gridResetPips || 0;
+      const avgClose5 = (state.multiPositionCloseMode === 'average');
       code += '//+------------------------------------------------------------------+\n';
       code += '//| Grid Trading MT5                                                  |\n';
       code += '//+------------------------------------------------------------------+\n';
@@ -2189,13 +2348,56 @@ CTrade trade;
       code += '   double bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);\n';
       code += '   int buyCount = CountPositions(POSITION_TYPE_BUY);\n';
       code += '   int sellCount = CountPositions(POSITION_TYPE_SELL);\n';
+      if (gridResetPips5 > 0) {
+        code += '   //--- グリッドリセット判定 ---\n';
+        code += '   if(GridResetPips > 0 && buyCount > 0) {\n';
+        code += '      double firstBuyPrice = DBL_MAX;\n';
+        code += '      for(int ri = PositionsTotal()-1; ri >= 0; ri--) {\n';
+        code += '         ulong tk = PositionGetTicket(ri);\n';
+        code += '         if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+        code += '         if(PositionGetInteger(POSITION_TYPE)!=POSITION_TYPE_BUY) continue;\n';
+        code += '         double op = PositionGetDouble(POSITION_PRICE_OPEN);\n';
+        code += '         if(op < firstBuyPrice) firstBuyPrice = op;\n';
+        code += '      }\n';
+        code += '      if(firstBuyPrice < DBL_MAX && ask < firstBuyPrice - GridResetPips * point) {\n';
+        code += '         for(int rj = PositionsTotal()-1; rj >= 0; rj--) {\n';
+        code += '            ulong tk2 = PositionGetTicket(rj);\n';
+        code += '            if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+        code += '            if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY) trade.PositionClose(tk2);\n';
+        code += '         }\n';
+        code += '         return;\n';
+        code += '      }\n';
+        code += '   }\n';
+        code += '   if(GridResetPips > 0 && sellCount > 0) {\n';
+        code += '      double firstSellPrice = 0;\n';
+        code += '      for(int ri2 = PositionsTotal()-1; ri2 >= 0; ri2--) {\n';
+        code += '         ulong tk3 = PositionGetTicket(ri2);\n';
+        code += '         if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+        code += '         if(PositionGetInteger(POSITION_TYPE)!=POSITION_TYPE_SELL) continue;\n';
+        code += '         double op2 = PositionGetDouble(POSITION_PRICE_OPEN);\n';
+        code += '         if(op2 > firstSellPrice) firstSellPrice = op2;\n';
+        code += '      }\n';
+        code += '      if(firstSellPrice > 0 && bid > firstSellPrice + GridResetPips * point) {\n';
+        code += '         for(int rj2 = PositionsTotal()-1; rj2 >= 0; rj2--) {\n';
+        code += '            ulong tk4 = PositionGetTicket(rj2);\n';
+        code += '            if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+        code += '            if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL) trade.PositionClose(tk4);\n';
+        code += '         }\n';
+        code += '         return;\n';
+        code += '      }\n';
+        code += '   }\n';
+      }
       code += '   \n';
       code += '   if(buyCount > 0 && buyCount < GridCount) {\n';
       code += '      double lastBuyPrice = LastPositionPrice(POSITION_TYPE_BUY);\n';
       code += '      if(ask <= lastBuyPrice - GridInterval * point) {\n';
       code += '         double sl = 0, tp = 0;\n';
-      code += '         if(StopLoss > 0) sl = ask - StopLoss * point;\n';
-      code += '         if(TakeProfit > 0) tp = ask + TakeProfit * point;\n';
+      if (!avgClose5) {
+        code += '         if(StopLoss > 0) sl = ask - StopLoss * point;\n';
+        if ((state.stopLossPct || 0) > 0)   code += '         if(StopLossPct > 0)  sl = ask * (1.0 - StopLossPct / 100.0);\n';
+        code += '         if(TakeProfit > 0) tp = ask + TakeProfit * point;\n';
+        if ((state.takeProfitPct || 0) > 0) code += '         if(TakeProfitPct > 0) tp = ask * (1.0 + TakeProfitPct / 100.0);\n';
+      }
       code += '         trade.Buy(LotSize, Symbol(), ask, sl, tp, "Grid");\n';
       code += '      }\n';
       code += '   }\n';
@@ -2204,10 +2406,64 @@ CTrade trade;
       code += '      double lastSellPrice = LastPositionPrice(POSITION_TYPE_SELL);\n';
       code += '      if(bid >= lastSellPrice + GridInterval * point) {\n';
       code += '         double sl2 = 0, tp2 = 0;\n';
-      code += '         if(StopLoss > 0) sl2 = bid + StopLoss * point;\n';
-      code += '         if(TakeProfit > 0) tp2 = bid - TakeProfit * point;\n';
+      if (!avgClose5) {
+        code += '         if(StopLoss > 0) sl2 = bid + StopLoss * point;\n';
+        if ((state.stopLossPct || 0) > 0)   code += '         if(StopLossPct > 0)  sl2 = bid * (1.0 + StopLossPct / 100.0);\n';
+        code += '         if(TakeProfit > 0) tp2 = bid - TakeProfit * point;\n';
+        if ((state.takeProfitPct || 0) > 0) code += '         if(TakeProfitPct > 0) tp2 = bid * (1.0 - TakeProfitPct / 100.0);\n';
+      }
       code += '         trade.Sell(LotSize, Symbol(), bid, sl2, tp2, "Grid");\n';
       code += '      }\n';
+      code += '   }\n';
+      code += '}\n\n';
+    }
+
+    // Average Close MT5
+    if (state.multiPositionCloseMode === 'average' && (state.takeProfit > 0 || state.takeProfitPct > 0 || state.stopLoss > 0 || state.stopLossPct > 0)) {
+      code += '//+------------------------------------------------------------------+\n';
+      code += '//| Average Price Close (MT5)                                         |\n';
+      code += '//+------------------------------------------------------------------+\n';
+      code += 'void CheckAverageClose()\n{\n';
+      code += '   double pipPtAvg = SymbolInfoDouble(Symbol(), SYMBOL_POINT) * (_Digits == 3 || _Digits == 5 ? 10 : 1);\n';
+      code += '   double bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);\n';
+      code += '   double ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);\n';
+      code += '   //--- Buy side\n';
+      code += '   double totalBuyLots = 0, weightedBuy = 0;\n';
+      code += '   for(int i = PositionsTotal()-1; i >= 0; i--) {\n';
+      code += '      if(PositionGetTicket(i) == 0) continue;\n';
+      code += '      if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+      code += '      if(PositionGetInteger(POSITION_TYPE)!=POSITION_TYPE_BUY) continue;\n';
+      code += '      double lots = PositionGetDouble(POSITION_VOLUME);\n';
+      code += '      weightedBuy += PositionGetDouble(POSITION_PRICE_OPEN) * lots;\n';
+      code += '      totalBuyLots += lots;\n';
+      code += '   }\n';
+      code += '   if(totalBuyLots > 0) {\n';
+      code += '      double avgBuy = weightedBuy / totalBuyLots;\n';
+      code += '      double buyTP = 0, buySL = 0;\n';
+      if (state.takeProfit > 0)    code += '      if(TakeProfit > 0)    buyTP = avgBuy + TakeProfit * pipPtAvg;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) buyTP = avgBuy * (1.0 + TakeProfitPct / 100.0);\n';
+      if (state.stopLoss > 0)      code += '      if(StopLoss > 0)      buySL = avgBuy - StopLoss * pipPtAvg;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)   buySL = avgBuy * (1.0 - StopLossPct / 100.0);\n';
+      code += '      if((buyTP > 0 && bid >= buyTP) || (buySL > 0 && bid <= buySL)) CloseAllPositions();\n';
+      code += '   }\n';
+      code += '   //--- Sell side\n';
+      code += '   double totalSellLots = 0, weightedSell = 0;\n';
+      code += '   for(int j = PositionsTotal()-1; j >= 0; j--) {\n';
+      code += '      if(PositionGetTicket(j) == 0) continue;\n';
+      code += '      if(PositionGetString(POSITION_SYMBOL)!=Symbol()||PositionGetInteger(POSITION_MAGIC)!=MagicNumber) continue;\n';
+      code += '      if(PositionGetInteger(POSITION_TYPE)!=POSITION_TYPE_SELL) continue;\n';
+      code += '      double lots2 = PositionGetDouble(POSITION_VOLUME);\n';
+      code += '      weightedSell += PositionGetDouble(POSITION_PRICE_OPEN) * lots2;\n';
+      code += '      totalSellLots += lots2;\n';
+      code += '   }\n';
+      code += '   if(totalSellLots > 0) {\n';
+      code += '      double avgSell = weightedSell / totalSellLots;\n';
+      code += '      double sellTP = 0, sellSL = 0;\n';
+      if (state.takeProfit > 0)    code += '      if(TakeProfit > 0)    sellTP = avgSell - TakeProfit * pipPtAvg;\n';
+      if (state.takeProfitPct > 0) code += '      if(TakeProfitPct > 0) sellTP = avgSell * (1.0 - TakeProfitPct / 100.0);\n';
+      if (state.stopLoss > 0)      code += '      if(StopLoss > 0)      sellSL = avgSell + StopLoss * pipPtAvg;\n';
+      if (state.stopLossPct > 0)   code += '      if(StopLossPct > 0)   sellSL = avgSell * (1.0 + StopLossPct / 100.0);\n';
+      code += '      if((sellTP > 0 && ask <= sellTP) || (sellSL > 0 && ask >= sellSL)) CloseAllPositions();\n';
       code += '   }\n';
       code += '}\n\n';
     }
